@@ -1,0 +1,197 @@
+# CI/CD: check the site is intact, then build and push the image to GHCR.
+#
+# Adapted from flockdeck-site's own workflow: pull requests build the image
+# but push nothing; pushes to main publish `latest` and `sha-<commit>`; a tag
+# like v0.1.0 publishes the bare semver `0.1.0`, which is the tag Flux's
+# ImagePolicy in k8s-infra watches for. Every one is pushed only after the
+# image has been served and checked. Nothing here needs a configured secret —
+# the push authenticates with the workflow's own GITHUB_TOKEN.
+#
+# Unlike flockdeck-site, nothing is served under a fingerprinted name (see
+# nginx.conf), so there's no immutable-cache assertion here; everything else
+# — headers, no access log, HTML that parses, links that resolve — is checked
+# the same way.
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  check:
+    name: Check the site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: The site is present and is the site
+        run: |
+          test -f index.html || { echo "index.html is missing"; exit 1; }
+          test -f docs.css || { echo "docs.css is missing"; exit 1; }
+          grep -q "<title>" index.html || { echo "index.html has no title"; exit 1; }
+          grep -q "Flockdeck" index.html || { echo "index.html does not mention Flockdeck"; exit 1; }
+          test -f app/getting-started.html || { echo "the 'using Flockdeck' pages are missing"; exit 1; }
+          test -f self-hosting/overview.html || { echo "the self-hosting pages are missing"; exit 1; }
+
+      # Every local href, src and srcset candidate of every page has to
+      # resolve to a file in the repository. Most pages are generated, so a
+      # broken one means the generator and the commit disagree; either way
+      # it is a 404 in production and it is cheap to catch here.
+      - name: Local links resolve
+        run: |
+          missing=0
+          check() {
+            case "$2" in
+              http:*|https:*|//*|mailto:*|data:*|'#'*) return ;;
+            esac
+            ref=${2%%#*}
+            ref=${ref#/}
+            case "$ref" in
+              */) ref="${ref}index.html" ;;
+              '') ref="index.html" ;;
+            esac
+            if [ ! -f "$ref" ]; then
+              echo "$1 references $2, which is not in the repository"
+              missing=1
+            fi
+          }
+          find . -name '*.html' -not -path './.git/*' | while read -r page; do
+            for ref in $(grep -oE '(href|src)="[^"]*"' "$page" | cut -d'"' -f2); do
+              check "$page" "$ref"
+            done
+          done
+          exit $missing
+
+      # nginx serving a page that no browser can parse would still be a green
+      # deploy. This is the cheapest check that the markup closes its tags.
+      - name: HTML parses
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -yqq libxml2-utils
+          find . -name '*.html' -not -path './.git/*' -print0 | xargs -0 -n1 xmllint --html --noout
+
+  image:
+    name: Image
+    needs: [check]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/flockdeck-docs
+          # The bare semver is load-bearing: k8s-infra's ImagePolicy matches
+          # `>=0.0.1`, so a tag carrying a leading v would be published and
+          # then never deployed.
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,format=short
+            type=semver,pattern={{version}}
+            type=ref,event=pr
+
+      # Built into this runner's Docker, not pushed: Flux deploys a new tag
+      # within minutes of its push, so a tag pushed before the check below
+      # was deployed whether or not the check then passed. The image is
+      # checked first, and the one checked is the one pushed after it.
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          push: false
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            flockdeck-docs:check
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # The image is what gets deployed, so it is worth one request against
+      # the thing itself rather than trusting that a COPY did what it was
+      # told.
+      - name: Serve the built image and fetch the page
+        run: |
+          docker run -d --name check -p 8080:80 flockdeck-docs:check
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/ >/tmp/page; then break; fi
+            sleep 1
+          done
+          grep -q "Flockdeck" /tmp/page || { echo "the served page is not the site"; docker logs check; exit 1; }
+          curl -fsS -o /dev/null http://127.0.0.1:8080/app/getting-started.html
+          curl -fsS -o /dev/null http://127.0.0.1:8080/self-hosting/overview.html
+          curl -fsS -o /dev/null http://127.0.0.1:8080/docs.css
+          # Everything here is asked about on every use: no fingerprinted
+          # names, so a deploy is always visible without clearing a cache.
+          cc() { curl -fsSI "http://127.0.0.1:8080/$1" | tr -d '\r' | grep -i '^cache-control:' | cut -d' ' -f2-; }
+          for f in "" index.html docs.css app/getting-started.html self-hosting/overview.html favicon.ico favicon.svg; do
+            case "$(cc "$f")" in
+              no-cache) ;;
+              *) echo "/$f is served with Cache-Control '$(cc "$f")', want no-cache"; exit 1 ;;
+            esac
+          done
+          # Every page names three icons, and browsers, feed readers and
+          # bookmark tools ask for /favicon.ico whether or not a page names
+          # it. Each has to be there, and to arrive as an image.
+          for f in favicon.svg favicon.ico apple-touch-icon.png; do
+            type=$(curl -fsS -o /dev/null -w '%{content_type}' "http://127.0.0.1:8080/$f") ||
+              { echo "$f is not served"; docker logs check; exit 1; }
+            case "$type" in
+              image/*) ;;
+              *) echo "$f is served as '$type', want an image"; docker logs check; exit 1 ;;
+            esac
+          done
+          # Every answer carries the security headers, whichever page gave
+          # it and whether or not it is an error. None names nginx's version.
+          for f in "" index.html app/getting-started.html self-hosting/overview.html docs.css favicon.ico no-such-page; do
+            headers=$(curl -sSI "http://127.0.0.1:8080/$f" | tr -d '\r')
+            for h in "Strict-Transport-Security: max-age=31536000" "X-Content-Type-Options: nosniff" \
+              "Referrer-Policy: strict-origin-when-cross-origin" "X-Frame-Options: DENY"; do
+              printf '%s\n' "$headers" | grep -qix "$h" || { echo "/$f is served without '$h'"; exit 1; }
+            done
+            server=$(printf '%s\n' "$headers" | grep -i '^server:' || true)
+            case "$server" in
+              *[0-9]*) echo "/$f names the server's version: '$server'"; exit 1 ;;
+            esac
+          done
+          # No access log is kept. nginx's image sends its logs to the
+          # container's output, so each request above would be a line there
+          # naming the address that asked.
+          if docker logs check 2>&1 | grep -E '"(GET|HEAD) /|client: '; then
+            echo "nginx logged the requests above; the site keeps no access log"; exit 1
+          fi
+          docker rm -f check
+
+      # Only now, with the image served and checked, is it pushed: the same
+      # image, under every tag the metadata gave it.
+      - name: Push
+        if: github.event_name != 'pull_request'
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          printf '%s\n' "$TAGS" | while read -r tag; do
+            if [ -n "$tag" ]; then docker push "$tag"; fi
+          done

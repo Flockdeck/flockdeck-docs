@@ -1,0 +1,437 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Remote access | Flockdeck docs</title>
+<meta name="description" content="Open this window from another device — a laptop away from your desk, a tablet, a phone — through a relay, without opening a port on this machine or setting up a VPN.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Remote access | Flockdeck docs">
+<meta property="og:description" content="Open this window from another device — a laptop away from your desk, a tablet, a phone — through a relay, without opening a port on this machine or setting up a VPN.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/remote.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/remote.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html" aria-current="page">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Remote access</h1>
+<p class="doc-lede">Open this window from another device — a laptop away from your desk, a tablet,
+a phone — through a relay, without opening a port on this machine or setting up
+a VPN.</p>
+<h2>How it works</h2>
+<p>Flockdeck dials <em>out</em> to the relay and holds one connection open while it runs.
+Each connection a paired browser makes is carried down it and answered by the
+same server the window on your desk uses, so the remote window is not a lesser
+copy: it is this window, with every pane, every dialog and every keystroke —
+bar the few things done only at the desk, listed below.</p>
+<p>A pane open in two windows at once, the one on your desk and a phone say, takes
+the size of whichever window last typed into it or focused it. Glancing at it
+from the phone leaves the desk's terminal as it was; typing on the phone fits it
+to the phone until you type at the desk again. The desk's own window shows a
+small phone glyph on a pane's header while a paired device has it open, in its
+chat or its terminal, naming the device — so text appearing there is not a
+surprise.</p>
+<p>Nothing on this machine listens for the network. The local server still binds
+to loopback only, and its token never leaves the machine — a request that came
+through the relay is let in because the relay has already checked that the
+device asking is paired with your account, and nothing else can put a request
+on that connection. The few things only another launch of the binary may do —
+open a project from the command line, quit the instance — still insist on the
+token, so a remote window cannot reach them.</p>
+<h2>Done only at the desk</h2>
+<p>A window reached through the relay is not offered these, and Flockdeck refuses
+them from one:</p>
+<ul>
+<li>quitting Flockdeck, or restarting it, including to install an update;</li>
+<li>turning remote access off, or on again against another relay;</li>
+<li>making a code for another desktop to join this account;</li>
+<li>setting or clearing an API key — one typed on a phone would pass through
+the relay, which can read it;</li>
+<li>changing where an API agent sends its prompts, its address, since its key
+goes wherever that says;</li>
+<li>turning the check for updates on or off.</li>
+</ul>
+<p>These keep a phone in a pocket from doing any of them by accident. They are
+not a security boundary: a remote window can open a shell pane, and from a
+shell it can do anything you can at this machine, <code>flockdeck remote disable</code>
+included. A paired device has everything your user account here has.</p>
+<h2>Turning it on</h2>
+<p><strong>Remote access…</strong> in the command palette opens a dialog that turns it on: leave
+the relay empty for <code>https://remote.flockdeck.ai</code>, or name another, give this
+machine a name if its host name is not the one you want, and press <strong>Turn on
+remote access</strong>. The same can be done from a terminal:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flockdeck remote enable</code></td>
+<td>Enrols this machine with the relay</td>
+</tr>
+<tr>
+<td><code>flockdeck remote pair</code></td>
+<td>A one-time link and QR code for a device</td>
+</tr>
+</tbody>
+</table>
+<p>The relay is <code>https://remote.flockdeck.ai</code> unless <code>-relay</code> or <code>FLOCKDECK_RELAY</code>
+names another. A second desktop joins the same account with a code from
+<code>flockdeck remote pair -desktop</code> on the first, given to the second — in the
+dialog under <strong>Joining an account, or invited?</strong>, or as
+<code>flockdeck remote enable -join &lt;code&gt;</code>. Every device paired with the account
+then reaches every desktop on it: pairing with one is pairing with them all.</p>
+<h2>Pairing a device</h2>
+<p><strong>Remote access…</strong> in the command palette — or the <strong>Remote</strong> button in the
+rail, which is there whether or not remote access is on — opens a dialog saying whether
+the relay is reachable and how many windows are open through it. <strong>Pair a
+device</strong> asks the relay for a link and shows it as a QR code: scan it with the
+device you want to pair, or open the link on it.</p>
+<p>A link works once and expires after a few minutes. Until then, whoever opens it
+can drive every agent on every desktop on this account, and open a shell on
+any of them, so treat it like a password.</p>
+<p>A phone paired with just one desktop opens straight into it; paired with more
+than one, it shows a list to choose from first. At 900px and wider — a
+tablet, or a browser window that wide — a desktop's list of panes sits in its
+own column beside whichever one is open, instead of swapping the whole
+screen for it; tapping another row swaps only that side, so the list keeps
+its scroll position and any helper group you had open.</p>
+<p>On a phone, opening a pane shows a chat with the agent rather than its raw
+terminal, for a Claude Code pane and Flockdeck's own chat client — see
+<strong>Your agents on your phone</strong>, below. When an agent stops to ask a question
+with set answers, it appears as buttons, so you can answer with a tap rather
+than typing into the terminal.</p>
+<h2>Your agents on your phone</h2>
+<p>Opening a pane from a paired device shows a chat with the agent, not its raw
+terminal, for a Claude Code pane and for Flockdeck's own chat client (the
+built-in Anthropic, OpenAI, Google and OpenAI-compatible agents) — anything
+else still opens as a terminal, because Flockdeck doesn't yet read what it's
+saying. Nothing to turn on: the phone asks the desktop when it opens a pane,
+and gets a chat back if there is one to give it. A <strong>Chat</strong>/<strong>Terminal</strong>
+switch in the pane's own header moves between the two anyway, and is
+remembered there, per device, per pane. A search button beside it opens a
+slim bar over the conversation — type to see matching prompts, replies and
+tool summaries as you go, and tap one to jump straight to it, paging in
+older history if it isn't loaded yet. Switching to <strong>Terminal</strong> still gives a
+proper terminal, not a cut-down one: Escape, Tab, the arrows, Enter and
+Ctrl+C sit in a row above the keyboard, with Ctrl, Page Up, Page Down, Home
+and End behind a <strong>More</strong> button, and the prompt itself stays above the
+phone's own keyboard rather than sliding behind it.</p>
+<p>Replies render as Markdown — headings, lists, tables, quotes, and code with a
+copy button, a wrap toggle and syntax colouring. A long code block or diff
+folds to its first dozen-odd lines behind &quot;Show all N lines&quot;, and a reply
+longer than about a screen and a half folds to about one screen under &quot;Show
+more&quot; — the newest reply stays open, an older long one folds, and one still
+arriving is never folded mid-stream; jumping to it from search opens
+whichever fold is in the way. Each turn's tool calls and thinking fold into
+one line, &quot;12 steps · 3 files edited · 4 commands&quot;, tapped open to see each
+step; an edit shows its diff, with line numbers. A question
+or a permission prompt appears as a card with buttons in the chat, rather
+than needing the terminal — multiple choice, a typed answer, and Yes/No for a
+permission are all covered, including a call that asks several questions at
+once: answer them one at a time on the card, then send them all together.
+Each reply also carries its own <strong>Copy</strong>, for the whole thing as Markdown,
+and <strong>Quote</strong>, which drops a paragraph or so of it into the box, quoted,
+ahead of whatever you've already typed. A message you start and don't send
+is kept too, per agent, in that browser, so leaving the chat and coming back
+doesn't lose it.</p>
+<p>While an agent works, &quot;Working for 3m — Bash&quot;, naming what it's doing, sits
+above the prompt box, and a <strong>Stop</strong> button — the same as pressing Escape —
+takes Send's place in the prompt row, with Send back beside it once you type;
+once it's idle, quick replies — Continue, Yes, go ahead, Explain that more
+simply, Run the tests — cover the common ones without typing. A message you
+send says what's happened to it: <strong>Sending…</strong>, then <strong>Sent</strong>, then a quiet
+tick for <strong>Delivered</strong> once the agent's own transcript shows it arrived; one
+that hasn't after a while says <strong>Not delivered yet</strong>, with <strong>Retry</strong> beside
+it. The chat header, and each row in the list below, also says what the
+agent has spent in its conversation — a token count and the tightest of its
+usage windows for one on a subscription, or a rough cost in dollars for one
+paying by the token — coloured once that window is close to running out.</p>
+<p>Every open pane also appears in the paired device's list with its latest
+reply, or the question it's waiting on, a time, and an unread dot, so you
+can see what's happened everywhere without opening each one. Opening the
+list again after a while away leads with <strong>Since you last looked</strong> — new
+replies, agents that finished, and ones that started waiting, since this
+device last had it open — and a tap on any of those jumps to and
+highlights the first row it counts, opening its helper group first if that
+was folded. It says nothing once there is nothing honest left to count. One
+waiting on a permission offers Yes and No right there in the list; one
+waiting on a single, short question offers a button for each option;
+anything more — several questions at once, a typed answer — still just
+opens the chat, the way tapping the row always has. Messages Flockdeck
+itself injects — a background task finishing, a session notice — show as
+small notes, never as if you had typed them.</p>
+<p>A lead agent's own helpers — started by <code>flockdeck spawn</code> or a fan-out —
+are grouped under its row instead of filling the list with one each,
+folded by default into a line such as &quot;3 helpers · 1 waiting&quot;; tap it to
+open them as indented rows, and again to fold them back, remembered per
+desktop and lead. A helper waiting on you is never hidden by the fold, and
+a group with one waiting sorts to the top even while its lead is idle.</p>
+<p>A screenshot in the conversation shows as a thumbnail that opens full
+screen. The attach button offers your photo library or the camera in one
+tap, and the library lets you pick several at once, up to six; each queues
+its own thumbnail in a strip above the prompt box, with a spinner while it
+uploads and its own Retry if it fails, and Send goes once every picture is
+in, as one message carrying all of them — attaching too many too quickly
+is refused rather than queued. They're shrunk on the phone before they're
+sent, kept on this desktop — in Flockdeck's own folder, never your
+project — and removed after about a week; the agent is told each file's
+path, the same way typing one would tell it.</p>
+<p>Most of this needs a fairly recent Flockdeck on the desktop; paired with an
+older one, a pane simply opens as a terminal instead. Even where a pane does
+open as a chat, a few parts fall back gracefully on a desktop too old to send
+them, rather than breaking: no live timer, a plain &quot;waiting for you — open
+the terminal to answer&quot; banner instead of a question or permission card, and
+no preview text in the paired device's list. <strong>New agent</strong>, search, and
+muting a single pane each need their own, newer understanding from the
+desktop too, and simply don't appear against an older one, rather than
+sending it a command it would silently drop.</p>
+<p><strong>New agent</strong>, near the top of a desktop's page in the relay's client, starts
+one without going to the desk: choose a project already open there, an agent
+and model, optionally a fresh worktree, and a first message, then <strong>Start</strong>.
+It opens straight into that agent's conversation once it starts, and refuses
+a project the desktop does not already have open rather than opening one.
+Starting several in quick succession is refused, the same guard that limits
+pictures.</p>
+<h2>Notifications on your phone</h2>
+<p>A paired phone can be told when an agent has been waiting on you for a while,
+whether or not the relay's page is open on it, and whether or not a window is
+open here: a run left detached reaches you too. On the phone, open a desktop
+and press <strong>Notify me when an agent needs me</strong>, below its list of panes. On
+an iPhone or iPad, add the page to the Home Screen first — Share, then <strong>Add
+to Home Screen</strong> — and open it from there: iOS and iPadOS send notifications
+only to web apps added that way, from version 16.4. Tapping a notification
+opens the pane that is waiting.</p>
+<p>Here, Settings › <strong>Remote access</strong> says what is sent:</p>
+<ul>
+<li><strong>Notify paired devices</strong> turns notifications off for every device at once.</li>
+<li><strong>After waiting</strong> is how long an agent has to have been waiting first: 30
+seconds, unless you choose otherwise. Each wait is told once, and an agent
+that is answered and then asks again is a new wait. However many agents are
+waiting, the phone is sent one notification that says how many, which
+replaces the one before it, and no more than one a minute. It is sent once
+an agent has waited that long and nobody has used this computer — keyboard
+or mouse, in any application — for two minutes, or its screen is locked;
+a Flockdeck window being in front of you makes no difference. Where the
+operating system's idle time can't be read, typing and clicks in
+Flockdeck's own windows here are what count instead. Nothing is
+sent about a pane you are using on the phone; if it is still waiting two
+minutes after you leave it, you are told then.</li>
+<li><strong>Send nothing identifying</strong> has a notification say only &quot;An agent on <em>this
+machine</em> needs you&quot;, rather than naming the pane and its project.</li>
+</ul>
+<p>A single agent that is chatty and safe to leave can also be muted from the
+bell in its own header on the phone, which leaves it out of what is sent
+while it goes on showing as waiting everywhere, including here. Muting lives
+on the pane, not the device that asked, and is forgotten on close: it does
+not survive a restart of Flockdeck.</p>
+<p>Each notification is encrypted here, on this machine, for the device it goes
+to, and the relay only passes it on: neither the relay nor the push service
+that carries it — Apple's, Google's, Mozilla's or Microsoft's, which is the
+browser's to choose — can read what it says, since the key that opens it never
+leaves the phone. They see that one was sent, and when; every notification is
+the same size, however long the names in it. A relay that does not send
+notifications, or an account whose plan does not include them, is said under
+the switch in the relay's own words.</p>
+<h2>Renaming</h2>
+<p>A machine is listed on every device under the name it was enrolled with — its
+host name, unless you gave another — and a device under whatever its browser
+suggested when it was paired. <strong>Rename</strong>, beside this machine and beside each
+device in the dialog, gives it a new one. From a terminal,
+<code>flockdeck remote rename &lt;name&gt;</code> renames this machine, and
+<code>flockdeck remote rename -device &lt;id or name&gt; &lt;name&gt;</code> a device. A paired device
+can rename any of them from its <strong>Devices</strong> page.</p>
+<h2>What the relay can see</h2>
+<p>Traffic is encrypted between your browser and the relay, and between the relay
+and this machine. The relay decrypts it to route it, so it is <strong>trusted</strong>: this
+is not end-to-end encryption, and whoever runs the relay could read what passes
+through it. The relay never sees this machine's local token or the API keys
+kept here, though anything typed into a remote window, a shell pane's included,
+passes through it; what it holds for this machine is a credential of its own,
+kept here in <code>remote.json</code> in the state directory and readable only by you.</p>
+<p>Reading is not all it could do. The relay is what decides which devices are
+paired, so whoever runs it can open a window on any desktop that is connected
+to it and use it as a paired device would: type to every agent, and open a
+shell. Use a relay you would trust with this machine.</p>
+<p>A relay that gives every desktop's window its own address — <code>remote.flockdeck.ai</code>
+does — keeps a page from one desktop's window from reaching another's: it runs
+on a different address, with none of the account's own session, so it cannot
+list your devices, open another desktop, or make a code for one to join. A
+relay without one instead serves every desktop's window from the same address
+as the account itself, which trusts every desktop of an account with the
+others' sessions; that is weaker, and is what a relay run without a spare
+domain for it falls back to.</p>
+<p>The shared relay at <code>https://remote.flockdeck.ai</code> has a
+<a href="https://flockdeck.ai/privacy.html" target="_blank" rel="noopener noreferrer">privacy policy</a>, which says what it stores
+about this machine and your devices, how long it keeps it and how to have it
+deleted, and <a href="https://flockdeck.ai/terms.html" target="_blank" rel="noopener noreferrer">terms</a> for using it.</p>
+<h2>Enterprise (coming soon)</h2>
+<p>For companies: a licence to run the relay on your own infrastructure, with SSO
+and support, for a company whose rules don't allow a third party to decrypt
+its developers' terminal traffic. The relay's own configuration already
+supports this today; see <a href="https://docs.flockdeck.ai/self-hosting/overview.html" target="_blank" rel="noopener noreferrer">Self-hosting the relay</a>
+for how.</p>
+<h2>Leaving the agents running for it</h2>
+<p>A remote window only works while Flockdeck is running here. Closing the window
+on this machine still quits it, even with a remote window open — so to leave
+the agents running for later, use <strong>Detach</strong> instead, or start with
+<code>flockdeck -detach</code>. A remote window closing never stops anything.</p>
+<p>If a second Flockdeck on this machine connects to the relay as the same
+machine, the first one steps aside and says so rather than fighting it for the
+connection.</p>
+<h2>Unpairing, and turning it off</h2>
+<p>The dialog lists every paired device with an <strong>Unpair</strong> button; unpairing ends
+that device's session at once, including any window it has open. <strong>Turn off
+remote access</strong>, at its foot, takes this machine off the relay; if it is the
+only machine on the account, the account and its paired devices go with it,
+and the dialog says so before it asks. A relay that cannot be reached is not
+taken for one that was told: you are offered <strong>Try again</strong>, and only then to
+forget it here anyway, which leaves the relay listing this machine, offline.
+From a terminal:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flockdeck remote devices</code></td>
+<td>What is paired, and each device's id</td>
+</tr>
+<tr>
+<td><code>flockdeck remote revoke &lt;id or name&gt;</code></td>
+<td>Unpairs one</td>
+</tr>
+<tr>
+<td><code>flockdeck remote rename &lt;name&gt;</code></td>
+<td>Renames this machine; <code>-device &lt;id or name&gt;</code> renames a device</td>
+</tr>
+<tr>
+<td><code>flockdeck remote disable</code></td>
+<td>Removes this machine from the relay</td>
+</tr>
+</tbody>
+</table>
+<p>A machine that was wiped or lost before remote access was turned off on it
+cannot take itself off. Remove it from the <strong>Devices</strong> page of a paired device
+instead, rather than wait: no device can reach it after that, and its
+credential stops working, so a copy of Flockdeck restored from a backup cannot
+connect with it either. Left alone, the relay removes it on its own once it
+has gone 30 days without being heard from.</p>
+<h2>If a device is lost</h2>
+<ol>
+<li><strong>Unpair</strong> it in the dialog, or with <code>flockdeck remote revoke &lt;id or name&gt;</code>.
+That ends its session at once, and it cannot get back in with the same
+pairing.</li>
+<li>Look down the dialog's lists for a device you did not pair or a desktop you
+did not add. Flockdeck is not told when a device pairs or a desktop joins,
+so those lists are where either shows. Unpair a device you do not know,
+and remove a desktop you do not know from the <strong>Devices</strong> page of a paired
+device.</li>
+<li>If the device could have opened a shell here, it could have copied this
+machine's credential out of <code>remote.json</code>. Turn remote access off and on
+again: this machine is enrolled afresh, and the old credential stops
+working. If this is the account's only desktop, turning it off also
+unpairs every device, and each of them pairs again with a new link.</li>
+</ol>
+<p>A pairing link or join code that was made and not used stops working on its
+own after a few minutes.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

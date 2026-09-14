@@ -1,0 +1,276 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings | Flockdeck docs</title>
+<meta name="description" content="Ctrl&#43;,, or Settings at the foot of the rail, opens the settings: the sections on the left and the one you are in on the right. Every control changes its setting at once, and it is the same setting the command palette and the keys change, so whichever you use, the others show it.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Settings | Flockdeck docs">
+<meta property="og:description" content="Ctrl&#43;,, or Settings at the foot of the rail, opens the settings: the sections on the left and the one you are in on the right. Every control changes its setting at once, and it is the same setting the command palette and the keys change, so whichever you use, the others show it.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/settings.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/settings.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html" aria-current="page">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Settings</h1>
+<p class="doc-lede"><kbd>Ctrl+,</kbd>, or <strong>Settings</strong> at the foot of the rail, opens the settings:
+the sections on the left and the one you are in on the right. Every control
+changes its setting at once, and it is the same setting the command palette and
+the keys change, so whichever you use, the others show it.</p>
+<ul>
+<li><strong>General</strong> — desktop notifications, and whether Flockdeck checks for new
+releases, which is changed only at the desk. <strong>Show them again</strong> brings back
+every hint you sent away.</li>
+<li><strong>Terminal</strong> — the font size, the font, how many lines each pane keeps to
+scroll back through, and the cursor's shape and whether it blinks, with a
+preview. The size is also <kbd>Ctrl+=</kbd>, <kbd>Ctrl+-</kbd> and
+<kbd>Ctrl+0</kbd>. <strong>Screen reader support</strong> lets a screen reader read what
+the agents write; it is off unless you turn it on, because it slows every
+terminal a little. The palette has <strong>Turn screen reader support on</strong> too.</li>
+<li><strong>Agents</strong> — the agent and model a pane starts when nobody chooses: for every
+project, and for the project on screen, which can go back to <strong>Same as every
+project</strong>.
+<ul>
+<li><strong>Routing</strong> — whether a fan-out's rows come with a model chosen for the
+work: <strong>Off</strong>, which it is until you change it, <strong>Suggest</strong> or
+<strong>Automatic</strong>, for every project and for this one. <strong>Never go below</strong> keeps
+it off the smaller tiers. The rules in force are listed, with where
+<code>agents.json</code> is, since that is where they are edited, and <strong>Clear routing
+history</strong> empties the record of what it chose. <a href="/app/agents.html">Agents and models</a>
+has the rest.</li>
+<li><strong>Claude Code's usage limits</strong> — which Claude panes read their five-hour
+and weekly limits for the pane header: <strong>Only where I have a status line</strong>,
+the default, <strong>Always</strong> or <strong>Never</strong>. It applies to a pane when it starts.
+<a href="/app/spend.html">Spend and limits</a> says what each one costs.</li>
+</ul>
+</li>
+<li><strong>API keys</strong> — set, replace or clear the key each API agent uses. A key is
+never shown once it is set. Keys are set and cleared only at the desk: a
+window reached through the relay shows which are set, and no more.</li>
+<li><strong>Remote access</strong> — turn it on or off, the relay it goes through, this
+machine's name, and the paired devices. Turning it on or off, and the
+relay, are changed only at the desk.</li>
+</ul>
+<p>A window reached through the relay leaves a few things to the desk: <a href="/app/remote.html">Remote
+access</a> lists them.</p>
+<ul>
+<li><strong>Account &amp; plan</strong> — the free plan you are on, and Enterprise, coming for
+companies to run the relay on their own infrastructure with SSO and support.
+At its foot are the privacy policy and terms for the shared relay, and the
+licences.</li>
+</ul>
+<p>Type into <strong>Find a setting</strong> to narrow the sections to the ones that mention a
+word. On a narrow screen the sections go across the top.</p>
+<h2>Elsewhere in the window</h2>
+<ul>
+<li><strong>The agent and model a pane runs</strong> — <strong>Split right (choose agent)…</strong> or
+<strong>New agent tab (choose agent)…</strong>. Kept with the layout.</li>
+<li><strong>Which agent and model a project starts</strong> — <strong>Agents</strong> in the settings, or
+<strong>Set as default for</strong> at the foot of the picker. Kept in
+<code>agents.json</code>.</li>
+<li><strong>Whether a fan-out's models are routed, and by which rules</strong> — <strong>Agents ›
+Routing</strong> in the settings for the mode and the floor; the rules themselves
+are edited by hand. Kept in <code>agents.json</code>.</li>
+<li><strong>Whether Claude panes read their usage limits</strong> — <strong>Agents › Claude Code's
+usage limits</strong> in the settings. Kept in <code>prefs.json</code>.</li>
+<li><strong>An API agent's key</strong> — <strong>API keys</strong> in the settings, <strong>API keys…</strong>, or
+<code>flockdeck keys set &lt;agent&gt;</code>. Kept in <code>keys.json</code>. At the desk only.</li>
+<li><strong>Where an API agent sends its prompts</strong> — its address, in the agent picker,
+or <code>flockdeck keys endpoint &lt;agent&gt; &lt;url&gt;</code>. Kept in <code>agents.json</code>. At the
+desk only.</li>
+<li><strong>A tab's name</strong> — double-click the tab, press F2 while the keyboard is on
+it, or <strong>Rename this tab…</strong> in the command palette. An empty name, or <strong>Use the automatic title</strong> there, goes
+back to the title the tab gives itself. Kept with the layout.</li>
+<li><strong>Which panes the prompt bar reaches</strong> — <kbd>Ctrl+Shift+B</kbd>, and the <code>⇉</code>
+button in each pane header; <a href="/app/broadcast.html">Broadcast and the prompt bar</a> has the
+rest. Kept until Flockdeck stops.</li>
+<li><strong>The terminal's font, size, scrollback and cursor</strong> — <strong>Terminal</strong> in the
+settings, or the palette's entries for each. Kept in <code>prefs.json</code>.</li>
+<li><strong>This machine's name and paired devices</strong> — <strong>Remote access</strong> in the
+settings, or <strong>Remote access…</strong>. Use <strong>Pair a device</strong>, <strong>Rename</strong> and
+<strong>Unpair</strong>. Kept on the relay; <a href="/app/remote.html">Remote access</a> has the rest.</li>
+<li><strong>Notifications on paired devices</strong> — <strong>Remote access</strong> in the settings:
+whether the relay tells the paired devices that asked for them when an agent
+has been waiting, after how long, and whether they name the pane. Kept in
+<code>prefs.json</code>; <a href="/app/remote.html">Remote access</a> has the rest.</li>
+<li><strong>Desktop notifications</strong> — <strong>General</strong> in the settings, or <strong>Turn desktop
+notifications off</strong> in the palette; kept in <code>prefs.json</code>. The browser also
+asks once whether this window may show them, and keeps the answer for that
+run only: each run has an address of its own.</li>
+<li><strong>Hints under the tab bar</strong> — their close button sends one away for good.
+Kept in <code>prefs.json</code>.</li>
+<li><strong>Theme</strong> — there is only the one, dark. It does not follow the system's
+light or dark mode.</li>
+</ul>
+<h2>In the state directory</h2>
+<p>Everything Flockdeck keeps is in one directory: <code>%AppData%\flockdeck</code> on
+Windows, <code>~/Library/Application Support/flockdeck</code> on macOS, and
+<code>~/.config/flockdeck</code> on Linux (or <code>$XDG_CONFIG_HOME/flockdeck</code> where that is
+set).</p>
+<ul>
+<li><code>agents.json</code> — your own agents, changes to the built-in ones, the default
+agent and model, and the routing policy: for every project under <code>defaults</code>
+and <code>routing</code>, for one under <code>projects</code>. <a href="/app/agents.html">Agents and models</a>
+describes it. It is read again each time the picker opens, so editing it
+needs no restart.</li>
+<li><code>keys.json</code> — API keys set through Flockdeck. A key exported in the
+environment is used first.</li>
+<li><code>remote.json</code> — this machine's enrolment with the relay.
+<code>flockdeck remote disable</code> removes it.</li>
+<li><code>routing.jsonl</code> — what routing chose for each routed fan-out row, and
+whether you kept it: the rule's name and the models, never the task. It
+keeps the last 10,000 lines, and <strong>Clear routing history</strong> empties it.</li>
+<li><code>prefs.json</code> — the settings under General and Terminal, Claude Code's usage
+limits, whether the help has
+been opened, and which hints were dismissed. Delete it while Flockdeck is not
+running to have the help open on the next start, every hint back, and every
+one of those settings as it first was.</li>
+<li><code>layout-….json</code> — one per project: its tabs, splits and panes.
+<code>flockdeck -new</code> starts without it.</li>
+<li><code>projects.json</code> — the recent projects the picker offers.</li>
+<li><code>session.json</code> — which projects are reopened on the next start.</li>
+<li><code>error.log</code> — why Flockdeck failed to start, when it had no terminal to say
+so in, and what went wrong as it stopped: a layout it could not save, an
+update it could not put in place, a restart that did not come back.</li>
+<li><code>instance.json</code> — the address of the Flockdeck that is running, so a second
+launch joins it.</li>
+<li><code>updates</code> — a downloaded release waiting to go in when Flockdeck next quits.</li>
+<li><code>sessions</code> — the settings file written for each pane whose agent reports its
+status, which also carries the pane's status line where that goes through
+Flockdeck.</li>
+<li><code>chats</code> — the built-in chat client's conversations.</li>
+<li><code>window</code> — the browser profile the window runs in. On Windows it is kept
+apart from the rest, in <code>%LOCALAPPDATA%\flockdeck\window</code>.</li>
+</ul>
+<p>To uninstall Flockdeck, quit it and delete the <code>flockdeck</code> binary (on Windows,
+the <code>%LOCALAPPDATA%\Programs\flockdeck</code> folder the installer made, its Start
+menu shortcut and its entry in your PATH), then this directory; turn remote
+access off first if it is on, so the relay forgets the
+machine. Worktrees it made are ordinary git worktrees, and stay beside their
+repositories until you remove them.</p>
+<h2>In the environment</h2>
+<p>These are read when Flockdeck starts, so set one where it will be seen then —
+<code>setx NAME value</code> on Windows, or an <code>export</code> line in your shell's profile
+elsewhere — and start Flockdeck again.</p>
+<ul>
+<li><code>FLOCKDECK_UPDATE</code> — <code>off</code> stops updating in the background, whatever
+<strong>Check for updates</strong> in the settings says: no checks for new releases, and
+nothing already downloaded is put in place. That is what
+keeps an older version you installed on purpose from updating itself to the
+latest.</li>
+<li><code>FLOCKDECK_BROWSER</code> — which browser provides the window, by name or path.</li>
+<li><code>FLOCKDECK_RELAY</code> — which relay <code>flockdeck remote enable</code> uses.</li>
+<li><code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code> and <code>GEMINI_API_KEY</code> (or
+<code>GOOGLE_API_KEY</code>) — keys for the API agents talking to those vendors' own
+addresses, used before anything in <code>keys.json</code>. An agent given another
+address, such as a gateway's, is never sent them.</li>
+<li><code>FLOCKDECK_API_KEY</code> — a key for any API agent, used when neither its own
+variables nor <code>keys.json</code> hold one.</li>
+<li><code>CLAUDE_CONFIG_DIR</code> — where Claude Code keeps its own files; Flockdeck follows
+it to find conversations and folder trust.</li>
+<li><code>NO_COLOR</code> — the built-in chat client draws without colour.</li>
+<li><code>FLOCKDECK_COLUMNS</code>, then <code>COLUMNS</code> — how wide the built-in chat client wraps
+its answers; 80 when neither is set.</li>
+<li><code>SHELL</code> — the shell a shell pane runs, as a login shell; <code>/bin/sh</code> if it is
+unset or names a program that is not there. On Windows a shell pane runs
+<code>pwsh</code> if it is installed, then the shell <code>COMSPEC</code> names, then Windows
+PowerShell.</li>
+</ul>
+<p>The variables Flockdeck sets in each pane, and the flags that shape one run —
+<code>-agent</code>, <code>-new</code>, <code>-shell</code> — are on <a href="/app/cli.html">The command line</a>.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

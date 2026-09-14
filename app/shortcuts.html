@@ -1,0 +1,401 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keyboard shortcuts | Flockdeck docs</title>
+<meta name="description" content="Everything not listed here goes to the focused agent, which needs the rest of the keyboard for itself. That is why almost every binding is on Ctrl&#43;Shift. The exceptions are the ones no terminal program claims: switching tabs, the font size, Ctrl&#43;, for the settings, F1 for this help, and F6 for the rest of the window.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Keyboard shortcuts | Flockdeck docs">
+<meta property="og:description" content="Everything not listed here goes to the focused agent, which needs the rest of the keyboard for itself. That is why almost every binding is on Ctrl&#43;Shift. The exceptions are the ones no terminal program claims: switching tabs, the font size, Ctrl&#43;, for the settings, F1 for this help, and F6 for the rest of the window.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/shortcuts.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/shortcuts.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html" aria-current="page">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Keyboard shortcuts</h1>
+<p class="doc-lede">Everything not listed here goes to the focused agent, which needs the rest of
+the keyboard for itself. That is why almost every binding is on
+<kbd>Ctrl+Shift</kbd>. The exceptions are the ones no terminal program claims:
+switching tabs, the font size, <kbd>Ctrl+,</kbd> for the settings,
+<kbd>F1</kbd> for this help, and <kbd>F6</kbd> for the rest of the window.</p>
+<p>Inside a terminal <kbd>Tab</kbd> belongs to the program running there, so
+<kbd>F6</kbd> is how the keyboard gets out: it moves between the rail, the
+top bar, the focused pane's buttons and its terminal, in that order, and
+<kbd>Shift+F6</kbd> goes the other way. Both work from the prompt bar too.
+While a dialog is open the keyboard stays there.</p>
+<p>Copying and pasting in a terminal works as it does in Windows Terminal.
+<kbd>Ctrl+C</kbd> copies what is selected, and with nothing selected goes to
+the program as usual, to interrupt it. <kbd>Ctrl+Shift+C</kbd> copies too, and
+<kbd>Ctrl+V</kbd> and <kbd>Ctrl+Shift+V</kbd> paste. On macOS,
+<kbd>Cmd+C</kbd> and <kbd>Cmd+V</kbd> copy and paste, and <kbd>Ctrl</kbd>
+with a letter always goes to the program.</p>
+<p>Actions marked <em>Command palette</em> have no binding of their own: press
+<kbd>Ctrl+Shift+K</kbd>, or <strong>Commands</strong> at the right of the top bar, and search for
+them by name.</p>
+<p>On macOS the bindings are the same, with <kbd>Ctrl</kbd> rather than
+<kbd>Cmd</kbd>, except for picking a tab by number: that is
+<kbd>Cmd+1</kbd> … <kbd>Cmd+9</kbd> there. <kbd>Option</kbd> with a digit is
+how most Mac layouts type characters such as <kbd>[</kbd>, <kbd>|</kbd> and
+<kbd>#</kbd>, so it is left to type them.</p>
+<h3>Panes</h3>
+<table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><kbd>Ctrl+Shift+D</kbd></td>
+<td>Split right (agent)</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+E</kbd></td>
+<td>Split down (agent)</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Split right (choose agent)…</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Split right (shell)</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+←</kbd></td>
+<td>Move pane left</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+→</kbd></td>
+<td>Move pane right</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+↑</kbd></td>
+<td>Move pane up</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+↓</kbd></td>
+<td>Move pane down</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Move pane to a tab of its own</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Tile these panes evenly</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+Z</kbd></td>
+<td>Zoom pane</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Restart pane</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+W</kbd></td>
+<td>Close pane</td>
+</tr>
+</tbody>
+</table>
+<h3>Tabs</h3>
+<table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><kbd>Ctrl+Shift+T</kbd></td>
+<td>New agent tab</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>New agent tab (choose agent)…</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+N</kbd></td>
+<td>New shell tab</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Tab</kbd></td>
+<td>Next tab</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+Tab</kbd></td>
+<td>Previous tab</td>
+</tr>
+<tr>
+<td><kbd>Alt+1 … Alt+9</kbd></td>
+<td>Select tab by number</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Merge every tab into this one</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Move tab left</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Move tab right</td>
+</tr>
+</tbody>
+</table>
+<h3>Agents</h3>
+<table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><kbd>Ctrl+Shift+B</kbd></td>
+<td>Toggle broadcast</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Add this pane to broadcast, or take it out</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+P</kbd></td>
+<td>Prompt all panes</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+X</kbd></td>
+<td>Fan out — turn this pane's plan into agents</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+A</kbd></td>
+<td>All agents across projects</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>API keys…</td>
+</tr>
+</tbody>
+</table>
+<h3>Git</h3>
+<table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><kbd>Ctrl+Shift+G</kbd></td>
+<td>Worktrees</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+S</kbd></td>
+<td>Review changes, commit and push</td>
+</tr>
+</tbody>
+</table>
+<h3>Finding your way</h3>
+<table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><kbd>Ctrl+Shift+K</kbd></td>
+<td>Command palette</td>
+</tr>
+<tr>
+<td><kbd>F6</kbd></td>
+<td>Move to the next part of the window</td>
+</tr>
+<tr>
+<td><kbd>Shift+F6</kbd></td>
+<td>Move to the previous part of the window</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+F</kbd></td>
+<td>Find in terminal</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+R</kbd></td>
+<td>Resume a past conversation</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+O</kbd></td>
+<td>Projects</td>
+</tr>
+<tr>
+<td><kbd>F1</kbd></td>
+<td>Help</td>
+</tr>
+</tbody>
+</table>
+<h3>The window</h3>
+<table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><kbd>Ctrl+,</kbd></td>
+<td>Settings</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+=</kbd></td>
+<td>Increase font size</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+-</kbd></td>
+<td>Decrease font size</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+0</kbd></td>
+<td>Reset font size</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Remote access…</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Detach — close the window, leave agents running</td>
+</tr>
+<tr>
+<td>Command palette</td>
+<td>Quit — stop every agent in every project</td>
+</tr>
+</tbody>
+</table>
+<p>Panes are focused by clicking, resized by dragging the divider between them,
+moved by dragging their header, and closed, restarted or zoomed from the
+buttons in their header. Double-click a tab to rename it; an empty name gives
+it back the title it gives itself.</p>
+<p>A divider can be resized from the keyboard too: reach it with <kbd>Tab</kbd>,
+then the arrow keys move it and <kbd>Home</kbd> shares the room equally. In the
+tab bar, <kbd>←</kbd> and <kbd>→</kbd> move between tabs, and <kbd>Home</kbd>
+and <kbd>End</kbd> go to the first and the last.</p>
+<h2>Inside a dialog</h2>
+<ul>
+<li><kbd>Esc</kbd> closes any dialog, the command palette and the prompt bar, and
+the find bar while you are typing in it. <kbd>Tab</kbd> stays inside an open
+dialog.</li>
+<li>While a dialog is open, the other shortcuts wait until it closes, so nothing
+changes behind it unseen. The font size keys, <kbd>Ctrl+Shift+K</kbd> and
+<kbd>F1</kbd> still work.</li>
+<li>In the command palette, the agent picker and the help's contents,
+<kbd>↑</kbd> and <kbd>↓</kbd> move through the list and <kbd>Enter</kbd>
+takes the one selected.</li>
+<li>In the agent picker, <kbd>→</kbd> opens an agent's models and <kbd>←</kbd>
+closes them, while nothing has been typed to narrow the list.</li>
+<li>In the find bar, <kbd>Enter</kbd> goes to the next match and
+<kbd>Shift+Enter</kbd> to the one before.</li>
+</ul>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

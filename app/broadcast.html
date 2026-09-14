@@ -1,0 +1,154 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Broadcast and the prompt bar | Flockdeck docs</title>
+<meta name="description" content="Some instructions are for every agent at once — &#34;run the tests and fix what breaks&#34;, across five worktrees. The prompt bar is how you say a thing once, and broadcast decides who hears it.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Broadcast and the prompt bar | Flockdeck docs">
+<meta property="og:description" content="Some instructions are for every agent at once — &#34;run the tests and fix what breaks&#34;, across five worktrees. The prompt bar is how you say a thing once, and broadcast decides who hears it.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/broadcast.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/broadcast.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html" aria-current="page">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Broadcast and the prompt bar</h1>
+<p class="doc-lede">Some instructions are for every agent at once — &quot;run the tests and fix what
+breaks&quot;, across five worktrees. The prompt bar is how you say a thing once,
+and broadcast decides who hears it.</p>
+<h2>The prompt bar</h2>
+<p><kbd>Ctrl+Shift+P</kbd> opens the prompt bar at the bottom of the window. Compose
+the instruction there and press <kbd>Enter</kbd> or <strong>Send</strong>: it is delivered
+as one submitted message rather than typed key by key. <kbd>Esc</kbd> or
+<strong>Cancel</strong> closes it without sending anything, and what you had written is
+still there when you open it again.</p>
+<p><kbd>Shift</kbd>+<kbd>Enter</kbd> starts a new line, so an instruction can be
+a list — &quot;1. add tests&quot;, &quot;2. run them&quot; — and the bar grows to show all of it.
+A list pasted in keeps its lines. <kbd>↑</kbd> on the first line and
+<kbd>↓</kbd> on the last bring back the prompts you sent before; on the lines
+between, they move from line to line.</p>
+<p>You get to read the sentence before six agents act on it, and a typo is yours
+to fix rather than theirs to interpret.</p>
+<h2>Prompts of several lines</h2>
+<p>A prompt of several lines reaches a pane as one message when the program in
+it accepts pasted text — it asks the terminal for bracketed paste, as Claude
+Code does — because the bar hands the lines over the way a paste would, and
+presses <kbd>Enter</kbd> once, after the last.</p>
+<p>A program that does not accept pasted text gets the prompt typed, and there a
+new line is an <kbd>Enter</kbd>: each line arrives as a message of its own.
+If a pane takes your lines one at a time, send it one line, or write the
+prompt as one.</p>
+<h2>Who receives it</h2>
+<p>With broadcast off, the prompt goes to the focused pane, and to any panes you
+have added with their <code>⇉</code> button. <kbd>Ctrl+Shift+B</kbd> — or <strong>Broadcast</strong> in
+the rail — turns broadcast on, and then it goes to every pane in the
+<strong>broadcast set</strong>: by default every agent in the tab on screen. Whenever the
+prompt will reach more than one pane, the bar's label says how many, as in
+<strong>Prompt → 3 panes</strong>. That includes panes you added with <code>⇉</code> while broadcast
+is off.</p>
+<p>The <code>⇉</code> button in each pane header adds that pane to the set or takes it out,
+as <strong>Add this pane to broadcast, or take it out</strong> in the command palette does for the focused
+pane.
+Membership is shown in the pane header even while broadcast is off. Once you
+have picked panes by hand the set stays as you made it, through broadcast
+being turned off and on, rather than following you from tab to tab.</p>
+<p>The focused pane is always included, so a prompt never goes somewhere you
+cannot see.</p>
+<p>Broadcast only decides where the prompt bar sends. What you type into a pane
+goes to that pane alone.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

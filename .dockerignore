@@ -1,0 +1,12 @@
+# Everything that is repository rather than website. The image copies the
+# whole directory, so this list is what decides the difference between the
+# two. content/ is the Markdown docgen reads to build self-hosting/ — the
+# site is the HTML it wrote, not the source.
+.git
+.github
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+LICENSE
+content

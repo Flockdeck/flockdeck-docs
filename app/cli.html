@@ -1,0 +1,400 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The command line | Flockdeck docs</title>
+<meta name="description" content="Once it is running you rarely need the command line: projects are opened and switched from inside the window. These are what is left.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="The command line | Flockdeck docs">
+<meta property="og:description" content="Once it is running you rarely need the command line: projects are opened and switched from inside the window. These are what is left.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/cli.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/cli.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html" aria-current="page">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>The command line</h1>
+<p class="doc-lede">Once it is running you rarely need the command line: projects are opened and
+switched from inside the window. These are what is left.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flockdeck</code></td>
+<td>Open the current directory</td>
+</tr>
+<tr>
+<td><code>flockdeck -C ~/code/api</code></td>
+<td>Open that directory, in the running instance if there is one</td>
+</tr>
+<tr>
+<td><code>flockdeck -new</code></td>
+<td>Start without the saved layout, and replace it with this run's</td>
+</tr>
+<tr>
+<td><code>flockdeck -shell</code></td>
+<td>Make the first pane a shell, not an agent</td>
+</tr>
+<tr>
+<td><code>flockdeck -agent codex</code></td>
+<td>Make every new pane this run that agent</td>
+</tr>
+<tr>
+<td><code>flockdeck -detach</code></td>
+<td>Run with no window; attach to it later</td>
+</tr>
+<tr>
+<td><code>flockdeck -quit</code></td>
+<td>Stop a running instance and its agents</td>
+</tr>
+<tr>
+<td><code>flockdeck -no-window</code></td>
+<td>Just serve; print the URL and open it yourself</td>
+</tr>
+<tr>
+<td><code>flockdeck -solo</code></td>
+<td>Start a separate instance instead of attaching</td>
+</tr>
+<tr>
+<td><code>flockdeck -version</code></td>
+<td>Print the version</td>
+</tr>
+<tr>
+<td><code>flockdeck agents</code></td>
+<td>List the agents and models that <code>-agent</code> and <code>spawn</code> accept, and which are installed here</td>
+</tr>
+</tbody>
+</table>
+<p>Running the binary again does <strong>not</strong> start a second set of agents. It finds
+the instance already going, hands it the directory you asked for, and opens a
+window onto it. <code>-solo</code> is the escape hatch when you genuinely want two.</p>
+<p><code>-new</code> is not a way to glance at an empty window. Its layout is saved over the
+one it skipped within half a minute of starting, and again when the run ends.
+The other projects you had open are put back in the list when the run ends,
+so the next start reopens them as before, around the one this run was started
+on, which is where it lands. One you closed during the run stays closed. A run that crashes after its window was reloaded
+or detached has already written the list without them, and the next start
+opens only its own projects.</p>
+<h2>spawn</h2>
+<p>Run from inside a pane, this starts another agent:</p>
+<pre><code class="language-sh">flockdeck spawn [--worktree &lt;branch&gt;] [--split] [--shell]
+                [--agent &lt;id&gt;] [--model &lt;model&gt;] &lt;task&gt;
+</code></pre>
+<p><code>--agent</code> and <code>--model</code> choose which agent the helper is; without them it is
+whatever the project runs by default. <code>flockdeck agents</code> lists the names both
+of them take, and a name neither the catalog nor the agent has is answered here
+rather than becoming a pane that never starts.</p>
+<p>The address and token come from the environment the pane was started with —
+<code>FLOCKDECK_API</code> and <code>FLOCKDECK_TOKEN</code> below — so only processes running inside a pane
+can use it, and running it anywhere else says so rather than failing
+obscurely. That is what lets an agent hand work to helpers of its own.</p>
+<h2>keys</h2>
+<p>An API agent — one Flockdeck talks to directly rather than through a CLI of its
+own — needs a key. It is looked for in that agent's own environment variables
+first, then in <code>keys.json</code> in the state directory, and last in
+<code>FLOCKDECK_API_KEY</code>. A vendor's own variable, such as <code>OPENAI_API_KEY</code>, is read
+only while the agent talks to that vendor's own address.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flockdeck keys set openai</code></td>
+<td>Reads the key from stdin, so it misses shell history</td>
+</tr>
+<tr>
+<td><code>flockdeck keys list</code></td>
+<td>Which agents have one, not what it is</td>
+</tr>
+<tr>
+<td><code>flockdeck keys clear openai</code></td>
+<td>Forgets the one Flockdeck stored</td>
+</tr>
+<tr>
+<td><code>flockdeck keys check openai</code></td>
+<td>Asks the agent's endpoint whether it takes the key a pane would use</td>
+</tr>
+<tr>
+<td><code>flockdeck keys endpoint &lt;agent&gt; &lt;url&gt;</code></td>
+<td>Points an API agent at another address; <code>default</code> in place of the address goes back to the vendor's own</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing here ever prints a key back, and neither does the interface.</p>
+<h2>remote</h2>
+<p>Reach this machine's agents from another device, through a relay.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flockdeck remote enable</code></td>
+<td>Enrol this machine; takes <code>-relay</code>, <code>-name</code>, <code>-join</code>, <code>-invite</code></td>
+</tr>
+<tr>
+<td><code>flockdeck remote pair</code></td>
+<td>A one-time link and QR code that pairs a device</td>
+</tr>
+<tr>
+<td><code>flockdeck remote pair -desktop</code></td>
+<td>A code that enrols another machine into the account</td>
+</tr>
+<tr>
+<td><code>flockdeck remote status</code></td>
+<td>Whether it is on, and whether it is connected</td>
+</tr>
+<tr>
+<td><code>flockdeck remote devices</code></td>
+<td>What is paired, with the ids <code>revoke</code> takes</td>
+</tr>
+<tr>
+<td><code>flockdeck remote revoke &lt;id or name&gt;</code></td>
+<td>Unpair a device</td>
+</tr>
+<tr>
+<td><code>flockdeck remote rename &lt;name&gt;</code></td>
+<td>Rename this machine; with <code>-device &lt;id or name&gt;</code>, a paired device instead</td>
+</tr>
+<tr>
+<td><code>flockdeck remote disable</code></td>
+<td>Remove this machine from the relay; <code>-force</code> if it cannot be reached</td>
+</tr>
+</tbody>
+</table>
+<p>A running instance is told when <code>enable</code> or <code>disable</code> changes anything, and
+connects or disconnects on the spot. <a href="/app/remote.html">Remote access</a> has the rest.</p>
+<h2>chat</h2>
+<pre><code class="language-sh">flockdeck chat
+</code></pre>
+<p>This is the terminal chat client Flockdeck runs in a pane for an API agent — the
+one that talks to a model API itself, with no wrapper CLI, no node and no
+Python. It is told which agent, which model and which session to be; the pane
+fills all three in, which is why you meet it as a pane rather than type it. Run
+outside a pane it still works, but there is nothing listening for the lifecycle
+events it reports, so nothing turns amber when it wants you. It has flags of its
+own for setting it up by hand — which wire to speak, the base URL, the model,
+and which environment variable holds the key — and lists them when asked for
+help, for talking to an endpoint from a plain terminal. On
+Windows, run it as <code>flockdeck-chat chat</code>: <code>flockdeck.exe</code> is built without a
+console, so it has nowhere to draw the conversation, and <code>flockdeck-chat.exe</code>
+beside it is the same program built with one.</p>
+<h2>update</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flockdeck update</code></td>
+<td>Fetches the latest release and puts it in place</td>
+</tr>
+<tr>
+<td><code>flockdeck update -check</code></td>
+<td>Says whether there is one, and stops</td>
+</tr>
+</tbody>
+</table>
+<p>When a new version has been downloaded, an <strong>Update</strong> button appears at the
+right of the top bar. It offers <strong>Restart now</strong>, which saves and reopens your
+layout but stops the running agents, or <strong>Later</strong>, which installs it when
+Flockdeck next quits. A window reached through the relay is not shown the
+button, and cannot turn the check for updates on or off: both are done at the
+desk.</p>
+<p>Releases are published at <code>dl.flockdeck.ai</code> as one archive per platform, with
+a <code>checksums.txt</code> beside them, signed with the release key that is built into
+Flockdeck. A second, standby key, held offline and used only if the first is
+ever lost or compromised, has been trusted alongside it since v0.3.5. GitHub
+carries every release too, signed the same way: when <code>dl.flockdeck.ai</code> cannot
+be reached, or what it serves is not signed by a trusted key, Flockdeck
+downloads from GitHub instead and says why in its log.
+Wherever it comes from, the download is checked against its signed SHA-256
+before anything is replaced, and a download that does not match is thrown away
+rather than installed.</p>
+<p>Which release is the latest comes from <code>latest.json</code> on <code>dl.flockdeck.ai</code>,
+which only names a version; Flockdeck then reads that version's own signed
+manifest. So an out-of-date <code>latest.json</code> can hold an update back for a few
+minutes, but it can never have anything unsigned or older installed.</p>
+<p>Replacing the binary does not disturb an instance that is already running: it
+is running from an image the operating system already holds, so the new version
+is simply what starts next time. The old file is moved aside and swept up by
+the following start.</p>
+<p>A build you made yourself — stamped <code>dev</code> by <code>go build</code> or <code>go install</code>, or by
+<code>git describe</code> when built with make — is never replaced by a release: there is
+no sense in which it is behind one.</p>
+<p>Set <code>FLOCKDECK_UPDATE=off</code> to stop the window checking on its own, and to stop
+an update it has already downloaded being put in place when Flockdeck exits.
+The subcommand still works; it is the background updating that goes.</p>
+<h2>Environment</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FLOCKDECK_BROWSER</code></td>
+<td>Force which browser provides the window</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_UPDATE</code></td>
+<td><code>off</code> stops updating in the background: no checks, and nothing already downloaded is put in place</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_RELAY</code></td>
+<td>Which relay <code>flockdeck remote enable</code> uses when <code>-relay</code> is not given</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_API</code></td>
+<td>Where Flockdeck listens for its panes — set for you</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_TOKEN</code></td>
+<td>The secret that goes with it — set for you</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_PANE</code></td>
+<td>The pane's id — set for you, read by <code>spawn</code></td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_PANE_NAME</code></td>
+<td>The pane's name, for a shell prompt to use</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_PROJECT</code></td>
+<td>The project the pane belongs to</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_AGENT</code></td>
+<td>Which agent the pane is running</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_MODEL</code></td>
+<td>Which model it was asked for, if any</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_LAUNCH</code></td>
+<td>Which start of the pane this is — set for you, sent back by its hooks so a late one from before a restart is dropped</td>
+</tr>
+</tbody>
+</table>
+<p><code>FLOCKDECK_PANE</code>, <code>FLOCKDECK_PANE_NAME</code> and <code>FLOCKDECK_PROJECT</code> are what a shell pane —
+which has no lifecycle hooks of its own — has to go on.</p>
+<p><code>FLOCKDECK_API</code>, <code>FLOCKDECK_TOKEN</code>, <code>FLOCKDECK_PANE</code>, <code>FLOCKDECK_PANE_NAME</code> and
+<code>FLOCKDECK_PROJECT</code> were called <code>PERCH_*</code> before the program was renamed. Panes
+still carry both spellings of those five and <code>spawn</code> still reads both, so a
+prompt or a script written against the old names keeps working; they will go
+in a later release. <code>FLOCKDECK_AGENT</code>, <code>FLOCKDECK_MODEL</code> and <code>FLOCKDECK_LAUNCH</code>
+are newer and have only the one name.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Requirements | Flockdeck docs</title>
+<meta name="description" content="What a self-hosted relay needs before you deploy it.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Requirements | Flockdeck docs">
+<meta property="og:description" content="What a self-hosted relay needs before you deploy it.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/self-hosting/requirements.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/self-hosting/requirements.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html" aria-current="page">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Self-hosting</p>
+<h1 id="requirements">Requirements</h1>
+<p class="doc-lede">What a self-hosted relay needs before you deploy it.</p>
+<h2 id="a-domain-and-dns-you-control">A domain, and DNS you control</h2>
+<p>The relay serves everything from the root of one hostname — for example
+<code>relay.example.com</code> — not from a subpath of a site you already run. Point
+that hostname's A/AAAA record at wherever the relay will listen, whether
+that's the relay itself (with its built-in ACME support) or a load balancer
+or reverse proxy in front of it.</p>
+<p>If you want each paired desktop to get its own subdomain (<code>-desk-domain</code>,
+see <a href="configuration.html">Configuration</a>), you'll also need a wildcard record
+— <code>*.relay.example.com</code> — and a wildcard certificate to match. This is
+optional; the relay works without it.</p>
+<h2 id="tls">TLS</h2>
+<p>The relay needs to be reachable over HTTPS. Three ways to get there, covered
+in <a href="deploying-the-relay.html">Deploying the relay</a>:</p>
+<ul>
+<li>the relay's own built-in ACME client, if it's the thing your DNS record
+points straight at;</li>
+<li>your own certificate and key, which the relay reloads without a restart
+when the files change; or</li>
+<li>a reverse proxy or load balancer in front of it that terminates TLS
+itself, with the relay behind it on plain HTTP.</li>
+</ul>
+<p>Whichever you choose, WebSocket upgrades have to reach the relay unbuffered
+— that's how a desktop's connection and a browser's both stay open. A proxy
+that buffers or times out long-lived connections will break both.</p>
+<h2 id="compute">Compute</h2>
+<p>The relay is a single small Go binary with modest resource needs — closer
+to a sidecar than a service you'd size a cluster around. It keeps no
+per-request state beyond the open tunnels themselves, so it scales with the
+number of connected desktops and devices, not with traffic volume.</p>
+<h2 id="storage">Storage</h2>
+<p>By default the relay keeps its state — paired desktops, devices, sessions —
+in an embedded database file on disk, no separate database server needed.
+MySQL 8 or later is supported as well, for a deployment that wants its state
+in a database it already operates. See <a href="storage-and-data.html">Storage and
+data</a>.</p>
+<p>Either way, the relay's data directory needs to survive restarts and
+redeploys: losing it forgets every paired desktop and device.</p>
+<h2 id="push-notifications-optional">Push notifications (optional)</h2>
+<p>If you want the relay to send push notifications to paired phones when an
+agent is waiting, it needs a VAPID key pair, which the relay can generate
+for you. See <a href="configuration.html">Configuration</a>.</p>
+<h2 id="what-you-dont-need">What you don't need</h2>
+<p>No database migrations to run by hand, no message queue, no separate cache.
+The relay is one process and one data directory.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting started | Flockdeck docs</title>
+<meta name="description" content="Flockdeck runs several coding agents at once, each in a real terminal, and answers one question at a glance: which agent needs you right now.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Getting started | Flockdeck docs">
+<meta property="og:description" content="Flockdeck runs several coding agents at once, each in a real terminal, and answers one question at a glance: which agent needs you right now.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/getting-started.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/getting-started.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html" aria-current="page">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Getting started</h1>
+<p class="doc-lede">Flockdeck runs several coding agents at once, each in a real terminal, and
+answers one question at a glance: which agent needs you right now.</p>
+<p>Every agent pane is a real program in a genuine pseudo-terminal, so it behaves
+exactly as it does in a normal terminal — permission prompts, slash commands,
+plan mode, colours, mouse. Claude Code is what a pane runs unless you say
+otherwise; any other coding agent, and any model API spoken to directly, is a
+pick away. What the app adds is everything you need once there is more than one
+of them.</p>
+<h2>The three things to know first</h2>
+<p><strong>The dot in each pane header says what that agent is doing.</strong> Green is
+working, amber is <em>waiting on you</em>, grey is idle, red means the process
+exited. A tab holding a waiting agent is marked <code>▲</code>, and so is the window
+title, so an agent that blocks while you are looking elsewhere still reaches
+you.</p>
+<p><strong>Panes are moved, not recreated.</strong> Drag a pane by its header to another edge,
+another tab, or a tab of its own; nothing restarts, and the conversation,
+working directory and scrollback come with it.</p>
+<p><strong><kbd>Ctrl+Shift+K</kbd> opens the command palette</strong>, and so does <strong>Commands</strong> at the
+right of the top bar. It holds every action in the application but switching
+tabs, searchable. If you remember one shortcut, remember that one.</p>
+<h2>A first session</h2>
+<ol>
+<li>Press <kbd>Ctrl+Shift+T</kbd> for an agent tab, or <kbd>Ctrl+Shift+D</kbd> to put a
+second agent beside the one you have. Both take the default agent;
+<strong>New agent tab (choose agent)…</strong> is the same thing with the picker in front of
+it, for when you want a different agent or a different model.</li>
+<li>Type into a pane as you would in any terminal. Click a pane to give it the
+keyboard.</li>
+<li>When an agent blocks on a permission prompt its dot turns amber and its tab
+is marked. Answer it, and it goes back to work.</li>
+<li>When one has produced something, press <kbd>Ctrl+Shift+S</kbd> to see the diff,
+commit and push it without leaving the window.</li>
+</ol>
+<h2>When one agent is not enough</h2>
+<p>Two agents editing the same files will fight. Give each its own checkout
+instead: <kbd>Ctrl+Shift+G</kbd> opens the worktrees, where you can create them, and
+<kbd>Ctrl+Shift+X</kbd> fans out — it turns one agent's plan into a set of agents that
+each take a task in a worktree of their own. <a href="/app/worktrees.html">Git worktrees</a> and
+<a href="/app/fanout.html">Fan out</a> cover both.</p>
+<h2>Which agent, which model</h2>
+<p>A pane's header names what is in it — <code>claude · sonnet</code>, <code>codex · gpt-5.6-sol</code> —
+beside its branch. <a href="/app/agents.html">Agents and models</a> explains the picker, what changes when
+an agent cannot report its own status, and how to add one of your own. For the
+API agents, and for Claude Code where its status line is read, the header also
+estimates what the conversation has spent and shows how near a usage limit it
+is; <a href="/app/spend.html">Spend and limits</a> says how, and when Claude Code's are read.</p>
+<h2>Finding the rest of it</h2>
+<p>The rail down the left of the window has a tile for each open project — one
+with an amber badge has an agent waiting on you — and under them the tools:
+broadcast, changes, history, worktrees, remote access, help and settings. Rest the
+pointer on one, or reach it with the keyboard, and it says what it is and the
+key that does the same. On a phone or a narrow window the rail folds into the
+menu at the left of the top bar.</p>
+<p><kbd>F1</kbd> brings this page back from anywhere.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

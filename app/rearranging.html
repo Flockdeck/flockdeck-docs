@@ -1,0 +1,164 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rearranging what is already running | Flockdeck docs</title>
+<meta name="description" content="A layout is rarely right first time. The agent you thought was a side errand turns out to be the one you are watching, and it is in the wrong corner.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Rearranging what is already running | Flockdeck docs">
+<meta property="og:description" content="A layout is rarely right first time. The agent you thought was a side errand turns out to be the one you are watching, and it is in the wrong corner.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/rearranging.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/rearranging.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html" aria-current="page">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Rearranging what is already running</h1>
+<p class="doc-lede">A layout is rarely right first time. The agent you thought was a side errand
+turns out to be the one you are watching, and it is in the wrong corner.</p>
+<p>Nothing is started or stopped by moving it. A move relocates the pane in the
+layout tree, so the process, its conversation, its working directory and its
+scrollback all come along — and the new arrangement is saved, so it comes back
+next time.</p>
+<h2>Dragging a pane</h2>
+<p>Drag a pane by its header. The pane under the pointer shows what would happen
+if you let go there:</p>
+<ul>
+<li>onto the <strong>left, right, top or bottom</strong> of another pane — it goes there,
+joining that row or column rather than nesting a new split inside it;</li>
+<li>onto the <strong>middle</strong> of another pane — the two <strong>exchange places</strong>, and the
+layout keeps its shape and proportions exactly as they were;</li>
+<li>onto <strong>another tab</strong> in the tab bar — it moves into that tab;</li>
+<li>onto the <strong><code>+</code> button</strong> — it gets a tab of its own.</li>
+</ul>
+<h2>Dragging a tab</h2>
+<p>Where along another tab it lands decides what happens:</p>
+<ul>
+<li>onto the <strong>left or right end</strong> — it is reordered to there;</li>
+<li>onto the <strong>middle</strong> — the two tabs are <strong>merged</strong>, and one tab is left
+holding every pane of both. Each keeps the arrangement it had, and the room
+is shared out a column at a time rather than half to each tab: fold five tabs
+in one after another and you get five even columns, not one half the width
+and the rest squeezed into slivers you cannot grab a divider in;</li>
+<li>onto the <strong><code>+</code> button</strong> — it goes to the end of the bar.</li>
+</ul>
+<p>A tab emptied by dragging its last pane away closes itself, and <strong>the pane is
+not closed with it</strong>. That is the difference between moving a pane out and
+closing it.</p>
+<h2>Putting a tab back in order</h2>
+<p>Every move here is relative — beside this pane, past that one — and enough of
+them leaves a tab with panes too narrow to grab a divider in or drop anything
+into. <strong>Tile these panes evenly</strong> is the way back: it lays the tab's panes out in rows of
+even columns, in the order they are already in, the same arrangement a fan-out
+starts its agents in.</p>
+<h2>From the keyboard</h2>
+<p><kbd>Ctrl+Shift+←</kbd>, <kbd>Ctrl+Shift+→</kbd>, <kbd>Ctrl+Shift+↑</kbd> and
+<kbd>Ctrl+Shift+↓</kbd> move the focused pane past its neighbour in that
+direction. The neighbour is chosen by what is on screen rather than by tree
+order, and where two panes are equally near, the upper or the left one is
+taken. The opposite arrow puts a move back, whatever the sizes of the panes it
+passed, as long as nothing else in the tab has moved since.</p>
+<p>The command palette carries the same moves, and <strong>Move pane to a tab of its own</strong>
+for the one dragging does by dropping a pane on <code>+</code>. It also has two that
+dragging cannot express as easily: <strong>Move this pane to tab: …</strong> and <strong>Merge
+tab into this one: …</strong> for every open tab, and <strong>Merge every tab into this one</strong> for
+when the agents you want to watch together are scattered across all of them.
+<strong>Move tab left</strong> and <strong>Move tab right</strong> move the tab on screen one
+place along the tab bar, as dragging it would.</p>
+<p>Merging is the reverse of dropping a pane on <code>+</code>: what one splits apart, the
+other gathers back up.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

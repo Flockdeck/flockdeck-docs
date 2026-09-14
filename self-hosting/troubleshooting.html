@@ -1,0 +1,161 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Troubleshooting | Flockdeck docs</title>
+<meta name="description" content="The ways a first self-hosted deployment usually goes wrong, and where to look.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Troubleshooting | Flockdeck docs">
+<meta property="og:description" content="The ways a first self-hosted deployment usually goes wrong, and where to look.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/self-hosting/troubleshooting.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/self-hosting/troubleshooting.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html" aria-current="page">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Self-hosting</p>
+<h1 id="troubleshooting">Troubleshooting</h1>
+<p class="doc-lede">The ways a first self-hosted deployment usually goes wrong, and where to
+look.</p>
+<h2 id="desktops-or-devices-cant-connect-at-all">Desktops or devices can't connect at all</h2>
+<p>Almost always a proxy swallowing WebSocket upgrades. If the relay is behind
+a reverse proxy or load balancer, confirm it's configured to forward
+WebSocket connections through unbuffered — see
+<a href="requirements.html">Requirements</a>. A proxy that works for ordinary HTTP
+traffic can still silently break this.</p>
+<h2 id="readyz-never-returns-healthy"><code>/readyz</code> never returns healthy</h2>
+<p>With MySQL storage, this means the relay can't reach the database: check
+<code>-database</code> (or <code>FLOCKDECK_RELAY_DATABASE_URL</code>), that the database exists,
+and <code>-database-ca</code> if the connection needs a CA certificate. With the
+embedded database, check that <code>-data</code> points at a directory the relay's
+process can actually write to.</p>
+<h2 id="certificate-errors">Certificate errors</h2>
+<ul>
+<li>Using <code>-acme-domain</code>: the relay needs to be reachable on ports 80 and 443
+directly from the internet for the ACME challenge to complete. Behind a
+proxy or load balancer, use <code>-tls-cert</code>/<code>-tls-key</code> or terminate TLS at the
+proxy instead — see <a href="deploying-the-relay.html">Deploying the relay</a>.</li>
+<li>Using <code>-tls-cert</code>/<code>-tls-key</code>: the relay reloads these when they change, so
+check the files were actually replaced (not just touched) and that the
+process can read them.</li>
+<li>Using <code>-desk-domain</code>: this needs a <em>wildcard</em> certificate covering
+<code>*.relay.example.com</code>, not just the base domain.</li>
+</ul>
+<h2 id="a-desktop-registers-against-the-shared-relay-instead-of-yours">A desktop registers against the shared relay instead of yours</h2>
+<p><code>FLOCKDECK_RELAY</code> has to be set in the environment the copy of Flockdeck
+that's actually running was launched from — see <a href="connecting-desktops.html">Connecting
+desktops</a>. A variable set in one shell profile
+doesn't reach Flockdeck launched from a desktop shortcut, a different
+shell, or a service manager. Passing <code>-relay</code> on <code>flockdeck remote enable</code>
+directly sidesteps this.</p>
+<h2 id="new-desktops-cant-register">New desktops can't register</h2>
+<p>If <code>-registration</code> is <code>invite</code>, every new desktop needs a code from
+<code>flockdeck-relay invite</code> first — see <a href="admin-and-invites.html">Admin and invites</a>.
+If it's <code>closed</code>, no new desktop can register regardless. Check
+<code>-max-hosts</code> too: once it's reached, registration fails until an existing
+desktop is removed.</p>
+<h2 id="rate-limiting">Rate limiting</h2>
+<p><code>-register-per-hour</code>, <code>-pair-per-minute</code> and <code>-connects-per-minute</code> (see
+<a href="configuration.html">Configuration</a>) are all per source address. Behind a
+proxy, if <code>-trust-proxy</code> isn't set, the relay sees every request as coming
+from the proxy's own address and rate-limits everyone behind it together —
+turn it on, and make sure the proxy is actually setting the forwarded
+headers it relies on.</p>
+<h2 id="still-stuck">Still stuck</h2>
+<p>Confirm the relay itself considers itself healthy — <code>/healthz</code> and
+<code>/readyz</code> — before chasing anything else; a relay that isn't up yet
+produces symptoms that look like every problem above at once.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

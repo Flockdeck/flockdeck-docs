@@ -1,0 +1,213 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fan out | Flockdeck docs</title>
+<meta name="description" content="Ask an agent to plan something and it answers with a list. Fan out reads that list out of the pane&#39;s output and offers to start an agent for each item.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Fan out | Flockdeck docs">
+<meta property="og:description" content="Ask an agent to plan something and it answers with a list. Fan out reads that list out of the pane&#39;s output and offers to start an agent for each item.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/fanout.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/fanout.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html" aria-current="page">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Fan out</h1>
+<p class="doc-lede">Ask an agent to plan something and it answers with a list. Fan out reads that
+list out of the pane's output and offers to start an agent for each item.</p>
+<p>Press <kbd>Ctrl+Shift+X</kbd>, or use the <code>⑂</code> button in the pane header.</p>
+<p>For a Claude Code pane the list is read out of the agent's own transcript — the
+markdown it actually produced, rather than the wrapped and redrawn version of
+it on screen. Any other pane, the built-in chat client and shells among them,
+falls back to the screen and is more often wrong for it.</p>
+<h2>What the dialog does</h2>
+<p>The extracted tasks appear in an editable box, one per line. <strong>Nothing runs
+until you say so</strong> — the list is a suggestion, not a decision. Edit it, delete
+the items you did not mean, add ones the agent missed. <kbd>Enter</kbd> in the
+box starts a new line rather than the run: the <strong>Start</strong> button under it, which
+counts the agents, is what starts them, as does <kbd>Ctrl</kbd>+<kbd>Enter</kbd>
+in the box, and <kbd>Esc</kbd> closes the dialog without starting any.</p>
+<p>These choices go with it:</p>
+<ul>
+<li><strong>Which agent, and which model.</strong> One control at the top sets what the whole
+run uses, and starts on the project's default agent and model; each line
+carries an override of its own, so twelve tasks can be split between two
+agents on purpose — the one that is good at the refactor and the cheap one
+that is good enough for the six renames.</li>
+<li><strong>Routing</strong>, when it is on for the project. A line whose task one of the
+rules matches comes with its model already set — a smaller one for
+mechanical work, a stronger one for hard work — and tagged <strong>↘ routed</strong> or
+<strong>↗ routed</strong>; the tag's tooltip names the rule. One line above the tasks
+counts them, beside <strong>Use the run's model for every task</strong>, which puts every
+line back on the run's model. Change a line's model and it is yours again.
+What the dialog shows is what runs. <a href="/app/agents.html">Agents and models</a> has the
+rules, and how to turn routing on.</li>
+<li><strong>Give each agent its own git worktree.</strong> On by default in a repository.
+Each child gets a branch named after its task, so they work in parallel
+without touching each other's files. Fanned out from a folder inside the
+repository, each child works in that same folder of its worktree; a folder
+git does not track has no copy there, so the child starts at the top.
+<a href="/app/worktrees.html">Git worktrees</a> covers what you can do with them afterwards.</li>
+<li><strong>Put them in this tab, beside the agent that planned them.</strong> Off, the
+children get a new tab of their own, called <strong>Fan out</strong> — or named after the
+task, when there is only one. Either way they end
+up in one tab together rather than a tab each: a dozen agents is a dozen tabs
+nobody can read, and a fan-out is precisely when you want to see them at once.</li>
+<li><strong>Trust the new worktrees.</strong> A fresh worktree is a directory the agent has
+never seen, so an agent with a trust question of its own — Claude Code has
+one — would stop and ask whether the folder is trusted before doing any work,
+once per child. If the folder you are fanning out from is already trusted,
+this carries that same answer over to the folder each child works in. It will
+not invent trust: the box is disabled unless the source directory is
+genuinely trusted already, and an answer given for one folder of a repository
+goes to that same folder of each worktree, never to the whole worktree. The
+project's answer to Claude Code's second question, &quot;Allow external CLAUDE.md
+file imports?&quot;, comes across the same way: a yes stays a yes, a no stays a
+no, and nothing is written if the project was never asked. The questions are
+Claude Code's, so it does nothing for another agent.</li>
+</ul>
+<p>Each task is handed to the agent as its opening argument rather than typed into
+the terminal, so it is submitted the moment the agent starts rather than
+depending on guessing when the interface is ready.</p>
+<h2>How they are arranged</h2>
+<p>The children are laid out in rows of even columns — three panes are a row of
+three, twelve are three rows of four — and the grid is rebuilt as each one
+starts. A row of twelve wraps every line a terminal prints and a stack of
+twelve leaves four lines showing, so neither is a tab you can actually watch.</p>
+<p>As soon as the first child starts, the window goes to it: its tab is selected
+and its pane focused, so what you type next reaches it. In this tab, the focus
+moves off the agent that planned them onto the first new pane. If you have
+gone to another tab while the worktrees were being made, the window stays
+where you are, so nothing you are typing goes to an agent you did not pick.</p>
+<p>Rearrange them afterwards like any other pane: drag one onto another's edge,
+drag one onto the <code>+</code> in the tab bar for a tab of its own, or drag a divider.</p>
+<p>Every child is a normal pane. Watch it, type into it, and review and commit
+its work from <a href="/app/changes.html">Changes</a>.</p>
+<h2>How many at once</h2>
+<p>A fan-out will start at most <strong>12</strong> agents. Each one is a real agent in a real
+terminal, and past a dozen it is the machine rather than the plan that decides
+how well they run. If the list you have edited is longer, the first 12 are
+started and it says so; start the rest as a second fan-out once some of the
+first have finished.</p>
+<p>Blank lines in the box are not tasks and do not count towards it.</p>
+<h2>When only some of them start</h2>
+<p>A task that cannot be started does not cancel the others. Each one that fails
+is reported on its own, and the summary at the end says how many agents
+started and how many did not — a fan-out opens a screenful of panes, and
+without the count a task that never started reads as one you simply lost track
+of among the ones that did.</p>
+<p>A worktree cut for an agent that then failed to start is removed again, so the
+worktree list is left describing the agents that are really running.</p>
+<h2>An agent starting its own helpers</h2>
+<p>Every pane carries an address and a token in its environment, so an agent can
+hand work to helpers itself:</p>
+<pre><code class="language-sh">flockdeck spawn &quot;add tests for the parser&quot;
+flockdeck spawn --worktree fix-auth &quot;repair the token refresh&quot;
+flockdeck spawn --split &quot;watch the build&quot;
+</code></pre>
+<p>Ask a lead agent to plan and then run one of these per task, and it fans
+itself out. Only processes running inside a pane can do this: the token never
+leaves the environment the pane was started with.</p>
+<p>A helper started this way is its parent's responsibility, not yours: its
+finishing and going quiet does not raise a phone push, a desktop notification
+or count toward the waiting badges, for as long as its parent's pane stays
+open to notice instead. A helper asking permission or a real question still
+turns amber and reaches you as usual, since only you can answer those. Once
+the parent's pane is closed, its helpers are yours again, from their next idle
+moment on.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

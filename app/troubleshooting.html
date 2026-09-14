@@ -1,0 +1,252 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>When something is wrong | Flockdeck docs</title>
+<meta name="description" content="The things that go wrong most often, and what they mean.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="When something is wrong | Flockdeck docs">
+<meta property="og:description" content="The things that go wrong most often, and what they mean.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/troubleshooting.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/troubleshooting.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html" aria-current="page">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>When something is wrong</h1>
+<p class="doc-lede">The things that go wrong most often, and what they mean.</p>
+<h2>It will not start at all</h2>
+<p>Started from a shortcut, Flockdeck has no terminal to print to, so a failure to
+start is also written to <code>error.log</code> in the state directory — <a href="/app/settings.html">Settings</a> says
+where that is. Running <code>flockdeck</code> from a terminal shows the same message there.
+What goes wrong as it stops — a layout it could not save, an update it could
+not put in place, a restart that did not come back — is written there too.</p>
+<p>When the layout cannot be saved, Quit and Restart say why and stop there
+rather than lose what changed; asking a second time goes ahead anyway.</p>
+<h2>macOS or Windows will not open a Flockdeck I downloaded</h2>
+<p>Release binaries are not signed. A copy you downloaded in a browser, from
+<code>dl.flockdeck.ai</code> or the GitHub mirror, carries the browser's download mark, so the first start may be
+stopped. On macOS, allow it under System Settings → Privacy &amp; Security, or run
+<code>xattr -d com.apple.quarantine</code> on the binary. On Windows, choose More info →
+Run anyway, or run <code>Unblock-File</code> on the program in PowerShell. The install
+scripts download with curl and PowerShell, which leave no such mark.</p>
+<h2>A pane says its CLI was not found on PATH</h2>
+<p>The agent's command is not on your <code>PATH</code>, so the pane shows that message where
+its terminal would be. Install it — the picker shows where to get every agent it
+knows about, and Claude Code is at
+<a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer">claude.com/claude-code</a> — then press
+<strong>Restart</strong> on the pane. The command is looked for each time a pane starts, but
+in the <code>PATH</code> Flockdeck itself was started with: if the installer added a new
+directory to <code>PATH</code> rather than using one already on it, quit Flockdeck and
+start it again so that it sees the change.</p>
+<h2>An agent is greyed out in the picker</h2>
+<p>For a CLI agent, its command is not on your <code>PATH</code>; the line under it says
+where to get it. For an API agent, no key was found: nothing in the
+environment variables it looks at, and nothing in Flockdeck's own store. <code>flockdeck keys set &lt;agent&gt;</code> reads one from stdin, and <a href="/app/agents.html">Agents and models</a> covers the
+rest. The OpenAI-compatible endpoint ships with no address, because none would
+be right for everybody: pick it, and the picker asks for one. It shows as
+available once it has a key, or at once when that address is on this machine
+and needs none. Unavailable agents are shown rather than hidden on purpose, so that an
+agent you have not installed is a decision rather than an absence.</p>
+<h2>A pane is dead, with a Restart button</h2>
+<p>The process exited. <strong>Restart pane</strong> starts it again in the same directory
+and, where the agent can, resumes the same conversation. If it exits immediately every time, run the
+agent's own command yourself in that directory to see what it says — a bad
+model id and an expired login both look like this from outside.</p>
+<h2>An agent stopped to ask about trusting a folder</h2>
+<p>A worktree is a directory the agent has never seen, and some agents — Claude
+Code among them — ask before working in one. Answer it once and it will not ask
+again for that directory; to avoid it entirely when fanning out, use the trust
+checkbox in the <a href="/app/fanout.html">Fan out</a> dialog, which carries over the answer already given for
+the project. It carries Claude Code's &quot;Allow external CLAUDE.md file imports?&quot;
+answer too, if the project was ever asked it.</p>
+<h2>A pane stopped saying what its agent is doing</h2>
+<p>Where an agent reports its own lifecycle, the status in its header is those
+reports, sent back to the application over loopback. When they stop, only the
+reporting has stopped: the agent carries on working, and its terminal is still
+the truth.</p>
+<p><strong>Restart</strong> the pane. It is launched with a freshly written settings file
+pointing at the address this run is listening on, and with this run's token
+in its environment, where the hooks read it; a pane still carrying an earlier
+run's address and token is missing both. If it
+happens repeatedly with Claude Code, run <code>claude --debug</code> in that directory: a
+hook that cannot reach the application, or that is turned away by it, says so
+on its standard error, and that is where Claude Code shows it.</p>
+<h2>A pane's status is vague, or late</h2>
+<p>Check what is running in it. An agent with no lifecycle of its own to report is
+read from its terminal instead — the bell, a quiet timer and, if its entry has
+<code>patterns</code>, the lines it prints — which is a guess, and a guess is sometimes a beat behind and sometimes
+wrong. <a href="/app/agents.html">Agents and models</a> says which agents report and which are read. There
+is nothing to fix here; it is the price of running an agent that was never
+built to be watched.</p>
+<h2>A Claude pane shows no usage limit</h2>
+<p>Claude Code hands its five-hour and weekly windows only to its status line,
+only on a Pro or Max plan, and only after the first answer in a session. By
+default Flockdeck reads them only where you have a status line of your own;
+<strong>Settings › Agents › Claude Code's usage limits › Always</strong> reads them in every
+Claude pane. That choice, and any change to your own status line, applies to a
+pane when it starts, so use <strong>Restart pane</strong> on one already running.
+<a href="/app/spend.html">Spend and limits</a> has the rest.</p>
+<h2>A fan-out shows no routed rows</h2>
+<p>Routing is off until you turn it on, in <strong>Settings › Agents › Routing</strong>. When
+it is on, it still leaves a line alone when no rule matches its task, when the
+run is on a model whose size it does not know — Claude Code's <strong>Default</strong> among
+them — and when the agent has no model in the tier the rule asks for. The
+dialog says so when routing can do nothing for the run's model.
+<a href="/app/agents.html">Agents and models</a> has the rules.</p>
+<h2>Push, pull or fetch fails over ssh</h2>
+<p>The Changes panel's git has nowhere to ask you anything, so ssh is told not
+to ask: it fails at once, rather than waiting for an answer nobody can give.
+Two failures come from that, and the panel says which it was.</p>
+<ul>
+<li><strong>ssh has not been told to trust the host.</strong> The first connection to a
+server asks whether to trust it. Run <code>git fetch</code> once from a terminal in
+that checkout and answer yes; the panel connects after that.</li>
+<li><strong>The remote refused the ssh key.</strong> A key with a passphrase cannot be
+unlocked without asking for it. Add it to your ssh agent with <code>ssh-add</code>, and
+the panel uses it from there. If it still fails, the remote does not know the
+key, and <code>git fetch</code> from a terminal says more.</li>
+</ul>
+<p>An ssh command of your own — <code>core.sshCommand</code> in git's config, or
+<code>GIT_SSH_COMMAND</code> or <code>GIT_SSH</code> in the environment — is left as it is, without
+that setting. Where ssh can ask for a passphrase in a window of its own, as on
+some Linux desktops, <code>git config core.sshCommand ssh</code> in the checkout is how
+to keep that window.</p>
+<h2>The window looks like a browser tab</h2>
+<p>The interface is a local web page shown in a chromeless application window,
+provided by whichever Chromium-based browser is found first — Chrome, Edge,
+Brave, Chromium or Vivaldi. If none is installed it opens
+as an ordinary tab instead, which works but looks less like an application.
+<code>FLOCKDECK_BROWSER</code> forces a particular one, by name or path; if that one
+cannot be found, the window does not open at all.</p>
+<h2>Nothing is exposed to the network</h2>
+<p>The server binds to <code>127.0.0.1</code> on a random port, and every request — the page,
+the assets and both WebSockets — must carry a token generated fresh for each
+run. A second launch of the binary reaches the running instance through that
+same loopback address.</p>
+<p>The window's own browser is never started with that token, or even with the
+one-time link that stands in for it, on its command line: another account on
+the same machine can often read one process's command line from another's,
+and a moment's head start with either would be enough to open a window onto
+your agents. The link is written into a file only your account can read
+instead, and the browser is pointed at that file. If a window ever shows &quot;This
+link has already been used&quot; and you did not just open one yourself, someone
+else on this computer may have — quit Flockdeck and start it again, which ends
+that session along with whichever window got to it first.</p>
+<p>Remote access, once you turn it on, is a connection this machine makes out to
+the relay. A request arriving through it is let in without the token, because
+the relay has already checked that the device asking is paired — <a href="/app/remote.html">Remote
+access</a> has the rest.</p>
+<h2>Desktop notifications never appear</h2>
+<p>The browser asks for permission on your first interaction with the window. If
+it was refused, grant it in the browser's site settings for this window's
+address, for this run only: the address changes each time Flockdeck starts,
+and the question comes back with it. Notifications are only raised while the window is <em>not</em> in front.</p>
+<h2>An agent seems to think it is a child of another session</h2>
+<p>It is not: each pane is a separate top-level session with its own session id,
+its own generated settings file where the agent takes hooks, and an environment
+scrubbed of the markers a
+parent agent session would otherwise pass down — every agent's markers, not
+only the ones belonging to whatever is in that pane, since Flockdeck may itself
+have been launched from inside one of them. If a pane is behaving as though it
+inherited something, restart it, and the state that survives a restart is the
+conversation, deliberately.</p>
+<h2>Everything stopped when I closed the window</h2>
+<p>Closing the window quits the application. Use <strong>Detach</strong> in the command
+palette to close the window and leave the agents running, and
+<code>flockdeck</code> to come back to them.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

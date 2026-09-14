@@ -1,0 +1,171 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What comes back, and what keeps running | Flockdeck docs</title>
+<meta name="description" content="Closing the window is not meant to cost you anything. Layouts, projects and conversations are restored on the next run, and agents can be left running without a window at all.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="What comes back, and what keeps running | Flockdeck docs">
+<meta property="og:description" content="Closing the window is not meant to cost you anything. Layouts, projects and conversations are restored on the next run, and agents can be left running without a window at all.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/persistence.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/persistence.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html" aria-current="page">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>What comes back, and what keeps running</h1>
+<p class="doc-lede">Closing the window is not meant to cost you anything. Layouts, projects and
+conversations are restored on the next run, and agents can be left running
+without a window at all.</p>
+<h2>On the next run</h2>
+<p>Layouts are saved per project. Tabs, splits, proportions and working
+directories come back, <strong>every project you had open is reopened</strong>, each pane
+starts the agent and model it had, and each one resumes the conversation it had
+rather than starting an empty one. The project you name on the command line is
+the one you land in; the rest are restored around it.</p>
+<p>A project whose folder is not there when Flockdeck starts — on a USB stick
+that is not plugged in, or a network drive not yet connected — is not opened,
+but it stays in the list for the next ten starts, so it comes back with its
+folder. Closing it, once it is back and open, takes it off the list.</p>
+<p>Started without one — from the Start menu, a shortcut, or a terminal in your
+home folder — Flockdeck opens the projects you had open last time and lands in
+the one you were in. Your home folder opens as a project only when there were
+none; to open it on purpose, run <code>flockdeck -C ~</code>.</p>
+<p>A layout is written when the window closes or reloads, when you detach,
+restart or quit, when a project is closed, and every half minute while
+Flockdeck runs — so if it is killed or crashes, it comes back as it was at
+most half a minute before. Which projects were open is not on that timer: it
+is written when the window closes or reloads, when you detach, and when
+Flockdeck stops, so after a crash the next start reopens the projects that
+were open at the last of those.</p>
+<p>A saved file Flockdeck cannot read — a layout, the list of open projects, your
+preferences — is never written over. It is moved aside, beside the original,
+with <code>.unread</code> on the end (or <code>.damaged</code>, when it could be read but made no
+sense, or is a layout saved by a newer version of Flockdeck), and that run goes
+on without it. The window says so, and where the file is kept, within half a
+minute of opening.</p>
+<p>That works because a pane is identified by a session id handed to the agent
+when the pane is created, and handed back when it is restored. Pane identity
+and conversation identity are the same thing, which is what makes restore
+meaningful rather than cosmetic.</p>
+<p>Two things have to hold for a conversation to come back: the agent has to be
+able to reattach one by id, and it has to have written a transcript to
+reattach. So a pane opened and never prompted starts a fresh conversation
+rather than dying on restore, and a pane running an agent that cannot resume
+comes back in the right place, in the right directory, with an empty
+conversation. <a href="/app/agents.html">Agents and models</a> says which is which.</p>
+<p>A layout saved by a build that knew only about Claude is read without a
+murmur: its panes come back running Claude Code at whatever model the CLI is
+set to, and nobody is asked anything.</p>
+<h2>Detaching</h2>
+<p><strong>Detach</strong>, in the command palette, closes the window and leaves every agent
+running.</p>
+<pre><code class="language-sh">flockdeck -detach   # start that way, with no window
+flockdeck           # come back to it
+flockdeck -quit     # stop everything
+</code></pre>
+<p>Closing the window normally still quits, so nothing is left running by
+accident.</p>
+<p><code>flockdeck -detach</code> gives the terminal back. On macOS and Linux, closing the
+terminal a Flockdeck was started from quits an attached run the orderly way,
+saving the layout first; a detached one, started with <code>-detach</code> or detached
+from the palette, carries on.</p>
+<h2>Reloading the window</h2>
+<p>Each pane keeps a bounded ring buffer of recent output, so a window that
+reconnects or is reloaded replays it into a fresh terminal. Reloading the page
+costs you scrollback beyond that buffer, not the conversation.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

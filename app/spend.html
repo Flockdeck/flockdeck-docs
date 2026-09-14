@@ -1,0 +1,144 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spend and limits | Flockdeck docs</title>
+<meta name="description" content="A pane&#39;s header says what its agent has spent in the conversation, and how close it is to the usage limit it runs under, so the agent that is burning money, or about to stop, can be picked out of a tab of six without asking each one.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Spend and limits | Flockdeck docs">
+<meta property="og:description" content="A pane&#39;s header says what its agent has spent in the conversation, and how close it is to the usage limit it runs under, so the agent that is burning money, or about to stop, can be picked out of a tab of six without asking each one.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/spend.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/spend.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html" aria-current="page">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Spend and limits</h1>
+<p class="doc-lede">A pane's header says what its agent has spent in the conversation, and how close it is to the usage limit it runs under, so the agent that is burning money, or about to stop, can be picked out of a tab of six without asking each one.</p>
+<h2>What the header shows</h2>
+<p>Two small figures sit after the tool name, before the processor and memory figure:</p>
+<ul>
+<li><strong>What it has spent.</strong> <code>~$1.24</code> is an estimate in US dollars. <code>84k tok</code> is tokens read and written, shown where there is no price to put on them, such as a local model. A <code>+</code> after the money, as in <code>~$0.40+</code>, means some of the tokens had no price, so the figure is a floor.</li>
+<li><strong>The tightest limit.</strong> <code>5h 72%</code> means 72% of the five-hour window is used; <code>7d</code> is the weekly one. A bar under it fills as the window does. It turns amber at 80% and red at 95%.</li>
+</ul>
+<p>Hover over either one for the rest: every window and when it resets, the tokens in, cached and out, and where the money figure came from.</p>
+<p>Nothing is shown for an agent that reports nothing. Today that is every agent except Claude Code and the built-in API agents.</p>
+<h2>Every money figure is an estimate</h2>
+<p>No figure here is your bill, and each one is written with <code>~</code> to say so.</p>
+<ul>
+<li><strong>The built-in API agents</strong> count the tokens of every call exactly, and Flockdeck prices them from a table of published prices compiled into the app, for Anthropic's, OpenAI's and Google's models. It is the same table the picker shows prices from. The tooltip says the date the prices were checked. A model is priced only when its id is one the table names, or a dated snapshot of one; any other is shown in tokens only, because a made-up price is worse than none.</li>
+<li><strong>Claude Code</strong> works out its own session cost at list prices, and the header shows that figure, marked as Claude Code's own. It can differ from what you are charged: for example, a data-residency premium or a negotiated rate is not in it.</li>
+</ul>
+<p>Tokens are exact and carry no <code>~</code>.</p>
+<h2>On a Claude subscription</h2>
+<p>If you use Claude Code on a Pro or Max plan, your money is fixed and what stops you is the usage window. So the header leads with the window, and shows tokens rather than dollars. The dollar figure goes in the tooltip, as what those tokens would have cost on the API.</p>
+<p>A limit belongs to your login, not to one pane. Every Claude pane on the same login shares the same five-hour and weekly windows, and so does claude.ai, and Claude Code on another machine. A reading from any pane is shown in all of them. Use elsewhere moves the window between readings, so a reading more than ten minutes old says when it was taken.</p>
+<h2>How Claude Code's limits are read</h2>
+<p>Claude Code hands its limits to one place only: the command that draws its status line, the line under its prompt. To read them, Flockdeck puts a small command of its own in that place for its panes. That command passes the figures to Flockdeck, then runs your own status line command with exactly the same input, and prints what yours prints. Your status line looks as it did.</p>
+<p>Where you have no status line of your own, doing this would cost you something: Claude Code hides most of the keyboard hints in its footer whenever any status line is set. So by default Flockdeck only does it where you already have a status line, and there it changes nothing you can see.</p>
+<p>To choose, open <strong>Settings › Agents › Claude Code's usage limits</strong>:</p>
+<ul>
+<li><strong>Only where I have a status line</strong> is the default.</li>
+<li><strong>Always</strong> shows the limits in every Claude pane. Where you have no status line of your own, the line under Claude's prompt is left empty and the footer hints go.</li>
+<li><strong>Never</strong> leaves Claude Code's status line alone. The header then shows nothing for Claude panes.</li>
+</ul>
+<p>The choice applies to a pane when it starts. Use <strong>Restart pane</strong> from the command palette for one that is already running. Your own status line is looked up the way Claude Code looks for it: in the project's <code>.claude/settings.local.json</code>, then <code>.claude/settings.json</code>, then your own <code>settings.json</code> in Claude Code's folder. If you change it, restart the pane so the new command is used.</p>
+<p>The windows only appear for Pro and Max subscribers, and only after the first answer in a session. On an API key, a Claude pane shows its session cost instead.</p>
+<h2>What stays on your machine</h2>
+<p>Everything here is worked out on this computer, from what the agents themselves report. Flockdeck sends nothing about your spending anywhere, and makes no network request to find it out: no usage API, no price feed. If remote access is on, the figures travel with the rest of your panes' state to your own devices, through the relay, as the pane headers do.</p>
+<p>The figures are kept in memory only for now. They start again when a conversation does, with <code>/clear</code> or a new session, and when Flockdeck restarts.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

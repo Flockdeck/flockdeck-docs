@@ -1,0 +1,165 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review, commit and push | Flockdeck docs</title>
+<meta name="description" content="Ctrl&#43;Shift&#43;S, or Changes in the rail, shows what changed in the working tree the focused agent has been using. The Review button on each worktree opens the same panel for that checkout, which is usually how you get here: see which agent produced something, then look at what it did.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Review, commit and push | Flockdeck docs">
+<meta property="og:description" content="Ctrl&#43;Shift&#43;S, or Changes in the rail, shows what changed in the working tree the focused agent has been using. The Review button on each worktree opens the same panel for that checkout, which is usually how you get here: see which agent produced something, then look at what it did.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/changes.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/changes.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html" aria-current="page">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Review, commit and push</h1>
+<p class="doc-lede"><kbd>Ctrl+Shift+S</kbd>, or <strong>Changes</strong> in the rail, shows what changed in the working
+tree the focused agent has been using. The <strong>Review</strong> button on each worktree opens the same panel for
+that checkout, which is usually how you get here: see which agent produced
+something, then look at what it did.</p>
+<p>The panel always shows the whole repository the pane is in, even when the pane
+was started in a folder inside it, and a commit takes every file in its list.</p>
+<h2>What it shows</h2>
+<ul>
+<li>The branch and where it stands against its upstream.</li>
+<li>Every changed file, what happened to it, and how many lines moved.</li>
+<li>A coloured diff of whichever file you select. A diff longer than 3,000 lines
+draws the first 3,000, with <strong>Show them</strong> for the rest, and the list of files
+stops at 2,000.</li>
+</ul>
+<h2>What you can do</h2>
+<ul>
+<li><strong>Commit</strong>, with the message you type in the box.</li>
+<li><strong>Commit and push</strong> in one go.</li>
+<li><strong>Fetch</strong> and <strong>Push</strong> against the upstream.</li>
+<li><strong>Pull</strong>, which appears only when the upstream has commits this branch does
+not, and only ever fast-forwards: a branch that has gone its own way is left
+for you to merge or rebase in a shell, and is offered no Pull.</li>
+</ul>
+<p>Everything that talks to a remote is there only when the checkout has one. The
+first push sets the upstream, so a branch a fan-out invented does not need a
+hand-typed command to leave the machine. A checkout with no branch checked out
+— a detached HEAD, or one in the middle of a rebase or a bisect — says so in
+place of the branch, and offers no push.</p>
+<h2>What a commit takes</h2>
+<p>A commit takes the files the list showed you when the panel opened, or when
+you last pressed <strong>Refresh</strong>. The list keeps up with the agents by itself, and
+a file that joins it after you looked, or is written to again, is marked
+<strong>new</strong> or <strong>edited</strong> rather than quietly added to what you commit.</p>
+<p>If the working tree has moved since you looked — a file has appeared, one has
+gone back to how it was committed, or one in the list has been written to
+again — nothing is committed. The list then shows the tree as it is, with what
+moved marked; check it and commit again. Only the files that were checked are
+staged, so one written a moment after the check waits for the next commit.</p>
+<p>During a merge, a file still in conflict is refused: a text file until its
+<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> markers are gone, and a binary file, or one that only one side kept,
+until you have chosen a side in a shell and added it.</p>
+<p>What this does not promise:</p>
+<ul>
+<li>A file written to again is noticed by its size and modification time, not by
+reading it. An edit that leaves both as they were — possible where the file
+system keeps times only to the second — goes through.</li>
+<li>When the list stops at 2,000 files, the ones it leaves out are held to their
+number, not their names.</li>
+<li>A listed file written to in the instant between that check and the commit
+itself goes in as it is then.</li>
+</ul>
+<p>Nothing here stages files selectively: a commit takes every file in the list,
+whole. Reviewing the diff first is the point of the panel — for anything
+finer, a shell pane is a keystroke away.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

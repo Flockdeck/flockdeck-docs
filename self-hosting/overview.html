@@ -1,0 +1,162 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Self-hosting the Flockdeck relay | Flockdeck docs</title>
+<meta name="description" content="Remote access normally goes through the shared relay at remote.flockdeck.ai: your desktop dials out to it, and your phone or laptop reaches your desktop through it. That relay is operated by Flockdeck and decrypts traffic to route it, so it is not end-to-end encrypted — see Security and privacy.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Self-hosting the Flockdeck relay | Flockdeck docs">
+<meta property="og:description" content="Remote access normally goes through the shared relay at remote.flockdeck.ai: your desktop dials out to it, and your phone or laptop reaches your desktop through it. That relay is operated by Flockdeck and decrypts traffic to route it, so it is not end-to-end encrypted — see Security and privacy.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/self-hosting/overview.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/self-hosting/overview.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html" aria-current="page">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Self-hosting</p>
+<h1 id="self-hosting-the-flockdeck-relay">Self-hosting the Flockdeck relay</h1>
+<p class="doc-lede">Remote access normally goes through the shared relay at <code>remote.flockdeck.ai</code>:
+your desktop dials out to it, and your phone or laptop reaches your desktop
+through it. That relay is operated by Flockdeck and decrypts traffic to route
+it, so it is not end-to-end encrypted — see <a href="security-and-privacy.html">Security and
+privacy</a>.</p>
+<p>For a company whose rules don't allow a third party to decrypt developers'
+terminal traffic, the relay can instead be run on your own infrastructure.
+That's <strong>Flockdeck Enterprise</strong>: a licensed, self-hosted relay, with single
+sign-on and support. It's announced on
+<a href="https://flockdeck.ai/#enterprise">flockdeck.ai</a> as coming soon — it isn't
+generally available yet, and single sign-on isn't built into the relay's
+main branch yet either.</p>
+<p>This section documents the relay as it exists and runs today, for a
+platform or ops team evaluating what self-hosting will involve: how it's
+deployed, how it's configured, what it needs, and how a desktop points at it
+instead of the shared one. Everything here is accurate to the relay's
+current behaviour; nothing in it depends on Enterprise, SSO or licensing
+existing yet. When you're ready to run this in production, get in touch
+through <a href="https://flockdeck.ai/#enterprise">flockdeck.ai</a> for access and
+support.</p>
+<h2 id="what-the-relay-does">What the relay does</h2>
+<p>The relay is a single Go program. A desktop running Flockdeck connects
+<em>out</em> to it over a WebSocket and keeps that connection open — nothing has to
+be opened on the desktop's own network. A browser (your phone, tablet or
+another computer) connects to the relay too, and the relay proxies its
+requests down the desktop's tunnel to the copy of Flockdeck running there.
+No ports are opened on the desktop's router, and no VPN is involved.</p>
+<p>Everything else in this section assumes you're comfortable operating a small
+stateful Go service: a binary or a container, a place to keep its data, and
+a certificate.</p>
+<h2 id="whats-on-the-following-pages">What's on the following pages</h2>
+<ul>
+<li><a href="requirements.html">Requirements</a> — what the relay needs to run: ports,
+TLS, DNS, storage.</li>
+<li><a href="deploying-the-relay.html">Deploying the relay</a> — running it as a binary
+or a container, behind a reverse proxy, with your own certificate or with
+Flockdeck's built-in ACME support.</li>
+<li><a href="configuration.html">Configuration</a> — every flag and environment
+variable, in one table.</li>
+<li><a href="storage-and-data.html">Storage and data</a> — the embedded database and the
+MySQL alternative.</li>
+<li><a href="admin-and-invites.html">Admin and invites</a> — the local admin API,
+inviting desktops, and usage stats.</li>
+<li><a href="connecting-desktops.html">Connecting desktops</a> — pointing Flockdeck at
+your relay instead of the shared one.</li>
+<li><a href="security-and-privacy.html">Security and privacy</a> — what the relay can
+see, and what it can't.</li>
+<li><a href="upgrading.html">Upgrading</a> — keeping a self-hosted relay current.</li>
+<li><a href="troubleshooting.html">Troubleshooting</a> — the usual ways a first deploy
+goes wrong.</li>
+</ul>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,383 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agents and models | Flockdeck docs</title>
+<meta name="description" content="Every agent pane runs a coding agent of your choosing at a model of your choosing. Claude Code is the default and behaves exactly as it always has; the picker is how you reach anything else.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Agents and models | Flockdeck docs">
+<meta property="og:description" content="Every agent pane runs a coding agent of your choosing at a model of your choosing. Claude Code is the default and behaves exactly as it always has; the picker is how you reach anything else.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/agents.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/agents.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html" aria-current="page">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Agents and models</h1>
+<p class="doc-lede">Every agent pane runs a coding agent of your choosing at a model of your
+choosing. Claude Code is the default and behaves exactly as it always has; the
+picker is how you reach anything else.</p>
+<h2>Picking one</h2>
+<p>The plain <kbd>Ctrl+Shift+T</kbd> and <kbd>Ctrl+Shift+D</kbd> stay one keystroke and
+take the default agent, because that is what you want almost every time. To
+choose deliberately, use <strong>New agent tab (choose agent)…</strong> or
+<strong>Split right (choose agent)…</strong> from the command palette, or click the <code>▾</code> beside
+the <code>+</code> that opens a new tab.</p>
+<p>The picker lists agents in two groups, <strong>installed</strong> and <strong>not installed</strong>. An
+agent you have not got is shown greyed with where to get it rather than
+hidden: somebody who has never installed Codex should still learn that Flockdeck
+would run it. Expand an agent for its models, with its default marked. Each
+model carries its tier — <strong>small</strong>, <strong>mid</strong> or <strong>top</strong>, how capable and so how
+costly it is among that agent's own — and a model of an API agent its published
+price per million tokens, in and out, with the day it was read. A command-line
+agent's models show no price: the same model may be billed per token or
+covered by a subscription, and only you know which. Every price comes from one
+table compiled into Flockdeck, each rate with the day it was read from the
+provider's own pricing page. It changes with releases; nothing is fetched. The
+chat's status line and the estimates in the pane header are priced from the
+same table. At the
+foot of the picker, <strong>Set as default for</strong> makes the choice stick, either for
+this project or for every project, so the one-keystroke split keeps doing the
+right thing. <strong>Use the default for every project</strong> removes this project's own
+choice.</p>
+<p>The pane header names what is running, beside the branch and in the same dim
+weight — <code>claude · sonnet</code>, <code>codex · gpt-5.6-sol</code>. A shell pane shows nothing there,
+because there is nothing to choose. For the API agents, and for Claude Code
+where its status line is read, what the conversation has spent and how near its
+usage limit it is follow;
+<a href="/app/spend.html">Spend and limits</a> explains the figures.</p>
+<h2>Two kinds of agent</h2>
+<p><strong>CLI agents</strong> are the tools you would run in a terminal yourself: Claude Code,
+Codex, Gemini, Aider, opencode, Cursor's agent. Flockdeck runs the command in the
+pane's pseudo-terminal, so it behaves exactly as it does anywhere else and uses
+whatever login that tool already has. Nothing is installed for you; an agent
+whose command is not on your <code>PATH</code> is the greyed kind.</p>
+<p><strong>API agents</strong> talk to a model API directly. There is no wrapper CLI, no node
+and no Python: Flockdeck runs its own chat client, <code>flockdeck chat</code>, in the pane. It is
+a real terminal chat client — streamed answers, a status line carrying the
+model, its token counts and, for a model in the price table, the running cost,
+and tools for reading files, editing them and
+running commands; the ones that write a file or run a command ask before they
+act. A command can be let through for the rest of the session by answering
+<em>always</em>; a write is asked about every time. <em>Always</em> is not offered for a
+command that can run anything at all — a shell, <code>git config</code>, <code>npm exec</code>,
+<code>docker run</code> — and a command with an option that writes a file wherever it
+says or runs a program it names, such as <code>git log --output</code> or
+<code>go test -exec</code>, is asked about even after <em>always</em>. Anthropic, OpenAI and
+Google are built in, and so is a plain OpenAI-compatible endpoint, which is how
+a local server — Ollama, LM Studio, vLLM — or a gateway becomes an agent.</p>
+<p>The price table holds Anthropic's, OpenAI's and Google's models. A model is
+priced only when its id is one the table names, or a dated snapshot of one
+such as <code>claude-haiku-4-5-20251001</code>; any other id, including one that only
+begins like a priced model, is shown in tokens with no dollars, because a
+made-up price is worse than none.</p>
+<h2>An endpoint's address</h2>
+<p>The OpenAI-compatible endpoint ships with no address, because none would be
+right for everybody, so it waits under <strong>not installed</strong> until it has one.
+Pick it and the picker asks for the address there and then: type where the
+model server answers, starting <code>http://</code> or <code>https://</code> — <code>http://127.0.0.1:11434/v1</code>
+for Ollama, <code>http://127.0.0.1:1234/v1</code> for LM Studio — and press <code>Enter</code>.
+<code>Escape</code> puts the field away without saving anything.</p>
+<p>How much of the address to give depends on the path. For an OpenAI-compatible
+endpoint, <code>/v1</code> is added only to a bare address such as
+<code>http://127.0.0.1:11434</code>. An address with a path of its own — <code>.../v1</code>, or a
+gateway's <code>https://gateway.example/openai</code> — is taken as the whole of the API's
+root, and nothing is added to it. So give the path your server or gateway
+documents, <code>/v1</code> included where it has one. For the Anthropic and Gemini
+agents, the API's version is added unless the address already ends in it. A
+request's full address pasted in, ending <code>/chat/completions</code>, <code>/messages</code> or
+<code>/models</code>, has that part taken off first.</p>
+<p>An address on this machine needs no key, so a local model server is offered
+the moment its address is saved. One anywhere else, such as a gateway, needs a
+key as well, set under <strong>API keys…</strong>.</p>
+<p>Any other API agent that has been given an address — one of your own, or a
+built-in pointed at a proxy — shows it beside its name. Open the agent with the
+right arrow and choose its <strong>Address</strong> row to change it. Saved empty, the
+address is taken away, and a built-in goes back to its vendor's own.</p>
+<p>An address that is not one is refused under the field, with what to type
+instead: <code>localhost:11434</code> is answered with <code>http://localhost:11434</code>. An
+address with a name or password in it is refused too, because it is shown in
+the picker; the key goes under <strong>API keys…</strong>. A pane already running keeps
+the address it started with until it is restarted. From a terminal, <code>flockdeck keys endpoint &lt;agent&gt; &lt;address&gt;</code> does the same, and <code>default</code> in place of the
+address goes back to the vendor's own.</p>
+<h2>Not every agent can do everything</h2>
+<p>Most of what Flockdeck does beyond drawing a terminal depends on the agent
+cooperating, and they do not all cooperate in the same ways.</p>
+<table>
+<thead>
+<tr>
+<th>If the agent</th>
+<th>Then</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>reports its own lifecycle</td>
+<td>its status dot says what it is really doing, rather than what its output looks like</td>
+</tr>
+<tr>
+<td>can resume by id</td>
+<td>restoring a layout brings its conversation back, not only its pane</td>
+</tr>
+<tr>
+<td>writes a transcript</td>
+<td>it can be resumed from it; Claude Code's is also where fan out reads a plan and what past conversations lists</td>
+</tr>
+<tr>
+<td>has a trust question</td>
+<td>a <a href="/app/fanout.html">fan-out</a> can answer it ahead of time for the worktrees it cuts</td>
+</tr>
+<tr>
+<td>answers a start-up hook</td>
+<td>its briefing survives a compaction, rather than being said once and summarised away</td>
+</tr>
+</tbody>
+</table>
+<p>An agent that does none of it still works perfectly well: it is a terminal with
+a program in it, which is where every one of these features started. Where a
+capability is missing Flockdeck falls back rather than failing — status comes from
+the terminal bell and a quiet timer; fan out reads the screen; resume is not
+attempted, and the pane starts fresh.</p>
+<p>Of the built-in agents, Claude Code and the four API agents report their own
+lifecycle and answer the start-up hook. Codex, Gemini CLI, Aider, opencode and
+Cursor Agent are read from their terminals, and are not briefed. An entry in
+<code>agents.json</code> can have the briefing put in front of such an agent's opening
+task instead, with <code>&quot;caps&quot;: {&quot;context&quot;: &quot;prompt&quot;}</code>, and can give it
+<code>&quot;patterns&quot;</code> — <code>&quot;waiting&quot;</code> and <code>&quot;idle&quot;</code>, each a list of phrases its output
+shows in that state — so that its status is read from what it prints as well. They are plain text, not expressions, and
+case does not matter; none of the built-ins has any yet.</p>
+<p>Aider is handed its opening task with <code>--message</code>, which Aider treats as a
+single message, so a pane started with a task (by a fan-out, say) may end when
+the task does.</p>
+<h2>Keys, for the API agents</h2>
+<p>A CLI agent uses the login it already has, and Flockdeck never sees it. An API
+agent needs a key, which is looked for in that agent's own environment
+variables first — <code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code> and the rest — then in
+Flockdeck's own store, and last in <code>FLOCKDECK_API_KEY</code>, which any API agent
+reads. A vendor's own variable is read only by an agent talking to that
+vendor's own address: a built-in given a gateway's or a proxy's address is
+never sent the key you exported for the vendor, and uses the one stored for it.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flockdeck keys set openai</code></td>
+<td>Reads the key from stdin, so it misses shell history</td>
+</tr>
+<tr>
+<td><code>flockdeck keys list</code></td>
+<td>Which agents have one, not what it is</td>
+</tr>
+<tr>
+<td><code>flockdeck keys clear openai</code></td>
+<td>Forgets the one Flockdeck stored</td>
+</tr>
+</tbody>
+</table>
+<p>Or set them from the window: <strong>API keys…</strong>, in the command palette, lists
+every API agent with <strong>set</strong> or <strong>not set</strong> beside it — and, for one that is
+not, the environment variables it would look in — and offers <strong>Set…</strong> and
+<strong>Clear</strong>.</p>
+<p>Keys are kept in <code>keys.json</code> in the state directory, readable only by you. A
+key reaches exactly one place: the environment of the chat process for the pane
+that needs it. It is never logged, never written into a saved layout and never
+shown — the interface will not read one back to you. An endpoint that needs no key at all, such
+as a local server on loopback, counts as available without one.</p>
+<h2>Adding your own: agents.json</h2>
+<p>The picker is the built-in agents overlaid with your own file, <code>agents.json</code> in
+the state directory — <code>%AppData%\flockdeck</code> on Windows, <code>~/Library/Application Support/flockdeck</code> on macOS, <code>~/.config/flockdeck</code> on Linux.</p>
+<pre><code class="language-json">{
+  &quot;version&quot;: 1,
+  &quot;defaults&quot;: { &quot;agent&quot;: &quot;claude&quot;, &quot;model&quot;: &quot;&quot; },
+  &quot;projects&quot;: {
+    &quot;C:\\code\\api&quot;: { &quot;agent&quot;: &quot;codex&quot;, &quot;model&quot;: &quot;gpt-5.6-terra&quot; }
+  },
+  &quot;agents&quot;: [
+    { &quot;id&quot;: &quot;claude&quot;, &quot;defaultModel&quot;: &quot;sonnet&quot; },
+    {
+      &quot;id&quot;: &quot;local&quot;,
+      &quot;name&quot;: &quot;Local llama&quot;,
+      &quot;runner&quot;: &quot;api&quot;,
+      &quot;api&quot;: {
+        &quot;wire&quot;: &quot;openai&quot;,
+        &quot;baseURL&quot;: &quot;http://127.0.0.1:11434/v1&quot;
+      },
+      &quot;models&quot;: [{ &quot;id&quot;: &quot;qwen3-coder&quot; }]
+    }
+  ]
+}
+</code></pre>
+<p>Entries are matched to the built-ins by <code>id</code> and merged field by field: the
+<code>claude</code> entry above changes its default model and leaves everything else
+alone. An <code>id</code> matching no built-in is an agent of your own. <code>&quot;hidden&quot;: true</code>
+takes one out of the picker without removing it. A model's <code>&quot;tier&quot;</code> —
+<code>&quot;small&quot;</code>, <code>&quot;mid&quot;</code> or <code>&quot;top&quot;</code> — is set or corrected the same way; anything else
+is named in the notice and ignored.</p>
+<p>The file is read fresh every time the picker opens, so editing it by hand takes
+effect without a restart.</p>
+<h2>Routing</h2>
+<p>A fan-out multiplies whatever its model costs, and many of its tasks are
+mechanical: run the tests, rename a symbol, fix a typo. Routing pre-sets each
+row of a <a href="/app/fanout.html">fan-out</a> to a model suited to the work — a smaller one for
+mechanical work, a stronger one for hard work — and leaves every other row
+exactly as it was. It is <strong>off</strong> until you turn it on, in Settings › Agents ›
+Routing, for every project or for one.</p>
+<p>What it chooses is shown before anything starts. A routed row's model is
+pre-set in its select, with a <strong>↘ routed</strong> tag (↗ for a stronger model) whose
+tooltip says which rule chose it and, for an API agent, what the two models
+cost. Changing the select makes the row yours again, and <strong>Use the run's
+model for every task</strong>, beside the line saying how many rows were routed,
+does that for all of them. What was shown is what runs. A pane started on a
+routed model says so in its header — <code>claude · haiku ↘</code> — with the rule in
+its tooltip.</p>
+<p>Routing moves work between the models of the agent the run is on, never to
+another agent, and only between models whose tier it knows. Claude Code's
+<strong>Default</strong> is whatever the CLI is set to, which might be its smallest model
+or its largest, so routing leaves work on it alone: choose a model for the run
+in the fan-out, or make one your default, for routing to choose from it.</p>
+<p><strong>Suggest</strong> and <strong>Automatic</strong> are the same for a fan-out, since the dialog asks
+before anything starts either way. <strong>Never go below</strong> keeps routing off the
+smaller tiers for a project where the work matters.</p>
+<p>The policy is kept in <code>agents.json</code> — and only there, never in a file inside a
+repository, so a repository you clone cannot change what your key spends:</p>
+<pre><code class="language-json">{
+  &quot;routing&quot;: {
+    &quot;mode&quot;: &quot;suggest&quot;,
+    &quot;floor&quot;: &quot;&quot;,
+    &quot;rules&quot;: [
+      { &quot;name&quot;: &quot;run the tests&quot;, &quot;tier&quot;: &quot;small&quot;,
+        &quot;when&quot;: { &quot;task&quot;: &quot;^(re-?)?run (the |all )?(unit |integration )?tests?\\b&quot; } },
+      { &quot;name&quot;: &quot;schema changes&quot;, &quot;tier&quot;: &quot;top&quot;,
+        &quot;when&quot;: { &quot;files&quot;: [&quot;**/migrations/**&quot;, &quot;**/*.sql&quot;] } },
+      { &quot;name&quot;: &quot;design work&quot;, &quot;model&quot;: &quot;opus&quot;, &quot;agent&quot;: &quot;claude&quot;,
+        &quot;when&quot;: { &quot;task&quot;: &quot;\\bdesign\\b&quot; } }
+    ]
+  },
+  &quot;projects&quot;: {
+    &quot;C:\\code\\payments&quot;: { &quot;routing&quot;: { &quot;mode&quot;: &quot;suggest&quot;, &quot;floor&quot;: &quot;mid&quot; } }
+  }
+}
+</code></pre>
+<p>Rules are tried in order and the <strong>first that matches decides</strong>; a task no rule
+matches is left alone. Every condition in <code>when</code> must hold: <code>task</code> is a
+regular expression matched without regard to case; <code>minWords</code> and <code>maxWords</code>
+bound the task's length; <code>files</code> are globs matched against the paths the task
+names (<code>**</code> is any number of directories, and a glob with no <code>/</code> matches a
+file's name anywhere); <code>kind</code> is <code>fanout</code>, <code>spawn</code> or <code>turn</code>; <code>agent</code> is an
+agent's id. A rule asks for a <code>tier</code>, or for one agent's <code>model</code>. Leave
+<code>rules</code> out for the built-in ones, which Settings lists; <code>&quot;rules&quot;: []</code> means
+none. A project's own policy replaces the one for every project whole. A rule
+that cannot be used — a pattern that is not one, a tier that is not one — is
+named in the notice and skipped, and the rest still apply.</p>
+<p>Saving a default from a Flockdeck that has no routing — 0.2.10 or older —
+writes a project's entry back without its <code>routing</code>, so a project's policy is
+lost that way.</p>
+<p><strong>Routing makes no request.</strong> It decides from these rules alone and
+makes no request of any kind; the routed mark on a pane travels only as the
+rest of the pane's state does, to your own paired devices when remote access
+is on. What it chose, and whether you kept it, is kept
+in <code>routing.jsonl</code> in the state directory, for your own numbers: the rule's
+name and the models, never the task. Settings has <strong>Clear routing history</strong>,
+and to turn all of it off, set every project to <strong>Off</strong>. A file that does not parse is a notice in the
+interface and nothing worse — the built-in agents carry on, because a typo in a
+settings file is not a reason to be unable to start work.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

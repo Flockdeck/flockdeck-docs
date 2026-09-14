@@ -1,0 +1,196 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panes and tabs | Flockdeck docs</title>
+<meta name="description" content="A pane is one terminal running one agent, or a plain shell. Tabs hold panes, and a tab can hold one or several, split however you like.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Panes and tabs | Flockdeck docs">
+<meta property="og:description" content="A pane is one terminal running one agent, or a plain shell. Tabs hold panes, and a tab can hold one or several, split however you like.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/panes.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/panes.html">
+<link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><rect fill="#93A1A9" x="3" y="22" width="26" height="2.6" rx="1.3"/><circle fill="#93A1A9" cx="8.4" cy="18" r="3.4"/><circle fill="#93A1A9" cx="23.6" cy="18" r="3.4"/><path fill="#4FD1DB" d="M16 3.4L21 12.2H11Z"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/jmwri/flockdeck">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html" aria-current="page">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Panes and tabs</h1>
+<p class="doc-lede">A pane is one terminal running one agent, or a plain shell. Tabs hold panes,
+and a tab can hold one or several, split however you like.</p>
+<h2>Making them</h2>
+<table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>What it makes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><kbd>Ctrl+Shift+T</kbd></td>
+<td>A tab with one agent in it</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+N</kbd></td>
+<td>A tab with a plain shell — no agent, no hooks</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+D</kbd></td>
+<td>An agent beside the focused pane</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+E</kbd></td>
+<td>An agent below the focused pane</td>
+</tr>
+<tr>
+<td><strong>Split right (shell)</strong></td>
+<td>A shell beside the focused pane, from the command palette</td>
+</tr>
+</tbody>
+</table>
+<p>Each of those takes the project's default agent, which keeps making a pane one
+keystroke. To choose a different agent or a different model, click the <code>▾</code>
+beside the <code>+</code> that opens a new tab, or take the two picker entries out of the
+command palette; <a href="/app/agents.html">Agents and models</a> is the page for all of it. The pane header then names what it got, beside the branch.</p>
+<p>A shell pane is an ordinary terminal in the same directory. It is there for
+the <code>git</code>, <code>npm</code> or <code>go</code> command you want to run yourself while the agents
+work, and for watching a build — which is why it can be split in beside an
+agent as well as opened in a tab of its own.</p>
+<h2>Working in them</h2>
+<p>Click a pane to give it the keyboard. Everything you type goes to the agent in
+it — that is the point, and it is why almost all of this application's own
+shortcuts are on <kbd>Ctrl+Shift</kbd>, which agents do not use.</p>
+<ul>
+<li>Drag the divider between two panes to resize them — or reach it with
+<kbd>Tab</kbd> and use the arrow keys, and <kbd>Home</kbd> to share the room
+equally again.</li>
+<li><kbd>Ctrl+Shift+Z</kbd> gives the focused pane the whole tab, and gives it back.
+The others keep running; they are simply not on screen.</li>
+<li><kbd>Ctrl+Shift+F</kbd> searches the focused terminal's scrollback.</li>
+<li>Select text with the mouse and <kbd>Ctrl+C</kbd> copies it; <kbd>Ctrl+V</kbd>
+pastes. With nothing selected, <kbd>Ctrl+C</kbd> goes to the agent, as it
+always did. <a href="/app/shortcuts.html">Keyboard shortcuts</a> has the rest, and macOS.</li>
+<li><kbd>Ctrl+Shift+W</kbd> closes a pane and stops the agent in it, without asking.
+It also ends what was started in the pane and is still running there: a
+shell's background jobs, a server an agent left going, a job that ignores
+the hangup. A program with windows of its own — a browser, an editor
+started with <code>code .</code> — stays open, as it does when a terminal is closed,
+and so does what it runs, such as the terminals in that editor.
+On macOS a background job that ignores the hangup (<code>nohup</code>) keeps running.
+Closing a tab's last pane closes the tab, and the <code>×</code> on a tab closes every
+pane in it.</li>
+</ul>
+<p>The buttons in a pane header do the same things: fan out, include in
+broadcast, restart, zoom, close.</p>
+<h2>Naming a tab</h2>
+<p>A tab names itself after the first thing its agent is asked. To call it
+something else, double-click it, press F2 while the keyboard is on it, or
+choose <strong>Rename this tab…</strong> in the command palette; a name you give it stays, whatever the agent is asked next. To go
+back, rename it to an empty name or choose <strong>Use the automatic title</strong> in the
+same dialog: the tab takes the title it would have had if it had never been
+renamed. Either way the name is kept with the layout.</p>
+<h2>Restarting</h2>
+<p><strong>Restart pane</strong>, in the command palette and in the pane header, stops the
+process and starts it again in the same directory, with the same agent and
+model — resuming the same conversation where that agent can, because a pane and
+its conversation are one identity. Use it when an agent is stuck or has wedged
+itself, not to clear the screen.</p>
+<p>A pane whose process exits covers its terminal with a <strong>Restart</strong> button
+rather than leaving a dead black rectangle.</p>
+<h2>Font size</h2>
+<p><kbd>Ctrl+=</kbd> and <kbd>Ctrl+-</kbd> change the terminal font size for every
+pane; <kbd>Ctrl+0</kbd> puts it back.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/jmwri/flockdeck">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
