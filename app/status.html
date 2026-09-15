@@ -137,11 +137,11 @@ seen from the one you are.</li>
 <li><strong>A desktop notification</strong> is raised when an agent blocks while the window is
 not in front. It is not raised when you are already looking at the window —
 the tab marker is enough, and a toast would be noise.</li>
-<li><strong>A helper another agent started</strong> for itself (see <kbd>Ctrl+Shift+X</kbd>) does not
-raise any of the above while that agent's own pane stays open — its idle
-nudge is the agent's to notice, not yours, though a permission prompt or a
-real question always still reaches you, and once that pane is closed the
-helper's idle nudges do too.</li>
+<li>Claude Code's own idle nudge — sent about a minute after a pane has simply
+gone quiet, waiting for a new prompt — never raises any of the above, for
+any pane: it says nothing more than that the pane is still there. A
+permission prompt or a real question always still reaches you, including
+for <strong>a helper another agent started</strong> for itself (see <kbd>Ctrl+Shift+X</kbd>).</li>
 <li><kbd>Ctrl+Shift+A</kbd> lists every pane in every open project with its status, and
 jumps to any of them.</li>
 </ul>
@@ -156,6 +156,21 @@ application over the loopback interface.</p>
 <p>Status therefore reflects what the agent is actually doing rather than what
 its output happens to look like. Those settings are additive: your own
 settings, hooks and permissions still apply.</p>
+<h3>Auto-review approvals</h3>
+<p>A pane can turn on auto-review approvals, which spares a person the wait for
+some of what would otherwise stop and ask: the same hidden hook that reports
+a <code>PreToolUse</code> call can also carry a permission decision back, before Claude
+Code's own prompt ever opens, for a call auto-review is confident about. It
+works like Codex's <code>auto_review</code> -- a reviewer looking at the request in
+front of it -- but it never touches Claude Code's own permission settings and
+it can only ever say &quot;let this one through,&quot; never &quot;deny&quot;: off, or for a call
+it is not sure of, a pane behaves exactly as it always would. Today that
+reviewer is a fixed policy: a <code>Bash</code> call is let through only when it is a
+single call to a command that only ever reads -- <code>git status</code>, <code>cat</code>, <code>grep</code>
+and the like -- inside the project, with nothing in it that could chain into
+something else or write anywhere; a call that changes a file, or reads
+outside the project, is always left to ask. It is off for every pane, and
+there is no switch for it in the window or on the phone yet.</p>
 <p>One answer is not reported by any event: a permission prompt answered from
 the keyboard. Enter turns the pane green, since allowing the tool starts it
 running. Refusing it puts Claude Code back at its prompt without a word, so

@@ -126,7 +126,7 @@ switched from inside the window. These are what is left.</p>
 </tr>
 <tr>
 <td><code>flockdeck -no-window</code></td>
-<td>Just serve; print the URL and open it yourself</td>
+<td>Serve headless, no browser needed here; print the URL and open it yourself</td>
 </tr>
 <tr>
 <td><code>flockdeck -solo</code></td>
@@ -142,6 +142,10 @@ switched from inside the window. These are what is left.</p>
 </tr>
 </tbody>
 </table>
+<p><code>-no-window</code> needs no browser on the machine it runs on either, so it's
+equally at home on a server you own — see <strong>Self-hosted</strong> in
+<a href="/app/remote.html">Remote access</a> for running Flockdeck headless and reaching it from
+a paired phone or laptop.</p>
 <p>Running the binary again does <strong>not</strong> start a second set of agents. It finds
 the instance already going, hands it the directory you asked for, and opens a
 window onto it. <code>-solo</code> is the escape hatch when you genuinely want two.</p>
@@ -244,10 +248,14 @@ only while the agent talks to that vendor's own address.</p>
 <td><code>flockdeck remote disable</code></td>
 <td>Remove this machine from the relay; <code>-force</code> if it cannot be reached</td>
 </tr>
+<tr>
+<td><code>flockdeck remote move &lt;relay&gt;</code></td>
+<td>Enrol with another relay, then leave this one once it answers; takes <code>-invite</code>, <code>-join</code>, <code>-name</code>, and <code>-yes</code> to skip the question. Every paired device has to pair again</td>
+</tr>
 </tbody>
 </table>
-<p>A running instance is told when <code>enable</code> or <code>disable</code> changes anything, and
-connects or disconnects on the spot. <a href="/app/remote.html">Remote access</a> has the rest.</p>
+<p>A running instance is told when <code>enable</code>, <code>disable</code> or <code>move</code> changes
+anything, and connects, disconnects or switches relay on the spot. <a href="/app/remote.html">Remote access</a> has the rest.</p>
 <h2>chat</h2>
 <pre><code class="language-sh">flockdeck chat
 </code></pre>
