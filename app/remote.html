@@ -109,6 +109,20 @@ device asking is paired with your account, and nothing else can put a request
 on that connection. The few things only another launch of the binary may do —
 open a project from the command line, quit the instance — still insist on the
 token, so a remote window cannot reach them.</p>
+<h2>Self-hosted: running it on a server, not a desk</h2>
+<p>&quot;Your desktop&quot; above doesn't have to be a desktop. <code>flockdeck -no-window</code>
+serves headless — no window, and no browser is ever looked for on that
+machine — so it runs just as well on a spare box, a home server, a NAS or a
+cheap VPS as it does on the machine in front of you. Pair it the same way
+(<code>flockdeck remote enable</code> then <code>flockdeck remote pair</code>) and it's a desktop
+in every way that matters here: full interface, chat on a phone, fan out, the
+lot. That makes the free app a self-hosted stand-in for a paid &quot;run my coding
+agents in the cloud&quot; service, on hardware you already control.</p>
+<p><code>-detach</code> also releases the terminal that started it, so an SSH session can
+end without ending Flockdeck. Under a process supervisor such as systemd,
+plain <code>-no-window</code> is usually the better fit: it keeps the terminal as its
+interface and leaves managing the process's lifecycle and logs to the
+supervisor.</p>
 <h2>Done only at the desk</h2>
 <p>A window reached through the relay is not offered these, and Flockdeck refuses
 them from one:</p>
@@ -339,6 +353,26 @@ domain for it falls back to.</p>
 <a href="https://flockdeck.ai/privacy.html" target="_blank" rel="noopener noreferrer">privacy policy</a>, which says what it stores
 about this machine and your devices, how long it keeps it and how to have it
 deleted, and <a href="https://flockdeck.ai/terms.html" target="_blank" rel="noopener noreferrer">terms</a> for using it.</p>
+<h2>The trial, and the subscription</h2>
+<p>Remote access through the shared relay at <code>https://remote.flockdeck.ai</code> is a
+subscription, after a free trial for every account that starts when its first
+machine is enrolled. The desktop app itself is free, every part of it,
+whatever the plan: only reaching it through the shared relay is paid for.</p>
+<p>The plan is the relay's to keep, and Flockdeck only shows what the relay says.
+<strong>Remote access…</strong> shows the account's plan and, during the trial, how many days
+are left, and so does <strong>Account &amp; plan</strong> in the settings. A paired phone or
+browser shows the same on its <strong>Devices</strong> page, which is where you subscribe.</p>
+<p>When a trial ends, or a subscription lapses, the relay stops carrying remote
+windows to this machine, and the dialog says so in the relay's own words.
+Nothing else changes: the window on your desk works exactly as before, and a
+paired device can still sign in and open <strong>Devices</strong> to subscribe. Flockdeck
+asks the relay again every few minutes, and at once from <strong>Try again</strong>, so
+remote access comes back by itself once the account is paid for.</p>
+<p>Nothing is deleted straight away. The account, its machines and its paired
+devices are kept for 90 days after a trial or subscription ends, and deleted
+after that; subscribing before then puts everything back as it was.</p>
+<p>A relay other than the shared one may have no plans at all, and then none of
+this applies: nothing is shown, and nothing stops.</p>
 <h2>Enterprise (coming soon)</h2>
 <p>For companies: a licence to run the relay on your own infrastructure, with SSO
 and support, for a company whose rules don't allow a third party to decrypt
@@ -353,6 +387,23 @@ the agents running for later, use <strong>Detach</strong> instead, or start with
 <p>If a second Flockdeck on this machine connects to the relay as the same
 machine, the first one steps aside and says so rather than fighting it for the
 connection.</p>
+<h2>Moving to another relay</h2>
+<p>A company that runs its own relay moves its machines onto it from the shared
+one, or from an old relay of its own. <strong>Move to another relay…</strong>, under
+<strong>This machine</strong> in the dialog, asks for the new relay's address and, if it
+asks for them, an invitation or join code; <code>flockdeck remote move &lt;relay&gt;</code> does
+the same from a terminal, with <code>-invite</code>, <code>-join</code> and <code>-name</code>.</p>
+<p>This machine is enrolled with the new relay first, and taken off the old one
+only once the new one answers, so a relay that is mistyped, down or refusing
+leaves everything as it was. <strong>Every paired device has to pair again</strong>
+afterwards, with the new relay: a device's pairing is kept by the relay it was
+made on, and no other relay can use it. The dialog and the command both say so,
+and ask, before anything is done; a script passes <code>-yes</code>. If this is the only
+machine on its account on the old relay, the account and its devices there go
+with it. An old relay that cannot be reached does not stop the move: it goes
+on listing this machine, offline, until a device paired there removes it.</p>
+<p>Machines set up from scratch point at a company's relay with <code>-relay</code>, or with
+<code>FLOCKDECK_RELAY</code> set on managed machines, and need no move.</p>
 <h2>Unpairing, and turning it off</h2>
 <p>The dialog lists every paired device with an <strong>Unpair</strong> button; unpairing ends
 that device's session at once, including any window it has open. <strong>Turn off
@@ -385,6 +436,10 @@ From a terminal:</p>
 <tr>
 <td><code>flockdeck remote disable</code></td>
 <td>Removes this machine from the relay</td>
+</tr>
+<tr>
+<td><code>flockdeck remote move &lt;relay&gt;</code></td>
+<td>Moves this machine to another relay; every device then pairs again</td>
 </tr>
 </tbody>
 </table>
