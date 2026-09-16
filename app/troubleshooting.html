@@ -52,6 +52,7 @@
       <li><a href="/app/fanout.html">Fan out</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Past conversations</a></li>
       <li><a href="/app/projects.html">Projects</a></li>
       <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
@@ -185,12 +186,11 @@ that setting. Where ssh can ask for a passphrase in a window of its own, as on
 some Linux desktops, <code>git config core.sshCommand ssh</code> in the checkout is how
 to keep that window.</p>
 <h2>The window looks like a browser tab</h2>
-<p>The interface is a local web page shown in a chromeless application window,
-provided by whichever Chromium-based browser is found first — Chrome, Edge,
-Brave, Chromium or Vivaldi. If none is installed it opens
-as an ordinary tab instead, which works but looks less like an application.
-<code>FLOCKDECK_BROWSER</code> forces a particular one, by name or path; if that one
-cannot be found, the window does not open at all.</p>
+<p>The interface is a local web page shown in a native window, built with Wails,
+which embeds the platform's own webview (WebView2 on Windows, WebKit on
+macOS, WebKitGTK on Linux) directly inside the binary. If the platform has no
+working webview it opens as an ordinary tab in your default browser instead,
+which works but looks less like an application.</p>
 <h2>Nothing is exposed to the network</h2>
 <p>The server binds to <code>127.0.0.1</code> on a random port, and every request — the page,
 the assets and both WebSockets — must carry a token generated fresh for each

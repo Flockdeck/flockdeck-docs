@@ -52,6 +52,7 @@
       <li><a href="/app/fanout.html">Fan out</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Past conversations</a></li>
       <li><a href="/app/projects.html">Projects</a></li>
       <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
@@ -326,12 +327,21 @@ starts with <code>flockdeck spawn</code> without <code>--agent</code> or <code>-
 <strong>Suggest</strong> such a helper runs as asked, since there is nobody to show a
 suggestion to. <strong>Never go below</strong> keeps routing off the
 smaller tiers for a project where the work matters.</p>
+<p><strong>Strategy</strong> decides what happens to a task no rule matches. <strong>Cost-first,
+quality-aware</strong> — the default — leaves it exactly where it was, the same as
+routing off would for that row. <strong>Minimise cost</strong> routes it too, to the
+cheapest model <strong>Never go below</strong> allows on the agent it was already going to
+run on, never to another agent. Either strategy, a rule that matches still
+decides first and <strong>Never go below</strong> still holds; the strategy only changes
+what happens when nothing matches. The row's tooltip says &quot;no rule matched&quot; for
+a suggestion made this way, so it is never mistaken for a rule's own reason.</p>
 <p>The policy is kept in <code>agents.json</code> — and only there, never in a file inside a
 repository, so a repository you clone cannot change what your key spends:</p>
 <pre><code class="language-json">{
   &quot;routing&quot;: {
     &quot;mode&quot;: &quot;suggest&quot;,
     &quot;floor&quot;: &quot;&quot;,
+    &quot;strategy&quot;: &quot;&quot;,
     &quot;rules&quot;: [
       { &quot;name&quot;: &quot;run the tests&quot;, &quot;tier&quot;: &quot;small&quot;,
         &quot;when&quot;: { &quot;task&quot;: &quot;^(re-?)?run (the |all )?(unit |integration )?tests?\\b&quot; } },
@@ -347,7 +357,9 @@ repository, so a repository you clone cannot change what your key spends:</p>
 }
 </code></pre>
 <p>Rules are tried in order and the <strong>first that matches decides</strong>; a task no rule
-matches is left alone. Every condition in <code>when</code> must hold: <code>task</code> is a
+matches is left alone under <code>&quot;strategy&quot;: &quot;balanced&quot;</code> (the default, same as
+leaving <code>strategy</code> out), or routed to the cheapest model the floor allows
+under <code>&quot;strategy&quot;: &quot;cost&quot;</code>. Every condition in <code>when</code> must hold: <code>task</code> is a
 regular expression matched without regard to case; <code>minWords</code> and <code>maxWords</code>
 bound the task's length; <code>files</code> are globs matched against the paths the task
 names (<code>**</code> is any number of directories, and a glob with no <code>/</code> matches a
@@ -368,8 +380,10 @@ sending anything, to check something is listening. The routed mark on a pane tra
 rest of the pane's state does, to your own paired devices when remote access
 is on. What it chose, and whether you kept it, is kept
 in <code>routing.jsonl</code> in the state directory, for your own numbers: the rule's
-name and the models, never the task. Settings has <strong>Clear routing history</strong>,
-and to turn all of it off, set every project to <strong>Off</strong>. A file that does not parse is a notice in the
+name and the models, never the task. Settings lists each rule beside how often
+the log shows it overridden, once it has decided at least once — the evidence
+for deciding which rules are worth hand-editing. Settings has <strong>Clear routing
+history</strong>, and to turn all of it off, set every project to <strong>Off</strong>. A file that does not parse is a notice in the
 interface and nothing worse — the built-in agents carry on, because a typo in a
 settings file is not a reason to be unable to start work.</p>
 

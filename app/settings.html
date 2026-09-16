@@ -52,6 +52,7 @@
       <li><a href="/app/fanout.html">Fan out</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Past conversations</a></li>
       <li><a href="/app/projects.html">Projects</a></li>
       <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
@@ -92,14 +93,35 @@ changes its setting at once, and it is the same setting the command palette and
 the keys change, so whichever you use, the others show it.</p>
 <ul>
 <li><strong>General</strong> — desktop notifications, and whether Flockdeck checks for new
-releases, which is changed only at the desk. <strong>Show them again</strong> brings back
-every hint you sent away.</li>
-<li><strong>Terminal</strong> — the font size, the font, how many lines each pane keeps to
-scroll back through, and the cursor's shape and whether it blinks, with a
-preview. The size is also <kbd>Ctrl+=</kbd>, <kbd>Ctrl+-</kbd> and
+releases in the background, which is changed only at the desk; <strong>Check for
+updates now</strong> asks once on the spot, whatever that switch says. <strong>Show them
+again</strong> brings back every hint you sent away.</li>
+<li><strong>Appearance</strong> — <strong>Theme</strong>: <strong>Dark</strong>, the palette this window has always
+drawn in; <strong>Light</strong>; or <strong>Follow system</strong>, which changes with this
+computer's own light-or-dark setting. <strong>Accent colour</strong> is a small fixed set
+of swatches, kept legible against either palette, not a free colour picker.
+Below them, <strong>Terminal</strong>: the font size, the font, how many lines each pane
+keeps to scroll back through, and the cursor's shape and whether it blinks,
+with a preview. The size is also <kbd>Ctrl+=</kbd>, <kbd>Ctrl+-</kbd> and
 <kbd>Ctrl+0</kbd>. <strong>Screen reader support</strong> lets a screen reader read what
 the agents write; it is off unless you turn it on, because it slows every
 terminal a little. The palette has <strong>Turn screen reader support on</strong> too.</li>
+<li><strong>Behaviour</strong> — <strong>Fan out</strong>'s own default for its &quot;Put them in this tab&quot;
+checkbox, which can still be changed for one run from the dialog itself. And
+<strong>Auto-review</strong>'s own default: whether a pane with no parent — one opened by
+hand, or a fresh row of a fan-out run from the window — starts with
+auto-review on. A pane's own switch still starts off unless this is on, and
+either way can be turned on or off for that one pane; auto-review only ever
+lets through a confidently read-only command, and never says &quot;deny&quot;.</li>
+<li><strong>Keybindings</strong> — every shortcut this window's own chrome offers, grouped as
+<a href="/app/shortcuts.html">Keyboard shortcuts</a> groups them, each with a button that
+records the next key you press as its new binding; <strong>Reset</strong> puts one back,
+and <strong>Reset every shortcut to its default</strong> puts all of them back. Two
+actions can never share a chord: giving one an action's binding takes it
+from whichever had it. This is a different thing from your terminal tool's
+own keybindings — Claude Code's <code>~/.claude/keybindings.json</code>, say — which
+remaps keystrokes inside a pane; this remaps the window around it, before a
+pane ever sees the keystroke.</li>
 <li><strong>Agents</strong> — the agent and model a pane starts when nobody chooses: for every
 project, and for the project on screen, which can go back to <strong>Same as every
 project</strong>.
@@ -107,7 +129,12 @@ project</strong>.
 <li><strong>Routing</strong> — whether a fan-out's rows come with a model chosen for the
 work: <strong>Off</strong>, which it is until you change it, <strong>Suggest</strong> or
 <strong>Automatic</strong>, for every project and for this one. <strong>Never go below</strong> keeps
-it off the smaller tiers. The rules in force are listed, with where
+it off the smaller tiers. <strong>Strategy</strong> is <strong>Cost-first, quality-aware</strong>,
+the default, or <strong>Minimise cost</strong>: quality-aware leaves work no rule
+recognises exactly where it was; minimise cost routes it too, to the
+cheapest model the floor allows. Either way a rule that matches still
+decides first. The rules in force are listed, each with how often the log
+shows it overridden where it has decided at least once, with where
 <code>agents.json</code> is, since that is where they are edited, and <strong>Clear routing
 history</strong> empties the record of what it chose. <a href="/app/agents.html">Agents and models</a>
 has the rest.</li>
@@ -149,8 +176,8 @@ word. On a narrow screen the sections go across the top.</p>
 <strong>Set as default for</strong> at the foot of the picker. Kept in
 <code>agents.json</code>.</li>
 <li><strong>Whether a fan-out's models are routed, and by which rules</strong> — <strong>Agents ›
-Routing</strong> in the settings for the mode and the floor; the rules themselves
-are edited by hand. Kept in <code>agents.json</code>.</li>
+Routing</strong> in the settings for the mode, the floor and the strategy; the
+rules themselves are edited by hand. Kept in <code>agents.json</code>.</li>
 <li><strong>Whether Claude panes read their usage limits</strong> — <strong>Agents › Claude Code's
 usage limits</strong> in the settings. Kept in <code>prefs.json</code>.</li>
 <li><strong>An API agent's key</strong> — <strong>API keys</strong> in the settings, <strong>API keys…</strong>, or
@@ -164,8 +191,10 @@ back to the title the tab gives itself. Kept with the layout.</li>
 <li><strong>Which panes the prompt bar reaches</strong> — <kbd>Ctrl+Shift+B</kbd>, and the <code>⇉</code>
 button in each pane header; <a href="/app/broadcast.html">Broadcast and the prompt bar</a> has the
 rest. Kept until Flockdeck stops.</li>
-<li><strong>The terminal's font, size, scrollback and cursor</strong> — <strong>Terminal</strong> in the
+<li><strong>The terminal's font, size, scrollback and cursor</strong> — <strong>Appearance</strong> in the
 settings, or the palette's entries for each. Kept in <code>prefs.json</code>.</li>
+<li><strong>A fan-out's own shortcut, or any other window shortcut</strong> — <strong>Keybindings</strong>
+in the settings. Kept in <code>keybindings.json</code>.</li>
 <li><strong>This machine's name and paired devices</strong> — <strong>Remote access</strong> in the
 settings, or <strong>Remote access…</strong>. Use <strong>Pair a device</strong>, <strong>Rename</strong> and
 <strong>Unpair</strong>. Kept on the relay; <a href="/app/remote.html">Remote access</a> has the rest.</li>
@@ -179,8 +208,8 @@ asks once whether this window may show them, and keeps the answer for that
 run only: each run has an address of its own.</li>
 <li><strong>Hints under the tab bar</strong> — their close button sends one away for good.
 Kept in <code>prefs.json</code>.</li>
-<li><strong>Theme</strong> — there is only the one, dark. It does not follow the system's
-light or dark mode.</li>
+<li><strong>Fan out's own default, and auto-review's own default</strong> — <strong>Behaviour</strong> in
+the settings. Kept in <code>prefs.json</code>.</li>
 </ul>
 <h2>In the state directory</h2>
 <p>Everything Flockdeck keeps is in one directory: <code>%AppData%\flockdeck</code> on
@@ -200,8 +229,12 @@ environment is used first.</li>
 <li><code>routing.jsonl</code> — what routing chose for each routed fan-out row, and
 whether you kept it: the rule's name and the models, never the task. It
 keeps the last 10,000 lines, and <strong>Clear routing history</strong> empties it.</li>
-<li><code>prefs.json</code> — the settings under General and Terminal, Claude Code's usage
-limits, whether the help has
+<li><code>keybindings.json</code> — every shortcut you have remapped or cleared under
+<strong>Keybindings</strong>, by the action's own id; one absent from it is still its
+built-in binding. Delete it, or <strong>Reset every shortcut to its default</strong>, to
+put every shortcut back at once.</li>
+<li><code>prefs.json</code> — the settings under General, Appearance and Behaviour,
+Claude Code's usage limits, whether the help has
 been opened, and which hints were dismissed. Delete it while Flockdeck is not
 running to have the help open on the next start, every hint back, and every
 one of those settings as it first was.</li>
@@ -233,12 +266,11 @@ repositories until you remove them.</p>
 <code>setx NAME value</code> on Windows, or an <code>export</code> line in your shell's profile
 elsewhere — and start Flockdeck again.</p>
 <ul>
-<li><code>FLOCKDECK_UPDATE</code> — <code>off</code> stops updating in the background, whatever
-<strong>Check for updates</strong> in the settings says: no checks for new releases, and
-nothing already downloaded is put in place. That is what
-keeps an older version you installed on purpose from updating itself to the
-latest.</li>
-<li><code>FLOCKDECK_BROWSER</code> — which browser provides the window, by name or path.</li>
+<li><code>FLOCKDECK_UPDATE</code> — <code>off</code> stops Flockdeck checking for new releases at all,
+whatever <strong>Check for updates</strong> or <strong>Check for updates now</strong> in the settings
+says: no checks, in the background or asked for on the spot, and nothing
+already downloaded is put in place. That is what keeps an older version you
+installed on purpose from updating itself to the latest.</li>
 <li><code>FLOCKDECK_RELAY</code> — which relay <code>flockdeck remote enable</code> uses.</li>
 <li><code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code> and <code>GEMINI_API_KEY</code> (or
 <code>GOOGLE_API_KEY</code>) — keys for the API agents talking to those vendors' own
