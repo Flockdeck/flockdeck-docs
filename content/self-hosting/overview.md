@@ -2,8 +2,9 @@
 
 Remote access normally goes through the shared relay at `remote.flockdeck.ai`:
 your desktop dials out to it, and your phone or laptop reaches your desktop
-through it. That relay is operated by Flockdeck and decrypts traffic to route
-it, so it is not end-to-end encrypted — see [Security and
+through it. That relay is operated by Flockdeck; terminal traffic is
+end-to-end encrypted through it, but the state of your panes still passes
+through in the clear — see [Security and
 privacy](security-and-privacy.html).
 
 For a company whose rules don't allow a third party to decrypt developers'

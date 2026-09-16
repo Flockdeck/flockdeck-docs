@@ -3,19 +3,29 @@
 What a relay — yours or the shared one — can and can't see, so you can
 weigh that against what your own rules require.
 
-## Not end-to-end encrypted
+## End-to-end encrypted terminal traffic, with one caveat
 
 Traffic between a desktop and a paired device is encrypted with TLS to the
-relay and from the relay onward, but the relay itself decrypts it to route
-it — it has to, to know which desktop a browser's request is for and to
-proxy it there. This is true of the shared relay at `remote.flockdeck.ai`
-and of a relay you run yourself in exactly the same way.
+relay and from the relay onward. On top of that, terminal traffic — what you
+type and what an agent prints back — is end-to-end encrypted by the desktop
+app and the paired device themselves, using keys the relay hands out but
+never holds: the relay has to route it, to know which desktop a browser's
+request is for, but it cannot read it. This is true of the shared relay at
+`remote.flockdeck.ai` and of a relay you run yourself in exactly the same
+way.
 
-Running your own relay changes *who* can see that decrypted traffic — your
-own infrastructure and the people who administer it, instead of Flockdeck —
-not *whether* it's decrypted somewhere in transit. That's the whole reason
-self-hosting exists: for a company whose rules require that the party
-decrypting developer terminal traffic be their own.
+The state of a pane still passes through the relay in the clear — what each
+pane's agent has spent, its usage limits, and which model routing chose for
+it — so whoever operates the relay you use can see that.
+
+End-to-end encryption defeats an honestly-run relay. It doesn't yet defend
+against a relay that's been actively compromised and tampered with to swap
+the keys it hands out at pairing — that needs an out-of-band check that
+hasn't been built yet. Running your own relay narrows who mounting that
+attack would require compromising to your own infrastructure and the people
+who administer it, instead of Flockdeck's — which is one of the reasons
+self-hosting exists, alongside not sending that metadata to a third party at
+all.
 
 ## What the relay routes, and what it stores
 
