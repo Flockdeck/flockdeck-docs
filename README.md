@@ -56,6 +56,6 @@ So a release is: regenerate, commit, tag.
 
 ## Licence
 
-MIT — see [LICENSE](LICENSE), the same licence as the Flockdeck desktop app
-this documents. The fonts (Archivo, JetBrains Mono) keep their own licence,
-the SIL Open Font License, beside them in `fonts/`.
+PolyForm Noncommercial — see [LICENSE](LICENSE), the same licence as the
+Flockdeck desktop app this documents. The fonts (Archivo, JetBrains Mono) keep
+their own licence, the SIL Open Font License, beside them in `fonts/`.

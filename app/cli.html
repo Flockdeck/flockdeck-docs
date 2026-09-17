@@ -30,7 +30,7 @@
     <a href="/app/getting-started.html">Using Flockdeck</a>
     <a href="/self-hosting/overview.html">Self-hosting</a>
     <a href="https://flockdeck.ai/">flockdeck.ai</a>
-    <a href="https://github.com/jmwri/flockdeck">Source</a>
+    <a href="https://github.com/Flockdeck/flockdeck-docs">Source</a>
   </nav>
 </header>
 
@@ -289,6 +289,10 @@ beside it is the same program built with one.</p>
 <td><code>flockdeck update -check</code></td>
 <td>Says whether there is one, and stops</td>
 </tr>
+<tr>
+<td><code>flockdeck update -version=v1.4.0</code></td>
+<td>Installs that release instead, forward or back</td>
+</tr>
 </tbody>
 </table>
 <p>When a new version has been downloaded, an <strong>Update</strong> button appears at the
@@ -297,6 +301,19 @@ layout but stops the running agents, or <strong>Later</strong>, which installs i
 Flockdeck next quits. A window reached through the relay is not shown the
 button, and cannot turn the check for updates on or off: both are done at the
 desk.</p>
+<p><code>-version</code> installs a specific release rather than always the latest,
+checked the same way and asking first unless <code>-yes</code> is given: it is how to
+undo a bad update yourself, right now, without waiting for a fix to be
+published. <strong>Settings › General › Install a specific version…</strong> offers the
+same choice from a list of recent releases, without typing a version number:
+picking one downloads and checks it, then offers it through the same
+<strong>Update</strong> button, so restarting onto it goes through the same confirmation
+an ordinary update does. Neither is offered to a window reached through the
+relay, for the same reason the ordinary update button is not.</p>
+<p>A release withdrawn after it shipped, because something was found wrong with
+it, is a recall. If the version you already installed was later recalled, a
+banner above the hints bar says so and why, with a way to move to the fix
+once one is published.</p>
 <p>Releases are published at <code>dl.flockdeck.ai</code> as one archive per platform, with
 a <code>checksums.txt</code> beside them, signed with the release key that is built into
 Flockdeck. A second, standby key, held offline and used only if the first is
@@ -388,12 +405,12 @@ are newer and have only the one name.</p>
 <footer class="foot">
   <div class="wrap">
     <p>Flockdeck documentation.<br>
-       <span class="foot-note">The desktop app is free and open source under the MIT licence.</span></p>
+       <span class="foot-note">The desktop app is free, with its source available for noncommercial use.</span></p>
     <nav aria-label="Footer">
       <a href="https://flockdeck.ai/">flockdeck.ai</a>
       <a href="https://flockdeck.ai/privacy.html">Privacy</a>
       <a href="https://flockdeck.ai/terms.html">Terms</a>
-      <a href="https://github.com/jmwri/flockdeck">Source</a>
+      <a href="https://github.com/Flockdeck/flockdeck-docs">Source</a>
     </nav>
     <div class="foot-legal">
       <p>© 2026 Jim Wright</p>
