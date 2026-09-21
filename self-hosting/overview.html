@@ -95,20 +95,21 @@ end-to-end encrypted through it, but the state of your panes still passes
 through in the clear — see <a href="security-and-privacy.html">Security and
 privacy</a>.</p>
 <p>For a company whose rules don't allow a third party to decrypt developers'
-terminal traffic, the relay can instead be run on your own infrastructure.
-That's <strong>Flockdeck Enterprise</strong>: a licensed, self-hosted relay, with single
-sign-on and support. It's announced on
-<a href="https://flockdeck.ai/#enterprise">flockdeck.ai</a> as coming soon — it isn't
-generally available yet, and single sign-on isn't built into the relay's
-main branch yet either.</p>
+terminal traffic, the relay can instead be run on your own infrastructure —
+single sign-on included; see
+<a href="configuration.html#single-sign-on">Configuration</a>. <strong>Flockdeck Enterprise</strong>
+is a licensed version of the same self-hosted relay, with support. It's
+announced on <a href="https://flockdeck.ai/#enterprise">flockdeck.ai</a> as coming soon
+and isn't generally available yet, but self-hosting the relay — single
+sign-on included — doesn't wait on it.</p>
 <p>This section documents the relay as it exists and runs today, for a
 platform or ops team evaluating what self-hosting will involve: how it's
 deployed, how it's configured, what it needs, and how a desktop points at it
 instead of the shared one. Everything here is accurate to the relay's
-current behaviour; nothing in it depends on Enterprise, SSO or licensing
-existing yet. When you're ready to run this in production, get in touch
-through <a href="https://flockdeck.ai/#enterprise">flockdeck.ai</a> for access and
-support.</p>
+current behaviour, single sign-on included; nothing in it depends on
+Enterprise or licensing existing yet. When you're ready to run this in
+production, get in touch through
+<a href="https://flockdeck.ai/#enterprise">flockdeck.ai</a> for access and support.</p>
 <h2 id="what-the-relay-does">What the relay does</h2>
 <p>The relay is a single Go program. A desktop running Flockdeck connects
 <em>out</em> to it over a WebSocket and keeps that connection open — nothing has to

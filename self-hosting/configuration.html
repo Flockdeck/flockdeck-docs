@@ -272,8 +272,46 @@ variable if both are set.</p>
 <p>Without these set, the relay runs fine; paired devices just don't get push
 notifications.</p>
 <h2 id="single-sign-on">Single sign-on</h2>
-<p>Not available in the relay's main branch yet — it's part of what
-Enterprise will add. See <a href="overview.html">Overview</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Env</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-oidc-issuer</code></td>
+<td><code>FLOCKDECK_RELAY_OIDC_ISSUER</code></td>
+<td>Have everyone pairing a device sign in with this OpenID Connect issuer first, e.g. <code>https://example.okta.com</code>.</td>
+</tr>
+<tr>
+<td><code>-oidc-client-id</code></td>
+<td><code>FLOCKDECK_RELAY_OIDC_CLIENT_ID</code></td>
+<td>The relay's client id at the identity provider.</td>
+</tr>
+<tr>
+<td><code>-oidc-client-secret-file</code></td>
+<td><code>FLOCKDECK_RELAY_OIDC_CLIENT_SECRET</code></td>
+<td>File holding the relay's client secret at the identity provider — or, in the environment variable, the secret itself. There's no <code>-oidc-client-secret</code> flag, so it never has to appear in a process listing.</td>
+</tr>
+<tr>
+<td><code>-oidc-name</code></td>
+<td><code>FLOCKDECK_RELAY_OIDC_NAME</code></td>
+<td>What the sign-in button calls the identity provider. The provider's own host by default.</td>
+</tr>
+<tr>
+<td><code>-oidc-email-domains</code></td>
+<td><code>FLOCKDECK_RELAY_OIDC_EMAIL_DOMAINS</code></td>
+<td>Comma-separated email domains whose people may sign in. Anyone the provider signs in, by default.</td>
+</tr>
+</tbody>
+</table>
+<p><code>-oidc-issuer</code> needs a client id and a secret to go with it; either given
+without the other, or without <code>-oidc-issuer</code>, is a startup error. This is
+part of the relay itself — it doesn't need Flockdeck Enterprise or a
+licence. See <a href="overview.html">Overview</a>.</p>
 <h2 id="an-example">An example</h2>
 <p>Behind a reverse proxy, with MySQL, registration by invite only, and push
 notifications on:</p>

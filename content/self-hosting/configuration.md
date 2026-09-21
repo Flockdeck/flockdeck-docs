@@ -58,8 +58,18 @@ notifications.
 
 ## Single sign-on
 
-Not available in the relay's main branch yet — it's part of what
-Enterprise will add. See [Overview](overview.html).
+| Flag | Env | What it does |
+| --- | --- | --- |
+| `-oidc-issuer` | `FLOCKDECK_RELAY_OIDC_ISSUER` | Have everyone pairing a device sign in with this OpenID Connect issuer first, e.g. `https://example.okta.com`. |
+| `-oidc-client-id` | `FLOCKDECK_RELAY_OIDC_CLIENT_ID` | The relay's client id at the identity provider. |
+| `-oidc-client-secret-file` | `FLOCKDECK_RELAY_OIDC_CLIENT_SECRET` | File holding the relay's client secret at the identity provider — or, in the environment variable, the secret itself. There's no `-oidc-client-secret` flag, so it never has to appear in a process listing. |
+| `-oidc-name` | `FLOCKDECK_RELAY_OIDC_NAME` | What the sign-in button calls the identity provider. The provider's own host by default. |
+| `-oidc-email-domains` | `FLOCKDECK_RELAY_OIDC_EMAIL_DOMAINS` | Comma-separated email domains whose people may sign in. Anyone the provider signs in, by default. |
+
+`-oidc-issuer` needs a client id and a secret to go with it; either given
+without the other, or without `-oidc-issuer`, is a startup error. This is
+part of the relay itself — it doesn't need Flockdeck Enterprise or a
+licence. See [Overview](overview.html).
 
 ## An example
 
