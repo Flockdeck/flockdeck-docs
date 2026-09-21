@@ -4,18 +4,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Past conversations | Flockdeck docs</title>
-<meta name="description" content="Ctrl&#43;Shift&#43;R, or History in the rail, lists the conversations stored for this project and resumes any of them into a new tab.">
+<title>Todo | Flockdeck docs</title>
+<meta name="description" content="A todo is a saved checklist: a plan an agent drafted, kept as steps you start one at a time, whenever you get to them, rather than all at once. It is meant to be come back to over days, unlike Fan out, which starts every task of a plan at once and forgets the run the moment its tab closes.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
-<meta property="og:title" content="Past conversations | Flockdeck docs">
-<meta property="og:description" content="Ctrl&#43;Shift&#43;R, or History in the rail, lists the conversations stored for this project and resumes any of them into a new tab.">
+<meta property="og:title" content="Todo | Flockdeck docs">
+<meta property="og:description" content="A todo is a saved checklist: a plan an agent drafted, kept as steps you start one at a time, whenever you get to them, rather than all at once. It is meant to be come back to over days, unlike Fan out, which starts every task of a plan at once and forgets the run the moment its tab closes.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://docs.flockdeck.ai/app/history.html">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/todo.html">
 <meta name="twitter:card" content="summary">
-<link rel="canonical" href="https://docs.flockdeck.ai/app/history.html">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/todo.html">
 <link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/docs.css">
 
@@ -50,11 +50,11 @@
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/fanout.html">Fan out</a></li>
-      <li><a href="/app/todo.html">Todo</a></li>
+      <li><a href="/app/todo.html" aria-current="page">Todo</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
-      <li><a href="/app/history.html" aria-current="page">Past conversations</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
       <li><a href="/app/projects.html">Projects</a></li>
       <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
       <li><a href="/app/remote.html">Remote access</a></li>
@@ -87,21 +87,52 @@
 
   <article class="prose">
     <p class="eyebrow">Using Flockdeck</p>
-<h1>Past conversations</h1>
-<p class="doc-lede"><kbd>Ctrl+Shift+R</kbd>, or <strong>History</strong> in the rail, lists the conversations stored
-for this project and resumes any of them into a new tab.</p>
-<p>For each one it shows the opening prompt, how long ago it was touched, how many
-entries it holds and its session id. <strong>Resume</strong> opens it in a new tab and picks
-it up where it stopped.</p>
-<p>This covers the conversations no pane is currently attached to: the one from
-yesterday, or one whose pane you closed. A conversation that <em>is</em> open in a
-pane is shown as such rather than offered twice, because two panes on one
-transcript would fight.</p>
-<p>The list is read from Claude Code's own transcripts rather than from anything
-Flockdeck keeps, so Claude Code conversations from sessions that had nothing to
-do with this application are in it too, and a conversation resumed from it
-opens as a Claude Code pane. Conversations with other agents, the built-in
-chat client included, are not listed.</p>
+<h1>Todo</h1>
+<p class="doc-lede">A todo is a saved checklist: a plan an agent drafted, kept as steps you start
+one at a time, whenever you get to them, rather than all at once. It is meant
+to be come back to over days, unlike <a href="/app/fanout.html">Fan out</a>, which starts every
+task of a plan at once and forgets the run the moment its tab closes.</p>
+<h2>Turning a plan into a todo</h2>
+<p>Ask an agent to plan something the same way you would before <a href="/app/fanout.html">fanning it
+out</a> — the plan can come from any pane's conversation, drafted with
+the application's ordinary chat. Once it has answered, press
+<strong>New todo</strong>, or the <code>☑</code> button in the pane header, beside <code>⑂</code>.</p>
+<p>The steps are read out of the pane the same way Fan out reads its tasks: out
+of a Claude Code agent's own transcript where that is available, off the
+screen otherwise. They appear in an editable box, one step per line, with a
+title field above it. Edit the list, give it a name, and press <strong>Save as
+todo</strong>. Nothing is started yet — saving only writes the checklist down.</p>
+<h2>The checklist</h2>
+<p>Open <strong>Todos</strong> to see every todo saved for the project. Each one shows
+its steps with a checkbox and a <strong>Start</strong> button:</p>
+<ul>
+<li>The <strong>checkbox</strong> ticks a step off by hand, in either direction, at any time.</li>
+<li><strong>Start</strong> opens a fresh agent for that one step, with the step's own text as
+its task — the same way <kbd>Ctrl+Shift+T</kbd> or a fan-out row does,
+optionally in a git worktree of its own. Started this way, several steps of
+one todo get worktrees grouped under the todo's own name in <code>git branch</code> and
+the worktree list, rather than a dozen unrelated branches that happen to
+have come from the same checklist.</li>
+<li>Editing a step's text, or dragging it to reorder it, is saved back the same
+way the plan was saved in the first place.</li>
+</ul>
+<p>A step you start is not removed from the list, and starting it a second time
+— after a failed attempt, or just to try again — keeps every earlier attempt
+alongside the new one, so the checklist remembers what was tried and how it
+went, not only the latest.</p>
+<h2>When a step is done</h2>
+<p>Closing the pane a step's agent ran in reads its outcome the same way a
+settled <a href="/app/fanout.html">fan-out</a> job does, and ticks the step automatically once
+that outcome reads as finished. A tick made this way is only ever a starting
+point: checking or unchecking a step by hand always has the last word, so a
+step you know is really done, or really is not, stays exactly as you left it
+regardless of what its agent's pane said on the way out.</p>
+<h2>Why not just fan out again</h2>
+<p>Fan out is for work you want started right now, all of it, in parallel panes
+you watch together. A todo is for a plan you are working through over time —
+one step today, the next tomorrow — where what has already been done, and
+what has not, needs to survive you closing the window. Saving a plan as a
+todo does not start anything; fanning one out never remembers it afterwards.</p>
 
   </article>
 </main>

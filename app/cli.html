@@ -50,6 +50,7 @@
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/todo.html">Todo</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
@@ -170,6 +171,36 @@ rather than becoming a pane that never starts.</p>
 <code>FLOCKDECK_API</code> and <code>FLOCKDECK_TOKEN</code> below — so only processes running inside a pane
 can use it, and running it anywhere else says so rather than failing
 obscurely. That is what lets an agent hand work to helpers of its own.</p>
+<h2>peer-name</h2>
+<p>Run from inside a pane, this reports the name another Claude session would
+use to address it — a cross-session messaging tool's own &quot;to&quot;, or the &quot;This
+session is …&quot; line a tool like <code>ListAgents</code> answers with:</p>
+<pre><code class="language-sh">flockdeck peer-name &lt;name&gt;
+</code></pre>
+<p>Flockdeck cannot learn this on its own: it is assigned by infrastructure
+outside the application entirely, and known only to whichever agent asks for
+it, typically by calling its own <code>ListAgents</code> tool. Reporting it here is what
+puts it in the pane's header (see <a href="/app/panes.html">Panes and tabs</a>), so another
+session's &quot;go look at pane X&quot; is something the user can actually act on
+without asking the pane to describe itself first.</p>
+<p>Like <code>spawn</code>, this only works inside a pane, using the address and token its
+environment was given.</p>
+<h2>close</h2>
+<p>Run from inside a pane, this closes another pane — the same effect
+Ctrl+Shift+W has on the one you're focused on:</p>
+<pre><code class="language-sh">flockdeck close [--force] &lt;pane-id&gt;
+flockdeck close --finished
+</code></pre>
+<p><code>&lt;pane-id&gt;</code> is the id <code>spawn</code> printed back when it started the pane you now
+want gone. A pane still working is left alone unless <code>--force</code> is given, so
+naming the wrong id cannot cut off work in progress; a pane cannot close
+itself this way — end its own turn instead. <code>--finished</code> closes every idle or
+exited pane across every open project instead of naming one, the same as the
+&quot;Close finished panes&quot; command, and takes no pane id.</p>
+<p>Like <code>spawn</code> and <code>peer-name</code>, this only works inside a pane, using the address
+and token its environment was given. It is what lets a coordinating agent
+clean up a helper whose work is done without a person finding it and pressing
+Ctrl+Shift+W themselves.</p>
 <h2>keys</h2>
 <p>An API agent — one Flockdeck talks to directly rather than through a CLI of its
 own — needs a key. It is looked for in that agent's own environment variables
@@ -365,7 +396,7 @@ The subcommand still works; it is the background updating that goes.</p>
 </tr>
 <tr>
 <td><code>FLOCKDECK_PANE</code></td>
-<td>The pane's id — set for you, read by <code>spawn</code></td>
+<td>The pane's id — set for you, read by <code>spawn</code>, <code>peer-name</code> and <code>close</code></td>
 </tr>
 <tr>
 <td><code>FLOCKDECK_PANE_NAME</code></td>
@@ -393,10 +424,10 @@ The subcommand still works; it is the background updating that goes.</p>
 which has no lifecycle hooks of its own — has to go on.</p>
 <p><code>FLOCKDECK_API</code>, <code>FLOCKDECK_TOKEN</code>, <code>FLOCKDECK_PANE</code>, <code>FLOCKDECK_PANE_NAME</code> and
 <code>FLOCKDECK_PROJECT</code> were called <code>PERCH_*</code> before the program was renamed. Panes
-still carry both spellings of those five and <code>spawn</code> still reads both, so a
-prompt or a script written against the old names keeps working; they will go
-in a later release. <code>FLOCKDECK_AGENT</code>, <code>FLOCKDECK_MODEL</code> and <code>FLOCKDECK_LAUNCH</code>
-are newer and have only the one name.</p>
+still carry both spellings of those five and <code>spawn</code>, <code>peer-name</code> and <code>close</code>
+still read both, so a prompt or a script written against the old names keeps
+working; they will go in a later release. <code>FLOCKDECK_AGENT</code>, <code>FLOCKDECK_MODEL</code>
+and <code>FLOCKDECK_LAUNCH</code> are newer and have only the one name.</p>
 
   </article>
 </main>
