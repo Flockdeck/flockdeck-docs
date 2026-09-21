@@ -50,6 +50,7 @@
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/todo.html">Todo</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
@@ -123,6 +124,26 @@ whichever folder the browser is showing.</p>
 own that closes it.</p>
 <p>The browser is served by the Go side rather than by the page, because a web
 page cannot be handed a real directory path.</p>
+<h2>Grouping several directories into one project</h2>
+<p>A project can be more than one directory — sibling repositories, or a repo
+alongside a plain folder of docs or notes — treated as one: they share a
+name and a tile in the rail, the switcher shows one entry instead of several
+unrelated-looking ones, and an agent in one can see what the others are
+doing.</p>
+<p><strong>Group open projects…</strong>, in the command palette, ticks two or more of the
+projects already open and merges them into one, named however you like.
+<strong>Add directory…</strong>, offered on an existing project's own row, adds another
+into it without leaving the dialog — the same browser used to open a
+project, which flags git repositories but does not require one: a plain
+folder joins just as readily.</p>
+<p>A grouped project's row expands (▸ / ▾) to show every member. Each one
+offers <strong>go to it</strong> directly rather than wherever the project was last left,
+an <strong>Agent</strong> or <strong>Shell</strong> button to open a tab there without switching
+first, and <strong>×</strong> to split it back out into a project of its own — which
+does not close it, and touches nothing on disk.</p>
+<p>A member does not need a git repository. One that has none simply has
+nothing to show in <kbd>Ctrl+Shift+S</kbd> or <kbd>Ctrl+Shift+G</kbd> — every other part
+of the project works the same either way.</p>
 <h2>Managing the list</h2>
 <p>Every project, open or not, carries a small row of its own controls:</p>
 <ul>
