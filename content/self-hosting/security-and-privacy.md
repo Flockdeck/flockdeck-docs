@@ -52,11 +52,22 @@ desktop's outbound connection to the relay carries exactly what's described
 above — proxied window content for paired devices, and nothing about
 projects, agents or conversations that aren't being viewed remotely.
 
+## The audit log
+
+`-audit` (see [Configuration](configuration.html)) turns on a log of who
+reached which desktop, from which device, and when — never what was typed
+or shown, since that's the terminal traffic [above](#end-to-end-encrypted-terminal-traffic-with-one-caveat)
+this relay can't read either way. `-audit-ip` adds the address each event
+came from, and `-audit-retention` bounds how long events are kept; both do
+nothing without `-audit` itself on.
+
 ## Operating a relay securely
 
 Treat it like any other service that terminates or proxies encrypted
 traffic for your organisation: TLS between every hop (see
 [Requirements](requirements.html)), the admin API kept off the public
-network (see [Admin and invites](admin-and-invites.html)), the data
-directory or database backed up and access-controlled, and the relay itself
-kept current (see [Upgrading](upgrading.html)).
+network — `-admin-addr` defaults to loopback already; set it to empty to
+turn the admin endpoints off entirely (see
+[Admin and invites](admin-and-invites.html)) — the data directory or
+database backed up and access-controlled, and the relay itself kept current
+(see [Upgrading](upgrading.html)).

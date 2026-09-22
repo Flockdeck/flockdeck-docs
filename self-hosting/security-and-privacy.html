@@ -129,13 +129,22 @@ projects is sent anywhere related to remote access. With it on, the
 desktop's outbound connection to the relay carries exactly what's described
 above — proxied window content for paired devices, and nothing about
 projects, agents or conversations that aren't being viewed remotely.</p>
+<h2 id="the-audit-log">The audit log</h2>
+<p><code>-audit</code> (see <a href="configuration.html">Configuration</a>) turns on a log of who
+reached which desktop, from which device, and when — never what was typed
+or shown, since that's the terminal traffic <a href="#end-to-end-encrypted-terminal-traffic-with-one-caveat">above</a>
+this relay can't read either way. <code>-audit-ip</code> adds the address each event
+came from, and <code>-audit-retention</code> bounds how long events are kept; both do
+nothing without <code>-audit</code> itself on.</p>
 <h2 id="operating-a-relay-securely">Operating a relay securely</h2>
 <p>Treat it like any other service that terminates or proxies encrypted
 traffic for your organisation: TLS between every hop (see
 <a href="requirements.html">Requirements</a>), the admin API kept off the public
-network (see <a href="admin-and-invites.html">Admin and invites</a>), the data
-directory or database backed up and access-controlled, and the relay itself
-kept current (see <a href="upgrading.html">Upgrading</a>).</p>
+network — <code>-admin-addr</code> defaults to loopback already; set it to empty to
+turn the admin endpoints off entirely (see
+<a href="admin-and-invites.html">Admin and invites</a>) — the data directory or
+database backed up and access-controlled, and the relay itself kept current
+(see <a href="upgrading.html">Upgrading</a>).</p>
 
   </article>
 </main>
