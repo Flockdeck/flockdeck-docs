@@ -31,7 +31,11 @@ jobs:
   post:
     if: github.event.workflow_run.conclusion == 'success'
     environment: pr-review-external
-    uses: Flockdeck/flockdeck/.github/workflows/reusable-pr-review-post.yml@main
+    # Pinned to a commit, not @main: this job holds the LLM API key and the
+    # GitHub App's private key, so what it runs shouldn't be able to change
+    # just because flockdeck's main branch moved -- bump this deliberately,
+    # alongside pr-review.yml's matching pin.
+    uses: Flockdeck/flockdeck/.github/workflows/reusable-pr-review-post.yml@1ad5ab0adf5909c9bd85fcff802c4a5268b14378
     with:
       artifact-run-id: ${{ github.event.workflow_run.id }}
     secrets:
