@@ -105,7 +105,7 @@ variable if both are set.</p>
 <tr>
 <td><code>-addr</code></td>
 <td></td>
-<td><code>:443</code></td>
+<td><code>:8080</code> (<code>:443</code> with <code>-acme-domain</code>)</td>
 <td>Address to listen on.</td>
 </tr>
 <tr>
@@ -145,6 +145,12 @@ variable if both are set.</p>
 <td>Your own certificate and key. Reloaded automatically when the files change.</td>
 </tr>
 <tr>
+<td><code>-client-dir</code></td>
+<td></td>
+<td></td>
+<td>Serve the remote client from this directory instead of the one built into the relay.</td>
+</tr>
+<tr>
 <td><code>-desk-domain</code></td>
 <td></td>
 <td></td>
@@ -172,7 +178,7 @@ variable if both are set.</p>
 <tr>
 <td><code>-data</code></td>
 <td></td>
-<td></td>
+<td><code>data</code></td>
 <td>Directory for the embedded database and the admin token file.</td>
 </tr>
 <tr>
@@ -207,12 +213,17 @@ variable if both are set.</p>
 <tr>
 <td><code>-max-hosts</code></td>
 <td>10</td>
-<td>Maximum number of registered desktops.</td>
+<td>Maximum number of desktops per account (0: no limit).</td>
 </tr>
 <tr>
 <td><code>-max-devices</code></td>
 <td>20</td>
-<td>Maximum number of paired phones/browsers per desktop.</td>
+<td>Maximum number of paired phones/browsers per account (0: no limit).</td>
+</tr>
+<tr>
+<td><code>-max-pairings</code></td>
+<td>5</td>
+<td>Unused pairing codes an account can hold at once; a new one replaces the oldest (0: no limit).</td>
 </tr>
 <tr>
 <td><code>-pairing-ttl</code></td>
@@ -222,32 +233,42 @@ variable if both are set.</p>
 <tr>
 <td><code>-session-ttl</code></td>
 <td>720h (30 days)</td>
-<td>How long a paired device stays paired before it has to pair again.</td>
+<td>How long a device stays paired without being used, before it has to pair again.</td>
+</tr>
+<tr>
+<td><code>-max-streams</code></td>
+<td>256</td>
+<td>Connections open to one desktop at once.</td>
 </tr>
 <tr>
 <td><code>-register-per-hour</code></td>
 <td>5</td>
-<td>Rate limit on new desktop registrations, per IP.</td>
+<td>Accounts made, and join codes that don't work, per client address per hour (0: no limit).</td>
 </tr>
 <tr>
 <td><code>-pair-per-minute</code></td>
 <td>10</td>
-<td>Rate limit on pairing attempts, per IP.</td>
+<td>Pairing attempts per client address per minute (0: no limit).</td>
 </tr>
 <tr>
 <td><code>-connects-per-minute</code></td>
 <td>60</td>
-<td>Rate limit on new connections, per IP.</td>
+<td>Desktop tunnels opened with a token that doesn't work, per client address per minute (0: no limit).</td>
 </tr>
 <tr>
 <td><code>-tunnels-per-address</code></td>
 <td>20</td>
-<td>Maximum concurrent tunnels from one address.</td>
+<td>Maximum desktops connected from one address at once (0: no limit).</td>
 </tr>
 <tr>
 <td><code>-max-tunnels</code></td>
 <td>1000</td>
-<td>Maximum concurrent tunnels, relay-wide.</td>
+<td>Maximum desktops connected to the relay at once (0: no limit).</td>
+</tr>
+<tr>
+<td><code>-log-level</code></td>
+<td><code>info</code></td>
+<td><code>debug</code>, <code>info</code>, <code>warn</code> or <code>error</code>.</td>
 </tr>
 <tr>
 <td><code>-memory-limit</code></td>
