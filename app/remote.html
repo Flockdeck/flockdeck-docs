@@ -165,6 +165,15 @@ remote access</strong>. The same can be done from a terminal:</p>
 </tr>
 </tbody>
 </table>
+<p>A relay set up with <code>-require-verified-registration</code> (see
+<a href="https://docs.flockdeck.ai/self-hosting/configuration.html" target="_blank" rel="noopener noreferrer">Configuration</a>)
+won't create an account this way until the email doing so is verified.
+<code>flockdeck remote enable</code> and <code>flockdeck remote move</code> handle that themselves:
+each opens the verification link in a browser, or prints it if none opens,
+and waits for it to be clicked — Ctrl+C cancels, and nothing is created until
+then. The dialog does not yet support this: opened against a relay that
+requires it, it fails at once and says to run the command from a terminal
+instead.</p>
 <p>The relay is <code>https://remote.flockdeck.ai</code> unless <code>-relay</code> or <code>FLOCKDECK_RELAY</code>
 names another. A second desktop joins the same account with a code from
 <code>flockdeck remote pair -desktop</code> on the first, given to the second — in the

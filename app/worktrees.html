@@ -101,6 +101,8 @@ repository. <kbd>Ctrl+Shift+G</kbd>, or <strong>Worktrees</strong> in the rail, 
 <li>whether it is the main worktree, or locked</li>
 <li><strong>folder gone</strong>, when its folder was deleted outside the application and
 only git's record of it is left</li>
+<li>in a project <a href="/app/projects.html">grouping more than one directory</a>, which repo the
+worktree belongs to</li>
 </ul>
 <h2>What you can do</h2>
 <table>
@@ -137,7 +139,11 @@ only git's record of it is left</li>
 <kbd>Enter</kbd> in the branch box does the same. It is created next to the
 repository; giving an existing branch name checks that branch out
 instead of creating one. Branches that have no worktree are listed underneath
-as one-click buttons.</p>
+as one-click buttons. In a project <a href="/app/projects.html">grouping more than one directory</a>,
+the form also offers a choice of which repo to create the worktree in —
+defaulting to whichever is active — since a worktree always belongs to
+exactly one repository; <a href="/app/changes.html">Review, commit and push</a> has the same
+choice for reviewing one.</p>
 <p><strong>Prune</strong> drops git's records of worktrees whose folders were deleted outside
 the application. A worktree like that is listed as <strong>folder gone</strong>, with a
 <strong>Prune</strong> button of its own in place of the others, since there is no folder

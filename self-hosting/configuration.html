@@ -133,6 +133,12 @@ variable if both are set.</p>
 <td>Contact address for the ACME account.</td>
 </tr>
 <tr>
+<td><code>-http-addr</code></td>
+<td></td>
+<td><code>:80</code></td>
+<td>With <code>-acme-domain</code>, the address answering ACME challenges and redirecting to https. Does nothing without <code>-acme-domain</code>, and is refused if set without it.</td>
+</tr>
+<tr>
 <td><code>-tls-cert</code> / <code>-tls-key</code></td>
 <td></td>
 <td></td>
@@ -143,6 +149,12 @@ variable if both are set.</p>
 <td></td>
 <td></td>
 <td>Base domain for giving each paired desktop its own subdomain. Needs a wildcard DNS record and certificate.</td>
+</tr>
+<tr>
+<td><code>-admin-addr</code></td>
+<td></td>
+<td><code>127.0.0.1:8081</code></td>
+<td>Loopback address for the admin endpoints <code>flockdeck-relay invite</code>, <code>stats</code> and <code>plan</code> use — see <a href="admin-and-invites.html">Admin and invites</a>. Empty turns them off.</td>
 </tr>
 </tbody>
 </table>
@@ -244,6 +256,50 @@ variable if both are set.</p>
 </tr>
 </tbody>
 </table>
+<h2 id="verified-registration">Verified registration</h2>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Env</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-require-verified-registration</code></td>
+<td><code>FLOCKDECK_RELAY_REQUIRE_VERIFIED_REGISTRATION</code></td>
+<td>off</td>
+<td>Require a verified email, confirmed with a magic link, before <code>flockdeck remote enable</code> may create an account and start a trial. Needs a Postmark token and <code>-mail-from</code>.</td>
+</tr>
+<tr>
+<td><code>-mail-from</code></td>
+<td></td>
+<td></td>
+<td>The relay's own address verification emails are sent from, e.g. <code>verify@flockdeck.ai</code>. Needed with <code>-require-verified-registration</code>, and refused without it.</td>
+</tr>
+<tr>
+<td><code>-verify-email-per-hour</code></td>
+<td></td>
+<td>5</td>
+<td>Verification emails started or resent per client address per hour (0: no limit).</td>
+</tr>
+<tr>
+<td><code>-verification-ttl</code></td>
+<td></td>
+<td>30m</td>
+<td>How long someone has to click a verification email's link before it expires.</td>
+</tr>
+</tbody>
+</table>
+<p>The Postmark server token itself is read only from <code>FLOCKDECK_RELAY_POSTMARK_TOKEN</code>
+— there is no flag for it, so it never appears in a process listing.
+<code>-require-verified-registration</code> refuses to start without both it and
+<code>-mail-from</code> set.</p>
+<p>The desktop app's command-palette dialog can't yet wait on a verification
+link, so it fails immediately on a relay set up this way; <code>flockdeck remote enable</code> and <code>flockdeck remote move</code> from a terminal open the link and wait
+for it instead. See <a href="/app/remote.html">Remote access</a>.</p>
 <h2 id="push-notifications">Push notifications</h2>
 <table>
 <thead>
@@ -312,6 +368,35 @@ notifications.</p>
 without the other, or without <code>-oidc-issuer</code>, is a startup error. This is
 part of the relay itself — it doesn't need Flockdeck Enterprise or a
 licence. See <a href="overview.html">Overview</a>.</p>
+<h2 id="audit-log">Audit log</h2>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-audit</code></td>
+<td>off</td>
+<td>Keep the audit log: who reached which desktop, from which device, and when. Never what was typed or shown.</td>
+</tr>
+<tr>
+<td><code>-audit-ip</code></td>
+<td>off</td>
+<td>With <code>-audit</code>, also record the address each event came from. Refused without <code>-audit</code>.</td>
+</tr>
+<tr>
+<td><code>-audit-retention</code></td>
+<td>0 (for good)</td>
+<td>With <code>-audit</code>, how long events are kept. Refused without <code>-audit</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="security-and-privacy.html">Security and privacy</a> for what the audit log
+does and doesn't capture.</p>
 <h2 id="an-example">An example</h2>
 <p>Behind a reverse proxy, with MySQL, registration by invite only, and push
 notifications on:</p>
