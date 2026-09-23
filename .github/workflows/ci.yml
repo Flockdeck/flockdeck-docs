@@ -84,6 +84,15 @@ jobs:
             for ref in $(grep -oE '(href|src)="[^"]*"' "$page" | cut -d'"' -f2); do
               check "$page" "$ref"
             done
+            # A srcset candidate is "url descriptor", comma-separated from the
+            # next one -- read splits each on whitespace once flattened onto
+            # its own line, dropping the descriptor (_) and any leading space
+            # the comma left behind. A herestring, not a pipe, feeds the
+            # loop: this calls check too, and needs to be in the current
+            # shell for the same reason the loop above is.
+            while IFS=' ' read -r ref _; do
+              [ -n "$ref" ] && check "$page" "$ref"
+            done <<< "$(grep -oE 'srcset="[^"]*"' "$page" | cut -d'"' -f2 | tr ',' '\n')"
           done < <(find . -name '*.html' -not -path './.git/*')
           exit "$missing"
 

@@ -16,7 +16,11 @@ permissions:
 
 jobs:
   diff:
-    uses: Flockdeck/flockdeck/.github/workflows/reusable-pr-diff.yml@main
+    # Pinned to a commit, not @main: flockdeck is a much larger, more active
+    # repo, and this call is what a fork PR's untrusted job actually runs --
+    # a moving ref would let anyone who can merge there change what runs
+    # here without a change ever landing in this repo.
+    uses: Flockdeck/flockdeck/.github/workflows/reusable-pr-diff.yml@1ad5ab0adf5909c9bd85fcff802c4a5268b14378
     with:
       pr-number: ${{ github.event.pull_request.number }}
       head-sha: ${{ github.event.pull_request.head.sha }}
