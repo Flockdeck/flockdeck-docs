@@ -8,13 +8,14 @@ variable if both are set.
 
 | Flag | Env | Default | What it does |
 | --- | --- | --- | --- |
-| `-addr` | | `:443` | Address to listen on. |
+| `-addr` | | `:8080` (`:443` with `-acme-domain`) | Address to listen on. |
 | `-public-url` | | | The address the relay tells desktops and devices to use — required whenever it isn't the same as `-addr`, such as behind a proxy. |
 | `-trust-proxy` | | off | Take the client address from forwarded headers instead of the TCP connection. Only turn this on when something trusted sits in front of the relay. |
 | `-acme-domain` | | | Domain to get a certificate for automatically. Requires the relay to be reachable on port 80 and 443 directly. |
 | `-acme-email` | | | Contact address for the ACME account. |
 | `-http-addr` | | `:80` | With `-acme-domain`, the address answering ACME challenges and redirecting to https. Does nothing without `-acme-domain`, and is refused if set without it. |
 | `-tls-cert` / `-tls-key` | | | Your own certificate and key. Reloaded automatically when the files change. |
+| `-client-dir` | | | Serve the remote client from this directory instead of the one built into the relay. |
 | `-desk-domain` | | | Base domain for giving each paired desktop its own subdomain. Needs a wildcard DNS record and certificate. |
 | `-admin-addr` | | `127.0.0.1:8081` | Loopback address for the admin endpoints `flockdeck-relay invite`, `stats` and `plan` use — see [Admin and invites](admin-and-invites.html). Empty turns them off. |
 
@@ -22,7 +23,7 @@ variable if both are set.
 
 | Flag | Env | Default | What it does |
 | --- | --- | --- | --- |
-| `-data` | | | Directory for the embedded database and the admin token file. |
+| `-data` | | `data` | Directory for the embedded database and the admin token file. |
 | `-database` | `FLOCKDECK_RELAY_DATABASE_URL` | | MySQL DSN, in place of the embedded database. See [Storage and data](storage-and-data.html). |
 | `-database-ca` | `FLOCKDECK_RELAY_DATABASE_CA` | | Path to a CA certificate for the MySQL connection. |
 
@@ -31,15 +32,18 @@ variable if both are set.
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `-registration` | `open` | Who can register a new desktop: `open`, `invite` (needs an invite code from an admin — see [Admin and invites](admin-and-invites.html)), or `closed`. |
-| `-max-hosts` | 10 | Maximum number of registered desktops. |
-| `-max-devices` | 20 | Maximum number of paired phones/browsers per desktop. |
+| `-max-hosts` | 10 | Maximum number of desktops per account (0: no limit). |
+| `-max-devices` | 20 | Maximum number of paired phones/browsers per account (0: no limit). |
+| `-max-pairings` | 5 | Unused pairing codes an account can hold at once; a new one replaces the oldest (0: no limit). |
 | `-pairing-ttl` | 10m | How long a pairing link or QR code stays valid. |
-| `-session-ttl` | 720h (30 days) | How long a paired device stays paired before it has to pair again. |
-| `-register-per-hour` | 5 | Rate limit on new desktop registrations, per IP. |
-| `-pair-per-minute` | 10 | Rate limit on pairing attempts, per IP. |
-| `-connects-per-minute` | 60 | Rate limit on new connections, per IP. |
-| `-tunnels-per-address` | 20 | Maximum concurrent tunnels from one address. |
-| `-max-tunnels` | 1000 | Maximum concurrent tunnels, relay-wide. |
+| `-session-ttl` | 720h (30 days) | How long a device stays paired without being used, before it has to pair again. |
+| `-max-streams` | 256 | Connections open to one desktop at once. |
+| `-register-per-hour` | 5 | Accounts made, and join codes that don't work, per client address per hour (0: no limit). |
+| `-pair-per-minute` | 10 | Pairing attempts per client address per minute (0: no limit). |
+| `-connects-per-minute` | 60 | Desktop tunnels opened with a token that doesn't work, per client address per minute (0: no limit). |
+| `-tunnels-per-address` | 20 | Maximum desktops connected from one address at once (0: no limit). |
+| `-max-tunnels` | 1000 | Maximum desktops connected to the relay at once (0: no limit). |
+| `-log-level` | `info` | `debug`, `info`, `warn` or `error`. |
 | `-memory-limit` | | A Go `GOMEMLIMIT`-style soft memory cap for the process. |
 
 ## Verified registration
