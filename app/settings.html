@@ -113,7 +113,10 @@ checkbox, which can still be changed for one run from the dialog itself. And
 hand, or a fresh row of a fan-out run from the window — starts with
 auto-review on. A pane's own switch still starts off unless this is on, and
 either way can be turned on or off for that one pane; auto-review only ever
-lets through a confidently read-only command, and never says &quot;deny&quot;.</li>
+lets through a confidently read-only command, and never says &quot;deny&quot;. And
+<strong>Status detection</strong>: whether TypeSafe's Jev model may help read the status
+of a pane whose agent reports none. <strong>Off by default</strong>, and it sends
+terminal output to a third party — see <a href="/app/status.html">Knowing who needs you</a>.</li>
 <li><strong>Keybindings</strong> — every shortcut this window's own chrome offers, grouped as
 <a href="/app/shortcuts.html">Keyboard shortcuts</a> groups them, each with a button that
 records the next key you press as its new binding; <strong>Reset</strong> puts one back,
@@ -211,6 +214,8 @@ run only: each run has an address of its own.</li>
 Kept in <code>prefs.json</code>.</li>
 <li><strong>Fan out's own default, and auto-review's own default</strong> — <strong>Behaviour</strong> in
 the settings. Kept in <code>prefs.json</code>.</li>
+<li><strong>Status detection with Jev</strong> — <strong>Behaviour</strong> in the settings. Kept in
+<code>prefs.json</code>; off unless you turn it on, and only from the machine itself.</li>
 </ul>
 <h2>In the state directory</h2>
 <p>Everything Flockdeck keeps is in one directory: <code>%AppData%\flockdeck</code> on
@@ -273,6 +278,9 @@ says: no checks, in the background or asked for on the spot, and nothing
 already downloaded is put in place. That is what keeps an older version you
 installed on purpose from updating itself to the latest.</li>
 <li><code>FLOCKDECK_RELAY</code> — which relay <code>flockdeck remote enable</code> uses.</li>
+<li><code>TYPESAFE_API_KEY</code> — a key for TypeSafe's Jev, used only when <strong>Status
+detection</strong> under <strong>Behaviour</strong> is turned on; see
+<a href="/app/status.html">Knowing who needs you</a>. Without it nothing is ever sent.</li>
 <li><code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code> and <code>GEMINI_API_KEY</code> (or
 <code>GOOGLE_API_KEY</code>) — keys for the API agents talking to those vendors' own
 addresses, used before anything in <code>keys.json</code>. An agent given another
