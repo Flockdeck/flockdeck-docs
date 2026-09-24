@@ -1,0 +1,15 @@
+# Relay flags that content/self-hosting/configuration.md deliberately does not
+# document. One per line: the flag, then the reason. A flag with no reason, a
+# flag the docs now mention, and a flag the relay no longer has all fail the
+# check, so this file cannot quietly outlive the decision behind it.
+#
+# Seeded from what configuration.md omitted at relay v0.2.50. Every one is
+# part of the hosted service's paid plans (a trial, a subscription, a grace
+# period before deletion) that a self-hosted relay never has: without
+# -billing-url the relay enforces nothing and shows no plan.
+-billing-addr Hosted-service billing: where the billing service sets an account's plan. A self-hosted relay has no billing service.
+-billing-url Hosted-service billing: where the devices page sends a browser to subscribe. A self-hosted relay has no plans to subscribe to.
+-enforce-plans Hosted-service billing: refuses remote access to accounts with no trial or subscription. Self-hosting has no plans (and it is off unless -billing-url is set).
+-grace-length Hosted-service billing: how long a lapsed account is kept before deletion, with -enforce-plans.
+-plan-names Hosted-service billing: what the trial/subscribed/lapsed plans are called in the UI.
+-trial-length Hosted-service billing: how long a free trial lasts, with -enforce-plans.

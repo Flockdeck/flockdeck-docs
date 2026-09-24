@@ -1,0 +1,75 @@
+flockdeck — runs your coding agents on hardware you control.
+
+Usage:
+  flockdeck [flags]
+
+Flags:
+  -C directory
+    	directory to open the workspace on
+    	(default: $FLOCKDECK_DIR if set, else the working directory) (default ".")
+  -agent id
+    	id of the agent new panes start as for this run; flockdeck agents lists them
+    	(default: $FLOCKDECK_START_AGENT if set)
+  -detach
+    	keep running without a window; reattach later by running it again
+    	(default: $FLOCKDECK_DETACH if set to 1 or true)
+  -new
+    	ignore any saved layout and start with a single pane
+    	(default: $FLOCKDECK_FRESH if set to 1 or true)
+  -no-window
+    	do not open a window or need a browser here; print the URL and keep serving
+    	(default: $FLOCKDECK_NO_WINDOW if set to 1 or true)
+  -quit
+    	stop a running instance and its agents
+  -shell
+    	open the first pane as a shell instead of an agent
+    	(default: $FLOCKDECK_SHELL_FIRST if set to 1 or true)
+  -solo
+    	always start a new instance instead of attaching to a running one
+    	(default: $FLOCKDECK_SOLO if set to 1 or true)
+  -version
+    	print the version and exit
+
+Subcommands:
+  spawn [--worktree <branch>] [--split] [--shell] [--agent <id>] [--model <model>] <task>
+        start another agent; run from inside a pane
+        run flockdeck spawn -h for what the flags do
+  peer-name <name>
+        report the name another Claude session would address this pane by; run from inside a pane
+  close [-force] <pane-id> | close -finished
+        close another pane, or every finished one; run from inside a pane
+  agents
+        list the agents flockdeck can run, with their models
+  chat [flags]
+        flockdeck's own chat client, which an API agent's pane runs; chat -h for its flags
+  keys [list|set <agent>|clear <agent>|check <agent>|endpoint <agent> [<url> | default]]
+        the API keys agents talk to a model API with
+  remote enable [-relay <url>] [-name <name>] [-join <code>] [-invite <code>]
+        enrol this machine with a relay, so another device can reach its agents
+  remote pair [-desktop] | status | devices | revoke <id> | disable [-force]
+        pair a device, and see or change what is paired
+  remote rename [-device <id or name>] <name>
+        rename this machine, or a paired device, as every device lists it
+  remote move [-invite <code>] [-join <code>] [-name <name>] [-yes] <relay>
+        move this machine to another relay; every device then pairs again
+  update [-check]
+        fetch the latest release and put it in place
+  help [<subcommand>]
+        this usage, or a subcommand's own
+
+Environment:
+  FLOCKDECK_UPDATE=off
+        do not look for new releases in the background; update still works
+  FLOCKDECK_RELAY=<url>
+        the relay remote access goes through, instead of the default one
+  FLOCKDECK_API_KEY=<key>
+        the key any API agent uses when neither its own variables nor a key
+        stored with `flockdeck keys set` hold one
+  FLOCKDECK_DIR=<directory>, FLOCKDECK_START_AGENT=<id>, FLOCKDECK_RELAY=<url>
+  FLOCKDECK_FRESH / FLOCKDECK_SHELL_FIRST / FLOCKDECK_NO_WINDOW / FLOCKDECK_DETACH / FLOCKDECK_SOLO=1
+        the environment equivalents of -C, -agent, -relay, -new, -shell,
+        -no-window, -detach and -solo, for a systemd unit or container manifest;
+        a flag given on the command line always wins
+
+Running it again attaches to an instance that is already going.
+Press F1 in the window for the help: the shortcuts, and how the rest of it works.
