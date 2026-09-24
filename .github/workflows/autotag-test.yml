@@ -1,0 +1,31 @@
+# The tests of the auto-tag script, against real git repositories the tests
+# make. Nothing here has a secret or a token, and a pull request from a fork
+# may run it.
+name: Auto-tag tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/scripts/**"
+      - ".github/workflows/autotag*.yml"
+  pull_request:
+    paths:
+      - ".github/scripts/**"
+      - ".github/workflows/autotag*.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test the auto-tag script
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run the tests
+        run: sh .github/scripts/autotag_test.sh
+      - name: Shellcheck
+        run: shellcheck -s sh .github/scripts/autotag.sh .github/scripts/autotag_test.sh

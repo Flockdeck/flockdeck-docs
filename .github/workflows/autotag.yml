@@ -1,0 +1,96 @@
+# Tag main when it has something new that ships and CI passed on it.
+#
+# Merging to main deploys nothing here: a v* tag is what CI builds into the
+# bare-semver image Flux deploys. This tags for us, so a merge that is green
+# and changes the site is live without anyone remembering to. The rules
+# (never a commit whose CI failed, never twice, not for what does not ship)
+# are in .github/scripts/autotag.sh, which is tested by autotag-test.yml.
+#
+# The tag is pushed with a GitHub App's installation token, not GITHUB_TOKEN.
+# A tag pushed with GITHUB_TOKEN starts no workflow, so CI would never build
+# the tag's image and nothing would deploy. See flockdeck's
+# .github/RELEASE_AUTOMATION_SETUP.md for the app, and for where its secrets
+# are kept: in this repository's `release` environment, which only main may
+# deploy to, so a workflow on any other branch cannot read them. This repository
+# is public, so it can have one. flockdeck-site's copy of this file has no
+# `environment: release` line, being private on the Free plan, which has no
+# environments; that line is the only difference between the two, apart from
+# this comment.
+#
+# What this does not do, and CI still does: build the image on a push to main
+# (it pushes `latest` and `sha-<commit>`, which Flux ignores), or on the tag
+# (which pushes the bare semver that Flux deploys). Tagging makes no commit,
+# so it cannot start itself again: the tag's own CI run is for a tag, and this
+# workflow only follows runs on main.
+name: Auto-tag
+
+on:
+  # When CI finishes on main. This is the trigger that does the work: the
+  # commit's CI has a result by then, so nothing waits for it.
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  # A safety net for a run this missed, an event that never came or a CI run
+  # that was started again and passed later: whatever is on main's tip, if it
+  # is green and untagged and ships, is tagged. It is cheap, and says why when
+  # it has nothing to do.
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+# One at a time, none cancelled. Two merges close together are two runs, the
+# second working out its tag after the first has pushed its own. GitHub keeps
+# one run waiting and replaces an older waiting one with a newer, which is
+# harmless: the newer commit has the older in it, and is what gets tagged.
+concurrency:
+  group: autotag
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  tag:
+    name: Tag
+    # Only a CI run that passed, on a push to main of this repository; the
+    # script asks GitHub again before it tags, this only avoids the runner.
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: release
+    permissions:
+      contents: read
+      # To ask whether CI passed.
+      actions: read
+    steps:
+      # Contents: write, on this repository only, for an hour: pushing a tag
+      # is all it is for.
+      - name: Mint the release bot's token
+        id: token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_APP_PRIVATE_KEY }}
+          permission-contents: write
+
+      # Every commit and every tag: the next version is worked out from the
+      # tags, and what changed from the history between two of them. The
+      # token stays in this checkout's git config for the push, and this job
+      # runs nothing but the script that is in this repository's main.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.token.outputs.token }}
+
+      # The commit is named by the event, never spliced into the script. For
+      # a schedule or a run started by hand it is empty, and is main's tip.
+      - name: Tag it if it is new, green and ships
+        env:
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          GH_TOKEN: ${{ github.token }}
+        run: sh .github/scripts/autotag.sh
