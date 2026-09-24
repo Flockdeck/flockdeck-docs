@@ -37,6 +37,11 @@ jobs:
         with:
           go-version-file: tools/docdrift/go.mod
       - name: Regenerate from the latest flockdeck release
+        env:
+          # setup-go pins GOTOOLCHAIN=local; docgen's go.mod may ask for a
+          # newer Go than the one installed above, and this is what lets the
+          # go command fetch it.
+          GOTOOLCHAIN: auto
         run: tools/docdrift/generated.sh upstream "$RUNNER_TEMP/report"
       - name: Open, update or close the tracking issue
         run: |
