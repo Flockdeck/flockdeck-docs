@@ -39,6 +39,39 @@ unlisted fails the build rather than going unlinked from the nav.
 as [flockdeck-site](https://github.com/jmwri/flockdeck-site), copied rather
 than linked across origins, since the two sites are deployed separately.
 
+## Keeping the docs from going stale
+
+The generated pages come from a specific flockdeck release, recorded in
+`.docs-generated-from` (`<tag> <commit>`). Regenerate, and update that stamp,
+in one step:
+
+```sh
+tools/docdrift/generated.sh regenerate          # from the latest release
+tools/docdrift/generated.sh regenerate v0.3.41  # or a named one
+```
+
+That needs `go` and `gh`; it clones flockdeck itself. Four guards (the
+comparison logic is `tools/docdrift`, a small stdlib-only Go program with its
+own tests) keep the docs honest. Each is its own job, so a failure says which:
+
+| Guard | When | What it catches |
+| --- | --- | --- |
+| **Generated files match** (`docs-guards.yml`) | every PR | A hand edit of `app/*.html` or `self-hosting/*.html`, or `content/` changed without regenerating. Compares against the *stamped* flockdeck, never the newest release, so a flockdeck release cannot turn an unrelated PR red. |
+| **Relay flags are documented** | every PR | The released relay's `serve -h` against `content/self-hosting/configuration.md`: every flag documented or in `tools/docdrift/allow-relay-flags.txt` with a reason; every documented flag still exists; stated defaults and env vars agree. Fails only on findings the PR *adds* (the base branch's page is checked the same way and diffed). |
+| **Desktop commands are documented** | every PR | The released desktop's `flockdeck -h` subcommands against `app/cli.html`; same base-branch rule, allowlist in `allow-desktop-commands.txt`. |
+| **Docs drift** (`docs-drift.yml`) | daily, and on demand | The site behind the latest flockdeck release, or the config/CLI pages disagreeing with the latest relay/desktop: keeps one tracking issue per check, closes it when clean, and does not comment when nothing changed. |
+
+The relay's flags are read from the public image
+`ghcr.io/flockdeck/flockdeck-relay` (anonymously, so it has to stay public);
+the desktop's from the linux amd64 release tarball, verified against
+`checksums.txt`. Neither guard is a required check by default: add the job
+names above to branch protection to make them gating (leave `Check the site`
+as it is).
+
+An entry in an allowlist is a decision: it needs a one-line reason, and the
+check fails when the entry outlives it (the docs now cover it, or the flag is
+gone). To run a guard by hand, see the top of each script in `tools/docdrift/`.
+
 ## How it is served
 
 Deployed the same way flockdeck-site is, to the wost Kubernetes cluster:

@@ -1,0 +1,136 @@
+# Upstream docs drift, daily: is the site behind what flockdeck and the relay
+# have actually released? Each check keeps ONE tracking issue -- opened when
+# the docs are behind, edited when what is behind changes, closed when they
+# catch up, and untouched (no comment) on a run that finds the same thing.
+# Not a PR gate: whether flockdeck cut a release is not something a docs PR
+# caused. docs-guards.yml is the PR-time half.
+#
+# A job that cannot run (the relay image went private, a release has no
+# tarball) fails red rather than opening an issue: that is a broken guard,
+# not drifted docs, and it should not be able to look like "all current".
+name: Docs drift
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  generated:
+    name: Docs are behind flockdeck?
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: tools/docdrift/go.mod
+      - name: Regenerate from the latest flockdeck release
+        run: tools/docdrift/generated.sh upstream "$RUNNER_TEMP/report"
+      - name: Open, update or close the tracking issue
+        run: |
+          latest=$(cat "$RUNNER_TEMP/report.latest")
+          stamped=$(cat "$RUNNER_TEMP/report.stamped")
+          if [ -s "$RUNNER_TEMP/report" ]; then
+            {
+              echo "The docs site would change if regenerated from flockdeck **$latest**; it was last generated from **$stamped** (\`.docs-generated-from\`)."
+              echo
+              echo "Pages that would change:"
+              echo
+              sed 's/^/- /' "$RUNNER_TEMP/report"
+              echo
+              echo "To catch up: \`tools/docdrift/generated.sh regenerate $latest\`, review the diff, and open a PR (release notes and other content that lives in \`content/\` are not touched by this)."
+              echo
+              echo "Tracked by the *Docs drift* workflow; it closes this issue itself once the site is current."
+            } >"$RUNNER_TEMP/body.md"
+            tools/docdrift/issue.sh sync generated "Docs are behind flockdeck $latest" "$RUNNER_TEMP/body.md"
+          else
+            tools/docdrift/issue.sh clear generated "The docs are current with flockdeck $latest again."
+          fi
+
+  relay:
+    name: Docs match the released relay?
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: tools/docdrift/go.mod
+      - name: Flags of the released relay
+        run: tools/docdrift/fetch-relay-help.sh "$RUNNER_TEMP/relay-help.txt"
+      - name: Compare with configuration.md; open, update or close the issue
+        run: |
+          (cd tools/docdrift && go build -o "$RUNNER_TEMP/docdrift" .)
+          version=$(cat "$RUNNER_TEMP/relay-help.txt.version")
+          if "$RUNNER_TEMP/docdrift" relay -help "$RUNNER_TEMP/relay-help.txt" \
+              -docs content/self-hosting/configuration.md \
+              -allow tools/docdrift/allow-relay-flags.txt >"$RUNNER_TEMP/findings" ; then
+            tools/docdrift/issue.sh clear relay "The self-hosting configuration page agrees with relay $version again."
+          else
+            [ "$?" -eq 1 ] || exit 1   # 2 is "could not run", which is a red job
+            {
+              echo "\`content/self-hosting/configuration.md\` disagrees with the released relay **$version** (\`flockdeck-relay serve -h\`):"
+              echo
+              cat "$RUNNER_TEMP/findings"
+              echo
+              echo "Document the flag, or -- if it is deliberately left out -- add it to \`tools/docdrift/allow-relay-flags.txt\` with a reason."
+              echo
+              echo "Tracked by the *Docs drift* workflow; it closes this issue itself once the page agrees."
+            } >"$RUNNER_TEMP/body.md"
+            tools/docdrift/issue.sh sync relay "Docs disagree with flockdeck-relay $version" "$RUNNER_TEMP/body.md"
+          fi
+
+  desktop:
+    name: Docs match the released desktop?
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: tools/docdrift/go.mod
+      - name: Libraries the desktop binary loads
+        run: sudo apt-get update -qq && sudo apt-get install -yqq libgtk-4-1 libwebkitgtk-6.0-4
+      - name: Subcommands of the released desktop
+        run: tools/docdrift/fetch-desktop-help.sh "$RUNNER_TEMP/desktop-help.txt"
+      - name: Compare with cli.html; open, update or close the issue
+        run: |
+          (cd tools/docdrift && go build -o "$RUNNER_TEMP/docdrift" .)
+          version=$(cat "$RUNNER_TEMP/desktop-help.txt.version")
+          if "$RUNNER_TEMP/docdrift" cli -help "$RUNNER_TEMP/desktop-help.txt" \
+              -docs app/cli.html \
+              -allow tools/docdrift/allow-desktop-commands.txt >"$RUNNER_TEMP/findings"; then
+            tools/docdrift/issue.sh clear desktop "The command-line page documents every flockdeck $version subcommand again."
+          else
+            [ "$?" -eq 1 ] || exit 1
+            {
+              echo "\`app/cli.html\` disagrees with the released desktop **$version** (\`flockdeck -h\`):"
+              echo
+              cat "$RUNNER_TEMP/findings"
+              echo
+              echo "\`app/cli.html\` is generated from \`internal/help/pages/cli.md\` in Flockdeck/flockdeck: fix the page there, then regenerate here. A subcommand that is deliberately undocumented goes in \`tools/docdrift/allow-desktop-commands.txt\` with a reason."
+              echo
+              echo "Tracked by the *Docs drift* workflow; it closes this issue itself once the page agrees."
+            } >"$RUNNER_TEMP/body.md"
+            tools/docdrift/issue.sh sync desktop "Docs disagree with flockdeck $version's command line" "$RUNNER_TEMP/body.md"
+          fi

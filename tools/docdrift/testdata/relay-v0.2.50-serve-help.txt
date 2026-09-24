@@ -1,0 +1,110 @@
+flockdeck-relay — reach the agents on your desktop from anywhere.
+
+Usage:
+  flockdeck-relay [serve] -public-url URL [flags]   run the relay (serve -h for the flags)
+  flockdeck-relay invite [-data DIR] [-note TEXT]    make a registration invite
+  flockdeck-relay stats [-data DIR]                  what the running relay holds
+  flockdeck-relay vapid-keys                         make a key pair for push notifications
+  flockdeck-relay plan [-data DIR] ACCOUNT [PLAN]    an account's plan, or put it on another
+  flockdeck-relay user revoke [-data DIR] EMAIL      revoke every device a person paired, at once
+  flockdeck-relay audit export [-data DIR] [-format csv|json] [-since TIME] [-until TIME] [-o FILE]
+                                                     write out the audit log
+  flockdeck-relay version
+
+Flags for serve:
+  -acme-domain domain
+    	get a certificate from Let's Encrypt for this domain, and for any other names the relay answers to listed after it, comma-separated
+  -acme-email address
+    	contact address for Let's Encrypt
+  -addr address
+    	address to listen on (:443 by default with -acme-domain) (default ":8080")
+  -admin-addr address
+    	loopback address for the admin endpoints; empty turns them off (default "127.0.0.1:8081")
+  -audit
+    	keep the audit log: who reached which desktop, from which device, and when; never what was typed or shown
+  -audit-ip
+    	with -audit, record the address each event came from
+  -audit-retention duration
+    	with -audit, how long events are kept (0: for good)
+  -billing-addr address
+    	address the billing service sets accounts' plans on, guarded by the token in FLOCKDECK_RELAY_BILLING_TOKEN; empty turns it off
+  -billing-url URL
+    	the billing service's URL, where Devices sends a paired browser to subscribe, with the key its links are signed with in FLOCKDECK_RELAY_BILLING_LINK_KEY
+  -client-dir directory
+    	serve the remote client from this directory instead of the built-in one
+  -connects-per-minute int
+    	tunnels opened with a token that does not work, per client address per minute (0: no limit) (default 60)
+  -data directory
+    	directory for the admin credentials, and the database when -database is not given (default "data")
+  -database DSN
+    	MySQL DSN to keep the relay's state in, e.g. user:pass@tcp(db:3306)/relay?tls=true (or FLOCKDECK_RELAY_DATABASE_URL); without it, a bbolt file in -data
+  -database-ca file
+    	file holding the CA certificate the database's TLS certificate is signed by (or the PEM itself in FLOCKDECK_RELAY_DATABASE_CA)
+  -desk-domain string
+    	give every desktop's tunnel its own origin, https://<hostId>.<domain>/, instead of a path under -public-url; needs a wildcard DNS record and certificate for it, arranged outside the relay (or FLOCKDECK_RELAY_DESK_DOMAIN)
+  -enforce-plans
+    	ask every account for a subscription after a free trial, refusing remote access to one that has neither; on by default once -billing-url is set (or FLOCKDECK_RELAY_ENFORCE_PLANS=true or =false, either way)
+  -grace-length duration
+    	how long an account whose trial or subscription has run out is kept before it is deleted, with -enforce-plans (default 2160h0m0s)
+  -http-addr address
+    	with -acme-domain, the address answering ACME challenges and redirecting to https (default ":80")
+  -log-level string
+    	debug, info, warn or error (default "info")
+  -mail-from address
+    	the relay's own address verification emails are sent from, e.g. verify@flockdeck.ai; needed with -require-verified-registration
+  -max-devices int
+    	paired devices per account (0: no limit) (default 20)
+  -max-hosts int
+    	desktops per account (0: no limit) (default 10)
+  -max-pairings int
+    	unused codes per account at once, a new one replacing the oldest (0: no limit) (default 5)
+  -max-streams int
+    	connections open to one desktop at once (default 256)
+  -max-tunnels int
+    	desktops connected to the relay at once (0: no limit) (default 1000)
+  -memory-limit limit
+    	a soft limit on the memory the relay uses, written as GOMEMLIMIT is, e.g. 220MiB: nearing it, the garbage collector works harder (default: GOMEMLIMIT, or none)
+  -oidc-client-id id
+    	the relay's client id at the identity provider (or FLOCKDECK_RELAY_OIDC_CLIENT_ID)
+  -oidc-client-secret-file file
+    	file holding the relay's client secret at the identity provider (or the secret itself in FLOCKDECK_RELAY_OIDC_CLIENT_SECRET)
+  -oidc-email-domains domains
+    	comma-separated email domains whose people may sign in; any the provider signs in by default (or FLOCKDECK_RELAY_OIDC_EMAIL_DOMAINS)
+  -oidc-issuer issuer
+    	have everyone pairing a device sign in with this OpenID Connect issuer first, e.g. https://example.okta.com (or FLOCKDECK_RELAY_OIDC_ISSUER)
+  -oidc-name string
+    	what the sign-in button calls the identity provider; its host by default (or FLOCKDECK_RELAY_OIDC_NAME)
+  -pair-per-minute int
+    	pairing attempts per client address per minute (0: no limit) (default 10)
+  -pairing-ttl duration
+    	how long a pairing or join code lasts (default 10m0s)
+  -plan-names plan=name
+    	what the plans are called where people see them, as plan=name pairs, comma-separated: trial, subscribed and lapsed (default "trial=Free trial,subscribed=Subscription,lapsed=Lapsed")
+  -public-url URL
+    	the URL people open, e.g. https://remote.flockdeck.ai (or FLOCKDECK_RELAY_PUBLIC_URL)
+  -register-per-hour int
+    	accounts made, and join codes that do not work, per client address per hour (0: no limit) (default 5)
+  -registration string
+    	who may create an account: open, invite or closed (default "open")
+  -require-verified-registration flockdeck remote enable
+    	require a verified email, confirmed with a magic link, before flockdeck remote enable may create an account and start a trial (or FLOCKDECK_RELAY_REQUIRE_VERIFIED_REGISTRATION=true); needs FLOCKDECK_RELAY_POSTMARK_TOKEN and -mail-from
+  -session-ttl duration
+    	how long a device stays paired without being used (default 720h0m0s)
+  -tls-cert file
+    	TLS certificate file
+  -tls-key file
+    	TLS private key file
+  -trial-length duration
+    	how long an account's free trial lasts, with -enforce-plans (default 720h0m0s)
+  -trust-proxy
+    	take the client address from X-Forwarded-For; only behind a proxy that sets it
+  -tunnels-per-address int
+    	desktops connected from one client address at once (0: no limit) (default 20)
+  -vapid-private-key key
+    	the VAPID private key push notifications are signed with, base64url or PEM (or, better, FLOCKDECK_RELAY_VAPID_PRIVATE_KEY); `flockdeck-relay vapid-keys` makes one, and without one no pushes are sent
+  -vapid-public-key key
+    	the relay's VAPID public key for push notifications, base64url (or FLOCKDECK_RELAY_VAPID_PUBLIC_KEY); worked out from the private key when left out
+  -verification-ttl duration
+    	how long someone has to click a verification email's link before it expires (default 30m0s)
+  -verify-email-per-hour int
+    	verification emails started or resent per client address per hour (0: no limit) (default 5)
