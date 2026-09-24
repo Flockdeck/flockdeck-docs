@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -265,5 +266,28 @@ func TestLoadAllowRequiresReason(t *testing.T) {
 	}
 	if _, err := loadAllow(write("-x a\n-x b\n")); err == nil {
 		t.Error("a duplicate entry was accepted")
+	}
+}
+
+// The snapshot pull requests are checked against has to be a real, parseable
+// `serve -h`, stamped with the release it came from.
+func TestRelaySnapshotIsWellFormed(t *testing.T) {
+	b, err := os.ReadFile("snapshot/relay-serve-help.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	flags, err := parseRelayHelp(string(b))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := flags["-public-url"]; !ok || len(flags) < 20 {
+		t.Errorf("snapshot parsed to %d flags, without -public-url?", len(flags))
+	}
+	v, err := os.ReadFile("snapshot/relay.version")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !regexp.MustCompile(`^\d+\.\d+\.\d+\s*$`).Match(v) {
+		t.Errorf("snapshot/relay.version = %q, want a bare semver like 0.2.50", v)
 	}
 }

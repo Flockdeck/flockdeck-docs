@@ -57,16 +57,49 @@ own tests) keep the docs honest. Each is its own job, so a failure says which:
 | Guard | When | What it catches |
 | --- | --- | --- |
 | **Generated files match** (`docs-guards.yml`) | every PR | A hand edit of `app/*.html` or `self-hosting/*.html`, or `content/` changed without regenerating. Compares against the *stamped* flockdeck, never the newest release, so a flockdeck release cannot turn an unrelated PR red. |
-| **Relay flags are documented** | every PR | The released relay's `serve -h` against `content/self-hosting/configuration.md`: every flag documented or in `tools/docdrift/allow-relay-flags.txt` with a reason; every documented flag still exists; stated defaults and env vars agree. Fails only on findings the PR *adds* (the base branch's page is checked the same way and diffed). |
+| **Relay flags are documented** | every PR | The relay's `serve -h`, as checked in under `tools/docdrift/snapshot` (see below), against `content/self-hosting/configuration.md`: every flag documented or in `tools/docdrift/allow-relay-flags.txt` with a reason; every documented flag still exists; stated defaults and env vars agree. Fails only on findings the PR *adds* (the base branch's page is checked the same way and diffed). Needs no credential. |
 | **Desktop commands are documented** | every PR | The released desktop's `flockdeck -h` subcommands against `app/cli.html`; same base-branch rule, allowlist in `allow-desktop-commands.txt`. |
 | **Docs drift** (`docs-drift.yml`) | daily, and on demand | The site behind the latest flockdeck release, or the config/CLI pages disagreeing with the latest relay/desktop: keeps one tracking issue per check, closes it when clean, and does not comment when nothing changed. |
 
-The relay's flags are read from the public image
-`ghcr.io/flockdeck/flockdeck-relay` (anonymously, so it has to stay public);
-the desktop's from the linux amd64 release tarball, verified against
-`checksums.txt`. Neither guard is a required check by default: add the job
-names above to branch protection to make them gating (leave `Check the site`
-as it is).
+The desktop's commands are read from the linux amd64 release tarball,
+verified against `checksums.txt`. None of the guards is a required check by
+default: add the job names above to branch protection to make them gating
+(leave `Check the site` as it is).
+
+### The relay snapshot
+
+The released relay image, `ghcr.io/flockdeck/flockdeck-relay`, is private on
+purpose (the built relay comes with an Enterprise licence), and this
+repository is public, so a pull request cannot and must not read it. Pull
+requests are checked against `tools/docdrift/snapshot/relay-serve-help.txt`,
+the relay's `serve -h` at the version in `snapshot/relay.version`.
+
+Something has to keep that snapshot honest, and it is the `relay` job of
+*Docs drift* (daily, and on demand). It is the only thing that reads the image:
+
+- It runs in the **`relay-release` environment** (Settings → Environments),
+  which must be restricted to **Deployment branches: `main` only**, so a
+  workflow on any other branch cannot read the credential.
+- The environment holds **`RELAY_GHCR_TOKEN`** (secret): a *classic* personal
+  access token with the **`read:packages`** scope and nothing else (fine-grained
+  tokens cannot read packages), for an account that can read the package; and
+  **`RELAY_GHCR_USER`** (variable): that account's username. A bot account
+  with read access to the package alone is best. Without either, the job fails
+  red saying so; it never falls back to an older image.
+- If the snapshot is not the latest release's, it opens or updates one issue,
+  *Relay flag snapshot is behind flockdeck-relay vX*, with the flag diff, and
+  closes it once they match. It also opens *Docs disagree with flockdeck-relay
+  vX* if `configuration.md` disagrees with the latest release itself.
+
+To refresh the snapshot by hand (with the same two variables set):
+
+```sh
+tools/docdrift/refresh-relay-snapshot.sh            # or ... 0.2.51
+```
+
+then fix or allowlist what `docdrift relay` reports and commit the snapshot
+with the docs. Until it is refreshed, pull requests cannot see a relay change
+the snapshot doesn't have, which is why the daily job exists.
 
 An entry in an allowlist is a decision: it needs a one-line reason, and the
 check fails when the entry outlives it (the docs now cover it, or the flag is
