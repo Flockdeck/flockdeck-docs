@@ -1,0 +1,8 @@
+# Desktop subcommands that app/cli.html deliberately does not document. One
+# per line: the subcommand (a subcommand's subcommand is written with a slash,
+# remote/enable), then the reason. A subcommand with no reason, one the page
+# now documents, and one the desktop no longer has all fail the check.
+#
+# Empty on purpose: every subcommand in `flockdeck -h` is meant to be on the
+# page. app/cli.html is generated from internal/help/pages/cli.md in
+# Flockdeck/flockdeck, so a gap is closed there, not here.
