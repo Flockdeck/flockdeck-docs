@@ -71,8 +71,8 @@ tags_at() {
 	git tag --points-at "$1" -l 'v*' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' || true
 }
 
-# shipping_files lists what changed between two commits that ends up in the
-# image. The Dockerfile copies the whole directory into it, less what
+# dockerignored_files lists what changed between two commits that ends up in
+# the image. The Dockerfile copies the whole directory into it, less what
 # .dockerignore names, and that file is the authority: a change to README.md,
 # to .github, or to content/ (which docs' generator reads, and whose output
 # arrives as a change of its own) is not a change to the site. Dockerfile and
@@ -81,13 +81,13 @@ tags_at() {
 # the path or any folder above it; one that this cannot follow, a negation,
 # makes everything count, since a tag that did not need to be pushed costs a
 # deploy and one that was needed and missed costs a stale site.
-shipping_files() {
+dockerignored_files() {
 	ignore=$(git show "$2:.dockerignore" 2> /dev/null || true)
 	if printf '%s\n' "$ignore" | grep -q '^[[:space:]]*!'; then
-		git -c core.quotepath=off diff --name-only "$1" "$2"
+		git -c core.quotepath=off diff --no-renames --name-only "$1" "$2"
 		return
 	fi
-	git -c core.quotepath=off diff --name-only "$1" "$2" | while IFS= read -r path; do
+	git -c core.quotepath=off diff --no-renames --name-only "$1" "$2" | while IFS= read -r path; do
 		case $path in Dockerfile | .dockerignore) printf '%s\n' "$path"; continue ;; esac
 		ignored=""
 		while IFS= read -r pat; do
@@ -101,6 +101,17 @@ $ignore
 EOF
 		[ -n "$ignored" ] || printf '%s\n' "$path"
 	done
+}
+
+# shipping_files: dockerignored_files less repository configuration, which no
+# build reads into the image whatever .dockerignore says: .gitattributes,
+# .editorconfig, .gitignore and CODEOWNERS, in any folder. A
+# commit of only these, such as the one that added .gitattributes to
+# renormalise line endings (the rewritten files being ones .dockerignore
+# already names), would roll out an identical site. Renames are not followed, so a file renamed onto one of these
+# names is still seen leaving its old path.
+shipping_files() {
+	dockerignored_files "$1" "$2" | grep -Ev '(^|/)(\.gitattributes|\.editorconfig|\.gitignore|CODEOWNERS)$' || true
 }
 
 ships() { [ -n "$(shipping_files "$1" "$2")" ]; }

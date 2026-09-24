@@ -118,6 +118,13 @@ holds "a stylesheet in a folder ships" shipping assets/site.css
 holds "nginx.conf ships" shipping nginx.conf
 holds "the Dockerfile ships: its base image is the deployment" shipping Dockerfile
 holds ".dockerignore ships: it decides what does" shipping .dockerignore
+refuses ".gitattributes does not ship" shipping .gitattributes
+refuses ".editorconfig does not ship" shipping .editorconfig
+refuses ".gitignore does not ship" shipping .gitignore
+refuses "CODEOWNERS does not ship" shipping CODEOWNERS
+refuses "a CODEOWNERS under .github does not ship" shipping .github/CODEOWNERS
+refuses "repository config in a folder does not ship" shipping assets/.gitignore
+holds "look-alikes of the config names ship" shipping .gitattributes.bak CODEOWNERS.html
 refuses "README.md does not ship" shipping README.md
 refuses "a workflow does not ship" shipping .github/workflows/ci.yml
 refuses "a new workflow does not ship" shipping .github/workflows/autotag.yml
@@ -126,6 +133,8 @@ refuses "content/ does not ship (docgen's generated pages are what does)" shippi
 refuses "a nested file of content/ does not ship" shipping content/deep/er/page.md
 refuses "several things that do not ship, together, do not ship" shipping README.md .github/x.yml content/a.md
 holds "one thing that ships among things that do not" shipping README.md .github/x.yml index.html
+holds "config files do not hide a page that ships beside them" shipping .gitattributes .editorconfig index.html
+refuses "repository config, together, does not ship" shipping .gitattributes .editorconfig .gitignore CODEOWNERS
 refuses "no change at all does not ship" ships "$base" "$base"
 git reset -q --hard "$base"
 git rm -q .dockerignore
@@ -144,6 +153,14 @@ echo r >> .github/x.yml
 git add -A
 git commit -q -m x
 holds "a negation .dockerignore this cannot follow makes everything count" ships "$neg" HEAD
+echo r >> .gitattributes
+git add -A
+git commit -q -m attrs
+refuses "even then, repository config does not ship" ships "$(git rev-parse HEAD~1)" HEAD
+git reset -q --hard "$base"
+git mv index.html .gitignore
+git commit -q -m "rename a page onto a config name"
+holds "a page renamed onto a config name is still seen leaving" ships "$base" HEAD
 
 # --- the whole run ----------------------------------------------------------
 
