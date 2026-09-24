@@ -9,14 +9,14 @@ variable if both are set.
 | Flag | Env | Default | What it does |
 | --- | --- | --- | --- |
 | `-addr` | | `:8080` (`:443` with `-acme-domain`) | Address to listen on. |
-| `-public-url` | | | The address the relay tells desktops and devices to use — required whenever it isn't the same as `-addr`, such as behind a proxy. |
+| `-public-url` | `FLOCKDECK_RELAY_PUBLIC_URL` | | The address the relay tells desktops and devices to use — required whenever it isn't the same as `-addr`, such as behind a proxy. |
 | `-trust-proxy` | | off | Take the client address from forwarded headers instead of the TCP connection. Only turn this on when something trusted sits in front of the relay. |
 | `-acme-domain` | | | Domain to get a certificate for automatically. Requires the relay to be reachable on port 80 and 443 directly. |
 | `-acme-email` | | | Contact address for the ACME account. |
 | `-http-addr` | | `:80` | With `-acme-domain`, the address answering ACME challenges and redirecting to https. Does nothing without `-acme-domain`, and is refused if set without it. |
 | `-tls-cert` / `-tls-key` | | | Your own certificate and key. Reloaded automatically when the files change. |
 | `-client-dir` | | | Serve the remote client from this directory instead of the one built into the relay. |
-| `-desk-domain` | | | Base domain for giving each paired desktop its own subdomain. Needs a wildcard DNS record and certificate. |
+| `-desk-domain` | `FLOCKDECK_RELAY_DESK_DOMAIN` | | Base domain for giving each paired desktop its own subdomain. Needs a wildcard DNS record and certificate. |
 | `-admin-addr` | | `127.0.0.1:8081` | Loopback address for the admin endpoints `flockdeck-relay invite`, `stats` and `plan` use — see [Admin and invites](admin-and-invites.html). Empty turns them off. |
 
 ## Storage
