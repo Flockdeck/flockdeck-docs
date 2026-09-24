@@ -76,16 +76,20 @@ jobs:
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: tools/docdrift/go.mod
-      - name: Flags of the released relay
-        run: tools/docdrift/fetch-relay-help.sh "$RUNNER_TEMP/relay-help.txt"
+      # The relay image is private (an Enterprise-licensed build), so a pull
+      # request has no way to read the released relay and is given no
+      # credential to try. It compares against tools/docdrift/snapshot, the
+      # relay's `serve -h` as of the version in snapshot/relay.version;
+      # docs-drift.yml, on main only, keeps that snapshot honest.
       - name: Compare with configuration.md (findings the PR added)
         run: |
           (cd tools/docdrift && go build -o "$RUNNER_TEMP/docdrift" .)
+          echo "relay snapshot: $(cat tools/docdrift/snapshot/relay.version)"
           args=()
           if git show HEAD^1:content/self-hosting/configuration.md >"$RUNNER_TEMP/base-configuration.md" 2>/dev/null; then
             args=(-baseline-docs "$RUNNER_TEMP/base-configuration.md")
           fi
-          "$RUNNER_TEMP/docdrift" relay -help "$RUNNER_TEMP/relay-help.txt" \
+          "$RUNNER_TEMP/docdrift" relay -help tools/docdrift/snapshot/relay-serve-help.txt \
             -docs content/self-hosting/configuration.md \
             -allow tools/docdrift/allow-relay-flags.txt "${args[@]}"
 

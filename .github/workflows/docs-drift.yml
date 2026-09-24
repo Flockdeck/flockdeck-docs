@@ -64,9 +64,16 @@ jobs:
             tools/docdrift/issue.sh clear generated "The docs are current with flockdeck $latest again."
           fi
 
+  # The one job that reads the released relay. Its image is private (an
+  # Enterprise-licensed build), so this needs a credential, and it lives in
+  # the `relay-release` environment, whose deployment branches are restricted
+  # to main: a workflow on any other branch cannot read RELAY_GHCR_TOKEN.
+  # Pull requests never come here; they compare against the checked-in
+  # snapshot this job keeps honest. See "The relay snapshot" in the README.
   relay:
-    name: Docs match the released relay?
+    name: Docs and snapshot match the released relay?
     runs-on: ubuntu-latest
+    environment: relay-release
     permissions:
       contents: read
       issues: write
@@ -77,8 +84,38 @@ jobs:
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: tools/docdrift/go.mod
+      # The credential is given to this step alone, and this step runs no
+      # code from the repository beyond the fetch script itself.
       - name: Flags of the released relay
+        env:
+          RELAY_GHCR_USER: ${{ vars.RELAY_GHCR_USER }}
+          RELAY_GHCR_TOKEN: ${{ secrets.RELAY_GHCR_TOKEN }}
         run: tools/docdrift/fetch-relay-help.sh "$RUNNER_TEMP/relay-help.txt"
+      - name: Is the checked-in snapshot the latest release's?
+        run: |
+          version=$(cat "$RUNNER_TEMP/relay-help.txt.version")
+          have=$(tr -d '\r' <tools/docdrift/snapshot/relay.version)
+          norm() { tr -d '\r' <"$1" | sed 's/[[:space:]]*$//'; }
+          same_text=true
+          diff -u <(norm tools/docdrift/snapshot/relay-serve-help.txt) <(norm "$RUNNER_TEMP/relay-help.txt") >"$RUNNER_TEMP/snapshot.diff" || same_text=false
+          if [ "$version" = "$have" ] && $same_text; then
+            tools/docdrift/issue.sh clear relay-snapshot "The relay flag snapshot is the latest release's ($version) again."
+          else
+            {
+              echo "\`tools/docdrift/snapshot\` is relay **$have**; the latest released relay is **$version**. Pull requests are checked against the snapshot, so until it is refreshed they cannot see what changed."
+              echo
+              echo "Refresh it: \`RELAY_GHCR_USER=... RELAY_GHCR_TOKEN=... tools/docdrift/refresh-relay-snapshot.sh\`, then fix or allowlist what \`docdrift relay\` reports, and commit the snapshot with the docs."
+              echo
+              echo "Flag changes between the two (\`serve -h\`):"
+              echo
+              echo '```diff'
+              head -n 150 "$RUNNER_TEMP/snapshot.diff"
+              echo '```'
+              echo
+              echo "Tracked by the *Docs drift* workflow; it closes this issue itself once the snapshot is current."
+            } >"$RUNNER_TEMP/body.md"
+            tools/docdrift/issue.sh sync relay-snapshot "Relay flag snapshot is behind flockdeck-relay $version" "$RUNNER_TEMP/body.md"
+          fi
       - name: Compare with configuration.md; open, update or close the issue
         run: |
           (cd tools/docdrift && go build -o "$RUNNER_TEMP/docdrift" .)
