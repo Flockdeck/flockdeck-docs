@@ -11,7 +11,11 @@
 # the tag's image and nothing would deploy. See flockdeck's
 # .github/RELEASE_AUTOMATION_SETUP.md for the app, and for where its secrets
 # are kept: in this repository's `release` environment, which only main may
-# deploy to, so a workflow on any other branch cannot read them.
+# deploy to, so a workflow on any other branch cannot read them. This repository
+# is public, so it can have one. flockdeck-site's copy of this file has no
+# `environment: release` line, being private on the Free plan, which has no
+# environments; that line is the only difference between the two, apart from
+# this comment.
 #
 # What this does not do, and CI still does: build the image on a push to main
 # (it pushes `latest` and `sha-<commit>`, which Flux ignores), or on the tag
