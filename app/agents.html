@@ -172,7 +172,7 @@ address is taken away, and a built-in goes back to its vendor's own.</p>
 instead: <code>localhost:11434</code> is answered with <code>http://localhost:11434</code>. An
 address with a name or password in it is refused too, because it is shown in
 the picker; the key goes under <strong>API keys…</strong>. A pane already running keeps
-the address it started with until it is restarted. From a terminal, <code>flockdeck keys endpoint &lt;agent&gt; &lt;address&gt;</code> does the same, and <code>default</code> in place of the
+the address it started with until it is restarted. From a terminal, <code>flockdeck keys endpoint &lt;agent&gt; &lt;address&gt;</code> does the same, and <code>default</code> in place of the
 address goes back to the vendor's own.</p>
 <h2>Not every agent can do everything</h2>
 <p>Most of what Flockdeck does beyond drawing a terminal depends on the agent
@@ -264,7 +264,7 @@ shown — the interface will not read one back to you. An endpoint that needs no
 as a local server on loopback, counts as available without one.</p>
 <h2>Adding your own: agents.json</h2>
 <p>The picker is the built-in agents overlaid with your own file, <code>agents.json</code> in
-the state directory — <code>%AppData%\flockdeck</code> on Windows, <code>~/Library/Application Support/flockdeck</code> on macOS, <code>~/.config/flockdeck</code> on Linux.</p>
+the state directory — <code>%AppData%\flockdeck</code> on Windows, <code>~/Library/Application Support/flockdeck</code> on macOS, <code>~/.config/flockdeck</code> on Linux.</p>
 <pre><code class="language-json">{
   &quot;version&quot;: 1,
   &quot;defaults&quot;: { &quot;agent&quot;: &quot;claude&quot;, &quot;model&quot;: &quot;&quot; },
