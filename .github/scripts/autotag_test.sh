@@ -117,7 +117,7 @@ holds "a new page ships" shipping about.html
 holds "a stylesheet in a folder ships" shipping assets/site.css
 holds "nginx.conf ships" shipping nginx.conf
 holds "the Dockerfile ships: its base image is the deployment" shipping Dockerfile
-refuses ".dockerignore does not ship: no build reads it into the image" shipping .dockerignore
+holds ".dockerignore ships: it decides what does" shipping .dockerignore
 refuses ".gitattributes does not ship" shipping .gitattributes
 refuses ".editorconfig does not ship" shipping .editorconfig
 refuses ".gitignore does not ship" shipping .gitignore
@@ -134,7 +134,7 @@ refuses "a nested file of content/ does not ship" shipping content/deep/er/page.
 refuses "several things that do not ship, together, do not ship" shipping README.md .github/x.yml content/a.md
 holds "one thing that ships among things that do not" shipping README.md .github/x.yml index.html
 holds "config files do not hide a page that ships beside them" shipping .gitattributes .editorconfig index.html
-refuses "repository config, together, does not ship" shipping .gitattributes .editorconfig .gitignore .dockerignore CODEOWNERS
+refuses "repository config, together, does not ship" shipping .gitattributes .editorconfig .gitignore CODEOWNERS
 refuses "no change at all does not ship" ships "$base" "$base"
 git reset -q --hard "$base"
 git rm -q .dockerignore
