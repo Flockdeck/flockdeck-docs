@@ -1,0 +1,210 @@
+# Upstream docs drift, daily: is the site behind what flockdeck and the relay
+# have actually released? Each check keeps ONE tracking issue -- opened when
+# the docs are behind, edited when what is behind changes, closed when they
+# catch up, and untouched (no comment) on a run that finds the same thing.
+# Not a PR gate: whether flockdeck cut a release is not something a docs PR
+# caused. docs-guards.yml is the PR-time half.
+#
+# A job that cannot run (a release has no tarball, a tool bug) fails red
+# rather than opening an issue: that is a broken guard, not drifted docs, and
+# it should not be able to look like "all current". The exception is the relay
+# job's credential: it is skipped until RELAY_GHCR_READ_USER is set, and a
+# credential that later stops working opens the relay-credential issue.
+name: Docs drift
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  generated:
+    name: Docs are behind flockdeck?
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: tools/docdrift/go.mod
+      - name: Regenerate from the latest flockdeck release
+        env:
+          # setup-go pins GOTOOLCHAIN=local; docgen's go.mod may ask for a
+          # newer Go than the one installed above, and this is what lets the
+          # go command fetch it.
+          GOTOOLCHAIN: auto
+        run: tools/docdrift/generated.sh upstream "$RUNNER_TEMP/report"
+      - name: Open, update or close the tracking issue
+        run: |
+          latest=$(cat "$RUNNER_TEMP/report.latest")
+          stamped=$(cat "$RUNNER_TEMP/report.stamped")
+          if [ -s "$RUNNER_TEMP/report" ]; then
+            {
+              echo "The docs site would change if regenerated from flockdeck **$latest**; it was last generated from **$stamped** (\`.docs-generated-from\`)."
+              echo
+              echo "Pages that would change:"
+              echo
+              sed 's/^/- /' "$RUNNER_TEMP/report"
+              echo
+              echo "To catch up: \`tools/docdrift/generated.sh regenerate $latest\`, review the diff, and open a PR (release notes and other content that lives in \`content/\` are not touched by this)."
+              echo
+              echo "Tracked by the *Docs drift* workflow; it closes this issue itself once the site is current."
+            } >"$RUNNER_TEMP/body.md"
+            tools/docdrift/issue.sh sync generated "Docs are behind flockdeck $latest" "$RUNNER_TEMP/body.md"
+          else
+            tools/docdrift/issue.sh clear generated "The docs are current with flockdeck $latest again."
+          fi
+
+  # The one job that reads the released relay. Its image is private (an
+  # Enterprise-licensed build), so this needs a credential, and it lives in
+  # the `relay-release` environment, whose deployment branches are restricted
+  # to main: a workflow on any other branch cannot read RELAY_GHCR_READ_TOKEN.
+  # Pull requests never come here; they compare against the checked-in
+  # snapshot this job keeps honest. See "The relay snapshot" in the README.
+  relay:
+    name: Docs and snapshot match the released relay?
+    runs-on: ubuntu-latest
+    # Dormant until the credential is set up: with no RELAY_GHCR_READ_USER
+    # repository variable the job is skipped (no run to go red, no issue). The
+    # repository check keeps forks, which cannot have the credential, out too.
+    if: github.repository == 'Flockdeck/flockdeck-docs' && vars.RELAY_GHCR_READ_USER != ''
+    environment: relay-release
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: tools/docdrift/go.mod
+      # The credential is given to this step alone, and this step runs no
+      # code from the repository beyond the fetch script itself.
+      # A credential the registry refuses (expired, revoked, lost access) is a
+      # maintenance task, not a bug: the fetch script exits 3, this opens the
+      # relay-credential issue and the job ends green. Anything else (exit 1
+      # or 2) is a broken guard and stays red.
+      - name: Flags of the released relay
+        id: fetch
+        env:
+          RELAY_GHCR_READ_USER: ${{ vars.RELAY_GHCR_READ_USER }}
+          RELAY_GHCR_READ_TOKEN: ${{ secrets.RELAY_GHCR_READ_TOKEN }}
+        run: |
+          rc=0
+          tools/docdrift/fetch-relay-help.sh "$RUNNER_TEMP/relay-help.txt" || rc=$?
+          if [ "$rc" -eq 0 ]; then
+            echo "ok=true" >>"$GITHUB_OUTPUT"
+            exit 0
+          fi
+          [ "$rc" -eq 3 ] || exit "$rc"
+          echo "ok=false" >>"$GITHUB_OUTPUT"
+          {
+            echo "The scheduled relay check could not read the private relay image \`ghcr.io/flockdeck/flockdeck-relay\` with the credential in the \`relay-release\` environment (secret \`RELAY_GHCR_READ_TOKEN\`, variable \`RELAY_GHCR_READ_USER\`). It may be expired or revoked, or the account lost read access to the package."
+            echo
+            echo "Until it is fixed the relay snapshot is not being checked against new releases. Replace the token (a classic PAT with only \`read:packages\`); see \"The relay snapshot\" in the README. The image stays private."
+            echo
+            echo "Tracked by the *Docs drift* workflow; it closes this issue itself on the next run that can read the image."
+          } >"$RUNNER_TEMP/body.md"
+          tools/docdrift/issue.sh sync relay-credential "Relay drift check cannot read the relay image" "$RUNNER_TEMP/body.md"
+      - name: Credential works again
+        if: steps.fetch.outputs.ok == 'true'
+        run: tools/docdrift/issue.sh clear relay-credential "The relay image is readable with the configured credential again."
+      - name: Is the checked-in snapshot the latest release's?
+        if: steps.fetch.outputs.ok == 'true'
+        run: |
+          version=$(cat "$RUNNER_TEMP/relay-help.txt.version")
+          have=$(tr -d '\r' <tools/docdrift/snapshot/relay.version)
+          norm() { tr -d '\r' <"$1" | sed 's/[[:space:]]*$//'; }
+          same_text=true
+          diff -u <(norm tools/docdrift/snapshot/relay-serve-help.txt) <(norm "$RUNNER_TEMP/relay-help.txt") >"$RUNNER_TEMP/snapshot.diff" || same_text=false
+          if [ "$version" = "$have" ] && $same_text; then
+            tools/docdrift/issue.sh clear relay-snapshot "The relay flag snapshot is the latest release's ($version) again."
+          else
+            {
+              echo "\`tools/docdrift/snapshot\` is relay **$have**; the latest released relay is **$version**. Pull requests are checked against the snapshot, so until it is refreshed they cannot see what changed."
+              echo
+              echo "Refresh it: \`RELAY_GHCR_READ_USER=... RELAY_GHCR_READ_TOKEN=... tools/docdrift/refresh-relay-snapshot.sh\`, then fix or allowlist what \`docdrift relay\` reports, and commit the snapshot with the docs."
+              echo
+              echo "Flag changes between the two (\`serve -h\`):"
+              echo
+              echo '```diff'
+              head -n 150 "$RUNNER_TEMP/snapshot.diff"
+              echo '```'
+              echo
+              echo "Tracked by the *Docs drift* workflow; it closes this issue itself once the snapshot is current."
+            } >"$RUNNER_TEMP/body.md"
+            tools/docdrift/issue.sh sync relay-snapshot "Relay flag snapshot is behind flockdeck-relay $version" "$RUNNER_TEMP/body.md"
+          fi
+      - name: Compare with configuration.md; open, update or close the issue
+        if: steps.fetch.outputs.ok == 'true'
+        run: |
+          (cd tools/docdrift && go build -o "$RUNNER_TEMP/docdrift" .)
+          version=$(cat "$RUNNER_TEMP/relay-help.txt.version")
+          if "$RUNNER_TEMP/docdrift" relay -help "$RUNNER_TEMP/relay-help.txt" \
+              -docs content/self-hosting/configuration.md \
+              -allow tools/docdrift/allow-relay-flags.txt >"$RUNNER_TEMP/findings" ; then
+            tools/docdrift/issue.sh clear relay "The self-hosting configuration page agrees with relay $version again."
+          else
+            [ "$?" -eq 1 ] || exit 1   # 2 is "could not run", which is a red job
+            {
+              echo "\`content/self-hosting/configuration.md\` disagrees with the released relay **$version** (\`flockdeck-relay serve -h\`):"
+              echo
+              cat "$RUNNER_TEMP/findings"
+              echo
+              echo "Document the flag, or -- if it is deliberately left out -- add it to \`tools/docdrift/allow-relay-flags.txt\` with a reason."
+              echo
+              echo "Tracked by the *Docs drift* workflow; it closes this issue itself once the page agrees."
+            } >"$RUNNER_TEMP/body.md"
+            tools/docdrift/issue.sh sync relay "Docs disagree with flockdeck-relay $version" "$RUNNER_TEMP/body.md"
+          fi
+
+  desktop:
+    name: Docs match the released desktop?
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: tools/docdrift/go.mod
+      - name: Libraries the desktop binary loads
+        run: sudo apt-get update -qq && sudo apt-get install -yqq libgtk-4-1 libwebkitgtk-6.0-4
+      - name: Subcommands of the released desktop
+        run: tools/docdrift/fetch-desktop-help.sh "$RUNNER_TEMP/desktop-help.txt"
+      - name: Compare with cli.html; open, update or close the issue
+        run: |
+          (cd tools/docdrift && go build -o "$RUNNER_TEMP/docdrift" .)
+          version=$(cat "$RUNNER_TEMP/desktop-help.txt.version")
+          if "$RUNNER_TEMP/docdrift" cli -help "$RUNNER_TEMP/desktop-help.txt" \
+              -docs app/cli.html \
+              -allow tools/docdrift/allow-desktop-commands.txt >"$RUNNER_TEMP/findings"; then
+            tools/docdrift/issue.sh clear desktop "The command-line page documents every flockdeck $version subcommand again."
+          else
+            [ "$?" -eq 1 ] || exit 1
+            {
+              echo "\`app/cli.html\` disagrees with the released desktop **$version** (\`flockdeck -h\`):"
+              echo
+              cat "$RUNNER_TEMP/findings"
+              echo
+              echo "\`app/cli.html\` is generated from \`internal/help/pages/cli.md\` in Flockdeck/flockdeck: fix the page there, then regenerate here. A subcommand that is deliberately undocumented goes in \`tools/docdrift/allow-desktop-commands.txt\` with a reason."
+              echo
+              echo "Tracked by the *Docs drift* workflow; it closes this issue itself once the page agrees."
+            } >"$RUNNER_TEMP/body.md"
+            tools/docdrift/issue.sh sync desktop "Docs disagree with flockdeck $version's command line" "$RUNNER_TEMP/body.md"
+          fi

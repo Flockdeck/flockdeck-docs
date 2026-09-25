@@ -1,0 +1,123 @@
+# Docs drift guards, on pull requests: catch a PR that leaves the docs
+# disagreeing with the code they describe. See tools/docdrift and the README.
+#
+# Deliberately separate from ci.yml, whose "Check the site" job is the one
+# branch protection requires by name -- nothing here renames or replaces it.
+# To make a guard gating, add its job name below to the required checks.
+#
+# None of these may go red because *flockdeck* moved on while an unrelated PR
+# sat open; that is what docs-drift.yml, on a schedule, is for:
+#   - "Generated files match" compares against the flockdeck version stamped
+#     in .docs-generated-from, not the newest release.
+#   - the relay and desktop checks compare against the newest release, so
+#     they fail only on findings the PR adds (the same check is run on the
+#     base branch's docs and the two are diffed).
+# No secret is used: this runs for fork PRs too, with a read-only token.
+name: Docs guards
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  tool-tests:
+    name: Drift tool tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: tools/docdrift/go.mod
+      - name: gofmt
+        run: test -z "$(gofmt -l tools/docdrift)" || { gofmt -l tools/docdrift; exit 1; }
+      - name: go vet and test
+        working-directory: tools/docdrift
+        run: |
+          go vet ./...
+          go test ./...
+      - name: Scripts parse
+        run: for f in tools/docdrift/*.sh; do bash -n "$f"; done
+
+  generated:
+    name: Generated files match
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # docgen's own go.mod names the Go it needs; the go command fetches
+      # that toolchain when this one is older.
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: tools/docdrift/go.mod
+      - name: Regenerate from the stamped flockdeck and compare
+        env:
+          # setup-go pins GOTOOLCHAIN=local; docgen's go.mod may ask for a
+          # newer Go than the one installed above, and this is what lets the
+          # go command fetch it.
+          GOTOOLCHAIN: auto
+        run: tools/docdrift/generated.sh check
+
+  relay-flags:
+    name: Relay flags are documented
+    runs-on: ubuntu-latest
+    steps:
+      # Two commits: a pull_request checkout is a merge commit whose first
+      # parent is the base branch, which is the docs "before" this PR.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: tools/docdrift/go.mod
+      # The relay image is private (an Enterprise-licensed build), so a pull
+      # request has no way to read the released relay and is given no
+      # credential to try. It compares against tools/docdrift/snapshot, the
+      # relay's `serve -h` as of the version in snapshot/relay.version;
+      # docs-drift.yml, on main only, keeps that snapshot honest.
+      - name: Compare with configuration.md (findings the PR added)
+        run: |
+          (cd tools/docdrift && go build -o "$RUNNER_TEMP/docdrift" .)
+          echo "relay snapshot: $(cat tools/docdrift/snapshot/relay.version)"
+          args=()
+          if git show HEAD^1:content/self-hosting/configuration.md >"$RUNNER_TEMP/base-configuration.md" 2>/dev/null; then
+            args=(-baseline-docs "$RUNNER_TEMP/base-configuration.md")
+          fi
+          "$RUNNER_TEMP/docdrift" relay -help tools/docdrift/snapshot/relay-serve-help.txt \
+            -docs content/self-hosting/configuration.md \
+            -allow tools/docdrift/allow-relay-flags.txt "${args[@]}"
+
+  desktop-cli:
+    name: Desktop commands are documented
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: tools/docdrift/go.mod
+      # The release binary links GTK 4 and WebKitGTK 6, and needs them to load
+      # even to print -h.
+      - name: Libraries the desktop binary loads
+        run: sudo apt-get update -qq && sudo apt-get install -yqq libgtk-4-1 libwebkitgtk-6.0-4
+      - name: Subcommands of the released desktop
+        run: tools/docdrift/fetch-desktop-help.sh "$RUNNER_TEMP/desktop-help.txt"
+      - name: Compare with app/cli.html (findings the PR added)
+        run: |
+          (cd tools/docdrift && go build -o "$RUNNER_TEMP/docdrift" .)
+          args=()
+          if git show HEAD^1:app/cli.html >"$RUNNER_TEMP/base-cli.html" 2>/dev/null; then
+            args=(-baseline-docs "$RUNNER_TEMP/base-cli.html")
+          fi
+          "$RUNNER_TEMP/docdrift" cli -help "$RUNNER_TEMP/desktop-help.txt" \
+            -docs app/cli.html \
+            -allow tools/docdrift/allow-desktop-commands.txt "${args[@]}"

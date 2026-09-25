@@ -10,3 +10,7 @@ Dockerfile
 README.md
 LICENSE
 content
+# The drift guards (tools/) and the stamp saying which flockdeck the generated
+# pages came from are repository, not website.
+tools
+.docs-generated-from
