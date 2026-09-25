@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Refresh tools/docdrift/snapshot from the latest released relay, by hand:
 #
-#   RELAY_GHCR_USER=... RELAY_GHCR_TOKEN=... tools/docdrift/refresh-relay-snapshot.sh [VERSION]
+#   RELAY_GHCR_READ_USER=... RELAY_GHCR_READ_TOKEN=... tools/docdrift/refresh-relay-snapshot.sh [VERSION]
 #
 # Then compare the docs (`docdrift relay -help snapshot/relay-serve-help.txt
 # -docs content/self-hosting/configuration.md -allow allow-relay-flags.txt`),

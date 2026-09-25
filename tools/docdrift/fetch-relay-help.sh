@@ -14,12 +14,14 @@
 # Only the scheduled job, in the main-only `relay-release` environment, and a
 # maintainer refreshing the snapshot by hand get here. It needs:
 #
-#   RELAY_GHCR_USER    a GitHub user or bot that can read the package
-#   RELAY_GHCR_TOKEN   a token for it with the read:packages scope (a classic
+#   RELAY_GHCR_READ_USER    a GitHub user or bot that can read the package
+#   RELAY_GHCR_READ_TOKEN   a token for it with the read:packages scope (a classic
 #                      personal access token: fine-grained ones cannot read
 #                      packages) and nothing else
 #
-# Missing either, this fails and says so; it never falls back to an older
+# Missing either, or refused by the registry, this exits 3 (a credential
+# problem, which the scheduled job reports as an issue rather than a red run);
+# any other failure exits 1 or 2. It fails and says so; it never falls back to an older
 # image, because checking the docs against a stale binary is the failure this
 # tool exists to prevent.
 set -euo pipefail
@@ -28,18 +30,18 @@ out=${1:?usage: fetch-relay-help.sh OUT_FILE}
 image=${RELAY_IMAGE:-ghcr.io/flockdeck/flockdeck-relay}
 repo=${image#ghcr.io/}
 
-[ -n "${RELAY_GHCR_USER:-}" ] && [ -n "${RELAY_GHCR_TOKEN:-}" ] || {
-  echo "RELAY_GHCR_USER and RELAY_GHCR_TOKEN are not set: reading the private relay image needs a read:packages token." >&2
+[ -n "${RELAY_GHCR_READ_USER:-}" ] && [ -n "${RELAY_GHCR_READ_TOKEN:-}" ] || {
+  echo "RELAY_GHCR_READ_USER and RELAY_GHCR_READ_TOKEN are not set: reading the private relay image needs a read:packages token." >&2
   echo "See 'The relay snapshot' in the README for what to create and where it is stored." >&2
-  exit 1
+  exit 3
 }
 
 denied() {
   echo "cannot read ${image} with the given credential: it may be expired, or lack read:packages or access to the package." >&2
-  exit 1
+  exit 3
 }
 
-token=$(curl -fsS -u "${RELAY_GHCR_USER}:${RELAY_GHCR_TOKEN}" \
+token=$(curl -fsS -u "${RELAY_GHCR_READ_USER}:${RELAY_GHCR_READ_TOKEN}" \
   "https://ghcr.io/token?service=ghcr.io&scope=repository:${repo}:pull" |
   sed -n 's/.*"token":"\([^"]*\)".*/\1/p') || denied
 
@@ -62,7 +64,7 @@ echo "relay image: ${image}:${tag}" >&2
 export DOCKER_CONFIG
 DOCKER_CONFIG=$(mktemp -d)
 trap 'rm -rf "$DOCKER_CONFIG"' EXIT
-printf '%s' "$RELAY_GHCR_TOKEN" | docker login ghcr.io -u "$RELAY_GHCR_USER" --password-stdin >&2 || denied
+printf '%s' "$RELAY_GHCR_READ_TOKEN" | docker login ghcr.io -u "$RELAY_GHCR_READ_USER" --password-stdin >&2 || denied
 # Pulled apart from the run so the pull's progress is not in the help text.
 docker pull -q "${image}:${tag}" >&2 || denied
 docker run --rm "${image}:${tag}" serve -h >"$out" 2>&1

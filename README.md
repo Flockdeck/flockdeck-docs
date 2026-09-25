@@ -77,21 +77,36 @@ the relay's `serve -h` at the version in `snapshot/relay.version`.
 Something has to keep that snapshot honest, and it is the `relay` job of
 *Docs drift* (daily, and on demand). It is the only thing that reads the image:
 
-- It runs in the **`relay-release` environment** (Settings → Environments),
-  which must be restricted to **Deployment branches: `main` only**, so a
-  workflow on any other branch cannot read the credential.
-- The environment holds **`RELAY_GHCR_TOKEN`** (secret): a *classic* personal
-  access token with the **`read:packages`** scope and nothing else (fine-grained
-  tokens cannot read packages), for an account that can read the package; and
-  **`RELAY_GHCR_USER`** (variable): that account's username. A bot account
-  with read access to the package alone is best. Without either, the job fails
-  red saying so; it never falls back to an older image.
+- **It is dormant until configured.** With no repository variable
+  `RELAY_GHCR_READ_USER` (or an empty one) the job is skipped: no run goes red
+  and no issue opens. Until then nothing refreshes the snapshot; pull requests
+  still work against the checked-in one. To switch it on:
+  1. Create a dedicated GitHub account (a bot) and give it **Read** on the
+     private `flockdeck-relay` package. The image stays **private**; this
+     grants read access to one account, it does not publish anything.
+  2. On that account, create a *classic* personal access token with the
+     **`read:packages`** scope and nothing else (fine-grained tokens cannot
+     read packages).
+  3. Settings → Environments → new **`relay-release`**, with **Deployment
+     branches: `main` only**, so a workflow on any other branch cannot read
+     the credential. Add the token as the environment secret
+     **`RELAY_GHCR_READ_TOKEN`**.
+  4. Settings → Secrets and variables → Actions → Variables: add the
+     repository variable **`RELAY_GHCR_READ_USER`** with that account's
+     username. (Setting this last is what turns the job on.)
+
+  The job also only runs in `Flockdeck/flockdeck-docs`, never in a fork.
+- If the credential later stops working (expired, revoked, access lost), the
+  job opens one issue, *Relay drift check cannot read the relay image*, ends
+  green, and closes the issue itself on the next run that can read the image.
+  Any other failure of the job is a bug in the tool and stays red. It never
+  falls back to an older image.
 - If the snapshot is not the latest release's, it opens or updates one issue,
   *Relay flag snapshot is behind flockdeck-relay vX*, with the flag diff, and
   closes it once they match. It also opens *Docs disagree with flockdeck-relay
   vX* if `configuration.md` disagrees with the latest release itself.
 
-To refresh the snapshot by hand (with the same two variables set):
+To refresh the snapshot by hand (with `RELAY_GHCR_READ_USER` and `RELAY_GHCR_READ_TOKEN` set in your shell):
 
 ```sh
 tools/docdrift/refresh-relay-snapshot.sh            # or ... 0.2.51
