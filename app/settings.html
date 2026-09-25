@@ -116,7 +116,12 @@ either way can be turned on or off for that one pane; auto-review only ever
 lets through a confidently read-only command, and never says &quot;deny&quot;. And
 <strong>Status detection</strong>: whether TypeSafe's Jev model may help read the status
 of a pane whose agent reports none. <strong>Off by default</strong>, and it sends
-terminal output to a third party — see <a href="/app/status.html">Knowing who needs you</a>.</li>
+terminal output to a third party — see <a href="/app/status.html">Knowing who needs you</a>.
+Above it, <strong>TypeSafe API key</strong> is where you paste, replace or clear the key
+that feature and <strong>Ask Jev to rate unmatched work</strong> need. The field is
+masked and never shows the key back, only whether one is set. Saving a key
+sends nothing: both features stay off until you turn them on. At the desk
+only.</li>
 <li><strong>Keybindings</strong> — every shortcut this window's own chrome offers, grouped as
 <a href="/app/shortcuts.html">Keyboard shortcuts</a> groups them, each with a button that
 records the next key you press as its new binding; <strong>Reset</strong> puts one back,
@@ -216,6 +221,9 @@ Kept in <code>prefs.json</code>.</li>
 the settings. Kept in <code>prefs.json</code>.</li>
 <li><strong>Status detection with Jev</strong> — <strong>Behaviour</strong> in the settings. Kept in
 <code>prefs.json</code>; off unless you turn it on, and only from the machine itself.</li>
+<li><strong>TypeSafe API key</strong> — <strong>Behaviour</strong> in the settings. Kept in <code>keys.json</code>
+with your agents' keys, never in <code>prefs.json</code>; set and cleared at the desk
+only, never shown back, and only ever sent to <code>api.typesafe.ai</code>.</li>
 </ul>
 <h2>In the state directory</h2>
 <p>Everything Flockdeck keeps is in one directory: <code>%AppData%\flockdeck</code> on
@@ -228,8 +236,9 @@ agent and model, and the routing policy: for every project under <code>defaults<
 and <code>routing</code>, for one under <code>projects</code>. <a href="/app/agents.html">Agents and models</a>
 describes it. It is read again each time the picker opens, so editing it
 needs no restart.</li>
-<li><code>keys.json</code> — API keys set through Flockdeck. A key exported in the
-environment is used first.</li>
+<li><code>keys.json</code> — API keys set through Flockdeck, and the TypeSafe key. A key
+exported in the environment is used first, except for the TypeSafe key, where
+the one set in Settings is.</li>
 <li><code>remote.json</code> — this machine's enrolment with the relay.
 <code>flockdeck remote disable</code> removes it.</li>
 <li><code>routing.jsonl</code> — what routing chose for each routed fan-out row, and
@@ -279,8 +288,11 @@ already downloaded is put in place. That is what keeps an older version you
 installed on purpose from updating itself to the latest.</li>
 <li><code>FLOCKDECK_RELAY</code> — which relay <code>flockdeck remote enable</code> uses.</li>
 <li><code>TYPESAFE_API_KEY</code> — a key for TypeSafe's Jev, used only when <strong>Status
-detection</strong> under <strong>Behaviour</strong> is turned on; see
-<a href="/app/status.html">Knowing who needs you</a>. Without it nothing is ever sent.</li>
+detection</strong> under <strong>Behaviour</strong>, or <strong>Ask Jev to rate unmatched work</strong>, is
+turned on; see <a href="/app/status.html">Knowing who needs you</a>. A key set in <strong>Settings ›
+Behaviour › TypeSafe API key</strong> is used first; this is the fallback when none
+is set there. No other variable is ever tried. Without a key nothing is ever
+sent.</li>
 <li><code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code> and <code>GEMINI_API_KEY</code> (or
 <code>GOOGLE_API_KEY</code>) — keys for the API agents talking to those vendors' own
 addresses, used before anything in <code>keys.json</code>. An agent given another
