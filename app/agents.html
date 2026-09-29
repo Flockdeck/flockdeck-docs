@@ -214,9 +214,13 @@ the terminal bell and a quiet timer; fan out reads the screen; resume is not
 attempted, and the pane starts fresh.</p>
 <p>Of the built-in agents, Claude Code and the four API agents report their own
 lifecycle and answer the start-up hook. Codex, Gemini CLI, Aider, opencode and
-Cursor Agent are read from their terminals, and are not briefed. An entry in
-<code>agents.json</code> can have the briefing put in front of such an agent's opening
-task instead, with <code>&quot;caps&quot;: {&quot;context&quot;: &quot;prompt&quot;}</code>, and can give it
+Cursor Agent are read from their terminals, but are still briefed: the briefing
+is put in front of their opening task, once, and is not refreshed. Codex,
+Gemini CLI, opencode and Cursor Agent get it even in a pane opened by hand with
+no task; Aider gets it only when there is a task, because <code>--message</code> makes it
+answer once and exit, and a message that was all briefing would end the pane.
+An entry in <code>agents.json</code> can choose the same for its own agent with
+<code>&quot;caps&quot;: {&quot;context&quot;: &quot;prompt&quot;}</code> (or <code>&quot;task&quot;</code> for the Aider behaviour), and can give it
 <code>&quot;patterns&quot;</code> — <code>&quot;waiting&quot;</code> and <code>&quot;idle&quot;</code>, each a list of phrases its output
 shows in that state — so that its status is read from what it prints as well. They are plain text, not expressions, and
 case does not matter; none of the built-ins has any yet.</p>
