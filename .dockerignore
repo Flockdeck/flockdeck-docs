@@ -14,3 +14,7 @@ content
 # pages came from are repository, not website.
 tools
 .docs-generated-from
+
+# The module file that only carries the retraction of the MIT-licensed
+# versions; it is not part of the website.
+go.mod
