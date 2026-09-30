@@ -149,7 +149,7 @@ switched from inside the window. These are what is left.</p>
 </tbody>
 </table>
 <p><code>-no-window</code> needs no browser on the machine it runs on either, so it's
-equally at home on a server you own — see <strong>Self-hosted</strong> in
+equally at home on a server you own — see <strong>Running it headless on a server</strong> in
 <a href="/app/remote.html">Remote access</a> for running Flockdeck headless and reaching it from
 a paired phone or laptop.</p>
 <p>Running the binary again does <strong>not</strong> start a second set of agents. It finds
@@ -390,6 +390,22 @@ The subcommand still works; it is the background updating that goes.</p>
 <tr>
 <td><code>FLOCKDECK_RELAY</code></td>
 <td>Which relay <code>flockdeck remote enable</code> uses when <code>-relay</code> is not given</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_API_KEY</code></td>
+<td>A key for any API agent, used when neither its own variables nor a key stored with <code>flockdeck keys set</code> hold one</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_DIR</code>, <code>FLOCKDECK_START_AGENT</code></td>
+<td>The equivalents of <code>-C</code> and <code>-agent</code></td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_FRESH</code>, <code>FLOCKDECK_SHELL_FIRST</code>, <code>FLOCKDECK_NO_WINDOW</code>, <code>FLOCKDECK_DETACH</code>, <code>FLOCKDECK_SOLO</code></td>
+<td>Set to <code>1</code>, the equivalents of <code>-new</code>, <code>-shell</code>, <code>-no-window</code>, <code>-detach</code> and <code>-solo</code>, for a service's environment; a flag given on the command line wins</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_REMOTE_INVITE</code>, <code>FLOCKDECK_REMOTE_JOIN</code>, <code>FLOCKDECK_REMOTE_NAME</code></td>
+<td>The defaults for <code>-invite</code>, <code>-join</code> and <code>-name</code> of <code>flockdeck remote enable</code></td>
 </tr>
 <tr>
 <td><code>FLOCKDECK_API</code></td>
