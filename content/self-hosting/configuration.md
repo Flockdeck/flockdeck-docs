@@ -93,8 +93,9 @@ notifications.
 
 `-oidc-issuer` needs a client id and a secret to go with it; either given
 without the other, or without `-oidc-issuer`, is a startup error. This is
-part of the relay itself — it doesn't need Flockdeck Enterprise or a
-licence. See [Overview](overview.html).
+part of the relay itself, which is what Flockdeck Enterprise is: the licensed,
+supported, self-hosted relay, single sign-on included. See
+[Overview](overview.html).
 
 ## Audit log
 

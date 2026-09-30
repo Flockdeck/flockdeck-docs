@@ -8,20 +8,18 @@ through in the clear — see [Security and
 privacy](security-and-privacy.html).
 
 For a company whose rules don't allow a third party to decrypt developers'
-terminal traffic, the relay can instead be run on your own infrastructure —
+terminal traffic, the relay can instead be run on your own infrastructure.
+That is **Flockdeck Enterprise**: the licensed, supported, self-hosted relay,
 single sign-on included; see
-[Configuration](configuration.html#single-sign-on). **Flockdeck Enterprise**
-is a licensed version of the same self-hosted relay, with support. It's
-announced on [flockdeck.ai](https://flockdeck.ai/#enterprise) as coming soon
-and isn't generally available yet, but self-hosting the relay — single
-sign-on included — doesn't wait on it.
+[Configuration](configuration.html#single-sign-on). It's announced on
+[flockdeck.ai](https://flockdeck.ai/#enterprise) as coming soon and isn't
+generally available yet.
 
 This section documents the relay as it exists and runs today, for a
 platform or ops team evaluating what self-hosting will involve: how it's
 deployed, how it's configured, what it needs, and how a desktop points at it
 instead of the shared one. Everything here is accurate to the relay's
-current behaviour, single sign-on included; nothing in it depends on
-Enterprise or licensing existing yet. When you're ready to run this in
+current behaviour, single sign-on included. When you're ready to run this in
 production, get in touch through
 [flockdeck.ai](https://flockdeck.ai/#enterprise) for access and support.
 
