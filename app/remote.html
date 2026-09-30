@@ -111,15 +111,16 @@ device asking is paired with your account, and nothing else can put a request
 on that connection. The few things only another launch of the binary may do —
 open a project from the command line, quit the instance — still insist on the
 token, so a remote window cannot reach them.</p>
-<h2>Self-hosted: running it on a server, not a desk</h2>
+<h2>Running it headless on a server, not a desk</h2>
 <p>&quot;Your desktop&quot; above doesn't have to be a desktop. <code>flockdeck -no-window</code>
 serves headless — no window, and no browser is ever looked for on that
 machine — so it runs just as well on a spare box, a home server, a NAS or a
 cheap VPS as it does on the machine in front of you. Pair it the same way
 (<code>flockdeck remote enable</code> then <code>flockdeck remote pair</code>) and it's a desktop
 in every way that matters here: full interface, chat on a phone, fan out, the
-lot. That makes the free app a self-hosted stand-in for a paid &quot;run my coding
-agents in the cloud&quot; service, on hardware you already control.</p>
+lot. That puts the app itself on hardware you already control, for free;
+reaching it from a phone through the shared relay is the same Remote access
+subscription as from any desktop.</p>
 <p><code>-detach</code> also releases the terminal that started it, so an SSH session can
 end without ending Flockdeck. Under a process supervisor such as systemd,
 plain <code>-no-window</code> is usually the better fit: it keeps the terminal as its
@@ -136,7 +137,11 @@ them from one:</p>
 the relay, which can read it;</li>
 <li>changing where an API agent sends its prompts, its address, since its key
 goes wherever that says;</li>
-<li>turning the check for updates on or off.</li>
+<li>turning the check for updates on or off, or checking for one now, and
+listing or installing a specific version;</li>
+<li>setting, reading or clearing the TypeSafe API key, and turning <strong>on</strong> status
+detection with Jev;</li>
+<li>detaching from the agents.</li>
 </ul>
 <p>These keep a phone in a pocket from doing any of them by accident. They are
 not a security boundary: a remote window can open a shell pane, and from a
@@ -341,13 +346,23 @@ device in the dialog, gives it a new one. From a terminal,
 <code>flockdeck remote rename -device &lt;id or name&gt; &lt;name&gt;</code> a device. A paired device
 can rename any of them from its <strong>Devices</strong> page.</p>
 <h2>What the relay can see</h2>
-<p>Traffic is encrypted between your browser and the relay, and between the relay
-and this machine. The relay decrypts it to route it, so it is <strong>trusted</strong>: this
-is not end-to-end encryption, and whoever runs the relay could read what passes
-through it. The relay never sees this machine's local token or the API keys
-kept here, though anything typed into a remote window, a shell pane's included,
-passes through it; what it holds for this machine is a credential of its own,
-kept here in <code>remote.json</code> in the state directory and readable only by you.</p>
+<p>Traffic is encrypted with TLS between your browser and the relay, and between
+the relay and this machine. On top of that, a <strong>terminal</strong> — what you type into
+it and what it prints — is end-to-end encrypted between this machine and the
+paired browser, with keys the relay hands out but never holds. Only the
+terminal is: when either side has no registered key, the terminal is served
+unencrypted. Everything else passes through the relay decrypted, so it is
+<strong>trusted</strong>, and whoever runs it could read it: the chat view of a pane and
+what you type into it, the state and latest replies of every pane, pictures you
+attach, diffs, commit, push and pull request data, and anything typed into a
+dialog, an API key included. The relay never sees this machine's local token or
+the API keys kept here, though anything typed into a remote window, a shell
+pane's included, passes through it; what it holds for this machine is a
+credential of its own, kept here in <code>remote.json</code> in the state directory and
+readable only by you.</p>
+<p>A relay could hand out the wrong key for a device. To check, press <strong>Verify</strong>
+beside a device in the dialog and compare the code with the one the device
+shows on its own <strong>Devices</strong> page; if they differ, unpair it.</p>
 <p>Reading is not all it could do. The relay is what decides which devices are
 paired, so whoever runs it can open a window on any desktop that is connected
 to it and use it as a paired device would: type to every agent, and open a

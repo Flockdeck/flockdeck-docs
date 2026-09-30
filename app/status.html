@@ -102,27 +102,44 @@ the one you are looking at.</p>
 </thead>
 <tbody>
 <tr>
-<td>Green, pulsing</td>
+<td>Filled cyan circle, pulsing</td>
 <td><strong>Working</strong> — producing output or running a tool</td>
 </tr>
 <tr>
-<td>Amber</td>
+<td>Amber triangle</td>
 <td><strong>Waiting on you</strong> — a permission prompt or a question</td>
 </tr>
 <tr>
-<td>Grey</td>
+<td>Amber triangle</td>
+<td><strong>Blocked</strong> — a tool call was refused outright and the turn ended there; nothing is being asked, but it needs a look</td>
+</tr>
+<tr>
+<td>Hollow grey circle</td>
 <td><strong>Idle</strong> — it finished its turn and is ready for a new prompt</td>
 </tr>
 <tr>
-<td>Faint grey</td>
+<td>Hollow grey circle, pulsing</td>
 <td><strong>Starting</strong> — launched, and not heard from yet</td>
 </tr>
 <tr>
-<td>Red</td>
+<td>Red filled square</td>
+<td><strong>Failed</strong> — the process ended with an error, or was killed</td>
+</tr>
+<tr>
+<td>Hollow square</td>
 <td><strong>Exited</strong> — the process is gone</td>
 </tr>
 </tbody>
 </table>
+<p>Each state has its own shape as well as its colour, so you can tell them apart
+without seeing colour, except that waiting and blocked share the triangle. A
+blocked pane counts as waiting everywhere waiting agents are counted (below).</p>
+<p>A pane whose turn is over but that has background work still running, a
+command or subagent it started, is still <strong>Idle</strong> and its header says how many
+are &quot;in background&quot;. Its dot is the working dot all the same, and its tooltip
+says it is working in the background. Such an agent is counted as working
+everywhere working agents are counted (below), though its own status stays
+idle.</p>
 <p>While a tool is running the pane header names it, so <code>Read</code>, <code>Bash</code> or <code>Edit</code>
 tells you what the agent is actually doing rather than only that it is busy.</p>
 <h2>Where else it shows</h2>
@@ -133,13 +150,17 @@ pulsing filled dot instead; the <code>▲</code> takes its place when an agent t
 waiting.</li>
 <li><strong>The window title</strong> reports the count, so a waiting agent is visible in the
 taskbar with the window behind something else.</li>
-<li><strong>The top bar</strong> counts the agents waiting and working in this project. Click
+<li><strong>The top bar</strong> counts the agents waiting and working across every open
+project, the same count the window title carries; an
+idle agent whose background work is still running counts as working, here
+and in the window title and the tab icon. Click
 the count for the same list <kbd>Ctrl+Shift+A</kbd> opens.</li>
 <li><strong>The rail</strong> down the left of the window has a tile for each open project,
 and the tile says what that project's agents are doing, most urgent first: an
-amber badge where an agent is waiting on you, a pulsing green one where
-agents are working and none is waiting, and nothing where every pane is
-idle, exited or not yet heard from, or there are no panes. So one that
+amber badge where an agent is waiting on you, a pulsing cyan one where
+agents are working (one with background work still running counts) and
+none is waiting, and nothing where every pane is idle, exited or not yet
+heard from, or there are no panes. So one that
 starts waiting in a project you are <em>not</em> looking at is seen from the one
 you are. Widen the rail and the count is written beside the name — <code>▲ 2</code>
 for two waiting, <code>● 3</code> for three working — and the tile's tooltip and
@@ -170,7 +191,8 @@ Code too old to say either keeps it counted until the agent stops it, the
 conversation is cleared, or the pane is closed by hand (or with
 <code>flockdeck close --force</code>).</li>
 <li>A background subagent calling tools after its agent's turn has ended leaves
-the pane grey, with that count, rather than flashing green for each call.
+the pane idle, with that count and the steady working dot, rather than
+flashing cyan for each call.
 A question or permission prompt it puts to you still turns it amber.</li>
 </ul>
 <h2>Where it comes from</h2>
@@ -197,10 +219,16 @@ reviewer is a fixed policy: a <code>Bash</code> call is let through only when it
 single call to a command that only ever reads -- <code>git status</code>, <code>cat</code>, <code>grep</code>
 and the like -- inside the project, with nothing in it that could chain into
 something else or write anywhere; a call that changes a file, or reads
-outside the project, is always left to ask. It is off for every pane, and
-there is no switch for it in the window or on the phone yet.</p>
+outside the project, is always left to ask. A <code>git</code> command is let through
+only when git itself, asked where the command will run, has nothing
+configured that would run a program or reach the network, and <code>git status</code>
+or <code>git diff</code> never in a repository with a submodule in it.</p>
+<p>It is off for a pane unless you turn it on, with the ✓ in the pane's header,
+or for new panes with <strong>Settings › Behaviour › Start new panes with
+auto-review on</strong>; a pane started by another agent starts as that agent's
+pane is.</p>
 <p>One answer is not reported by any event: a permission prompt answered from
-the keyboard. Enter turns the pane green, since allowing the tool starts it
+the keyboard. Enter turns the pane cyan, since allowing the tool starts it
 running. Refusing it puts Claude Code back at its prompt without a word, so
 a pane that is then heard from by nothing, neither an event nor anything it
 draws, for ten seconds goes back to grey.</p>
