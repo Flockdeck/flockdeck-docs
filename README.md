@@ -1,6 +1,6 @@
 # flockdeck-docs
 
-The documentation site for [Flockdeck](https://github.com/jmwri/flockdeck),
+The documentation site for [Flockdeck](https://github.com/Flockdeck/flockdeck),
 served at [docs.flockdeck.ai](https://docs.flockdeck.ai).
 
 It has two parts, built differently on purpose.
@@ -13,10 +13,10 @@ placeholders, that render behind `F1` in the app — into this section, so a
 web copy can't say anything the app itself doesn't. Don't edit anything
 under `app/` by hand; the next generation overwrites it. Edit the pages at
 their source, `internal/help/pages/*.md` in
-[flockdeck](https://github.com/jmwri/flockdeck), instead:
+[flockdeck](https://github.com/Flockdeck/flockdeck), instead:
 
 ```sh
-# from a checkout of github.com/jmwri/flockdeck, beside this one
+# from a checkout of github.com/Flockdeck/flockdeck, beside this one
 go run ./cmd/docgen -out ../flockdeck-docs
 ```
 
@@ -36,7 +36,7 @@ unlisted fails the build rather than going unlinked from the nav.
 
 `index.html`, `docs.css`, the fonts and the icons are generated too, from
 `cmd/docgen`'s own embedded assets — the same palette, type and prose rules
-as [flockdeck-site](https://github.com/jmwri/flockdeck-site), copied rather
+as flockdeck-site (flockdeck.ai), copied rather
 than linked across origins, since the two sites are deployed separately.
 
 ## Keeping the docs from going stale
@@ -69,7 +69,8 @@ default: add the job names above to branch protection to make them gating
 ### The relay snapshot
 
 The released relay image, `ghcr.io/flockdeck/flockdeck-relay`, is private on
-purpose (the built relay comes with an Enterprise licence), and this
+purpose: it is licensed only under a separate agreement (Flockdeck
+Enterprise, coming soon), and this
 repository is public, so a pull request cannot and must not read it. Pull
 requests are checked against `tools/docdrift/snapshot/relay-serve-help.txt`,
 the relay's `serve -h` at the version in `snapshot/relay.version`.
@@ -125,7 +126,7 @@ gone). To run a guard by hand, see the top of each script in `tools/docdrift/`.
 Deployed the same way flockdeck-site is, to the wost Kubernetes cluster:
 
 1. CI builds an image from these files on every push. A tag like `v0.1.0`
-   publishes `ghcr.io/jmwri/flockdeck-docs:0.1.0` — the bare semver matters,
+   publishes `ghcr.io/flockdeck/flockdeck-docs:0.1.0` — the bare semver matters,
    because that is what Flux's ImagePolicy matches.
 2. Flux, watching this repository from `k8s-infra/flockdeck-docs`, sees the
    new tag, writes it into `deployment.yaml` and reconciles the cluster.
@@ -133,10 +134,12 @@ Deployed the same way flockdeck-site is, to the wost Kubernetes cluster:
    `docs.flockdeck.ai` DNS record, the namespace, and the registry pull
    secrets.
 
-So a release is: regenerate, commit, tag.
+So a release is: regenerate and merge. The auto-tag workflow
+(`.github/workflows/autotag.yml`) tags main once CI has passed on a commit that
+changes the site, and the tag is what CI builds into the deployed image.
 
 ## Licence
 
 PolyForm Noncommercial — see [LICENSE](LICENSE), the same licence as the
-Flockdeck desktop app this documents. The fonts (Archivo, JetBrains Mono) keep
+Flockdeck desktop app this documents. The fonts (IBM Plex Sans, JetBrains Mono) keep
 their own licence, the SIL Open Font License, beside them in `fonts/`.
