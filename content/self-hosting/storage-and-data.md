@@ -1,9 +1,14 @@
 # Storage and data
 
-The relay keeps one kind of state: which desktops are registered, which
-devices are paired to them, and their active sessions. There's no
-per-message or per-keystroke history to store — traffic is proxied through,
-not recorded.
+The relay keeps account and device records: accounts, desktops (name and
+when last seen), devices (name, browser user agent and session expiry),
+pairing codes and invites not yet used (with the admin's note on an
+invite), push subscriptions, and the end-to-end public keys of desktops and
+devices. Some settings add more: with single sign-on, each person's
+identity and email; with `-audit`, the audit log (emails and names, and
+addresses with `-audit-ip`); with verified registration, the verified email.
+There's no per-message or per-keystroke history to store — traffic is
+proxied through, not recorded, and nothing typed or shown is kept.
 
 ## The embedded database
 
@@ -19,8 +24,11 @@ process, one volume, nothing else to operate.
 
 For a deployment that wants the relay's state in a database it already
 runs, set `-database` (or `FLOCKDECK_RELAY_DATABASE_URL`) to a MySQL 8 or
-later DSN instead of `-data`. Use `-database-ca` if the connection needs a
-CA certificate verified.
+later DSN instead of the embedded database. `-data` is still used, for the
+admin token and ACME certificates, just not for state. Use `-database-ca`
+if the connection needs a CA certificate verified. The relay creates and
+updates its own tables on start, so its database user needs to be able to
+create and alter tables.
 
 `/readyz` doesn't answer until the database connection is live, so a load
 balancer or orchestrator waiting on readiness won't route traffic to a

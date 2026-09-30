@@ -132,7 +132,8 @@ agent is waiting, it needs a VAPID key pair, which the relay can generate
 for you. See <a href="configuration.html">Configuration</a>.</p>
 <h2 id="what-you-dont-need">What you don't need</h2>
 <p>No database migrations to run by hand, no message queue, no separate cache.
-The relay is one process and one data directory.</p>
+The relay is one process and one data directory, and always exactly one
+process: no clustering.</p>
 
   </article>
 </main>

@@ -9,7 +9,7 @@ variable if both are set.
 | Flag | Env | Default | What it does |
 | --- | --- | --- | --- |
 | `-addr` | | `:8080` (`:443` with `-acme-domain`) | Address to listen on. |
-| `-public-url` | `FLOCKDECK_RELAY_PUBLIC_URL` | | The address the relay tells desktops and devices to use — required whenever it isn't the same as `-addr`, such as behind a proxy. |
+| `-public-url` | `FLOCKDECK_RELAY_PUBLIC_URL` | | The address people open, at the root of its host. Required, except with `-acme-domain`, where it defaults to `https://` plus that domain. Must be `https://` when the relay serves TLS itself. |
 | `-trust-proxy` | | off | Take the client address from forwarded headers instead of the TCP connection. Only turn this on when something trusted sits in front of the relay. |
 | `-acme-domain` | | | Domain to get a certificate for automatically. Requires the relay to be reachable on port 80 and 443 directly. |
 | `-acme-email` | | | Contact address for the ACME account. |
@@ -17,7 +17,7 @@ variable if both are set.
 | `-tls-cert` / `-tls-key` | | | Your own certificate and key. Reloaded automatically when the files change. |
 | `-client-dir` | | | Serve the remote client from this directory instead of the one built into the relay. |
 | `-desk-domain` | `FLOCKDECK_RELAY_DESK_DOMAIN` | | Base domain for giving each paired desktop its own subdomain. Needs a wildcard DNS record and certificate. |
-| `-admin-addr` | | `127.0.0.1:8081` | Loopback address for the admin endpoints `flockdeck-relay invite`, `stats` and `plan` use — see [Admin and invites](admin-and-invites.html). Empty turns them off. |
+| `-admin-addr` | | `127.0.0.1:8081` | Loopback address for the admin endpoints `flockdeck-relay invite`, `stats`, `plan`, `user revoke` and `audit export` use — see [Admin and invites](admin-and-invites.html). Empty turns them off. |
 
 ## Storage
 
@@ -25,13 +25,13 @@ variable if both are set.
 | --- | --- | --- | --- |
 | `-data` | | `data` | Directory for the embedded database and the admin token file. |
 | `-database` | `FLOCKDECK_RELAY_DATABASE_URL` | | MySQL DSN, in place of the embedded database. See [Storage and data](storage-and-data.html). |
-| `-database-ca` | `FLOCKDECK_RELAY_DATABASE_CA` | | Path to a CA certificate for the MySQL connection. |
+| `-database-ca` | `FLOCKDECK_RELAY_DATABASE_CA` | | A file path for the flag, or the PEM text itself in the environment variable. Refused without `-database`. |
 
 ## Registration and limits
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-registration` | `open` | Who can register a new desktop: `open`, `invite` (needs an invite code from an admin — see [Admin and invites](admin-and-invites.html)), or `closed`. |
+| `-registration` | `open` | Who may create a new account: `open`, `invite` (needs an invite code from an admin — see [Admin and invites](admin-and-invites.html)), or `closed`. A desktop joining an existing account with a join code from `flockdeck remote pair -desktop` is always allowed. |
 | `-max-hosts` | 10 | Maximum number of desktops per account (0: no limit). |
 | `-max-devices` | 20 | Maximum number of paired phones/browsers per account (0: no limit). |
 | `-max-pairings` | 5 | Unused pairing codes an account can hold at once; a new one replaces the oldest (0: no limit). |
@@ -111,15 +111,16 @@ does and doesn't capture.
 ## An example
 
 Behind a reverse proxy, with MySQL, registration by invite only, and push
-notifications on:
+notifications on. The database address and the VAPID private key are set in
+the environment, so neither appears in a process listing; the public key is
+worked out from the private one.
 
 ```
+export FLOCKDECK_RELAY_DATABASE_URL="flockdeck:$MYSQL_PASSWORD@tcp(db.internal:3306)/flockdeck_relay?tls=true"
+export FLOCKDECK_RELAY_VAPID_PRIVATE_KEY="$VAPID_PRIVATE_KEY"
 flockdeck-relay serve \
   -public-url https://relay.example.com \
   -addr 127.0.0.1:8080 \
   -trust-proxy \
-  -database "flockdeck:$MYSQL_PASSWORD@tcp(db.internal:3306)/flockdeck_relay" \
-  -registration invite \
-  -vapid-private-key "$VAPID_PRIVATE_KEY" \
-  -vapid-public-key "$VAPID_PUBLIC_KEY"
+  -registration invite
 ```

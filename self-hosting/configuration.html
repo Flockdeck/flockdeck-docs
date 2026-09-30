@@ -112,7 +112,7 @@ variable if both are set.</p>
 <td><code>-public-url</code></td>
 <td><code>FLOCKDECK_RELAY_PUBLIC_URL</code></td>
 <td></td>
-<td>The address the relay tells desktops and devices to use — required whenever it isn't the same as <code>-addr</code>, such as behind a proxy.</td>
+<td>The address people open, at the root of its host. Required, except with <code>-acme-domain</code>, where it defaults to <code>https://</code> plus that domain. Must be <code>https://</code> when the relay serves TLS itself.</td>
 </tr>
 <tr>
 <td><code>-trust-proxy</code></td>
@@ -160,7 +160,7 @@ variable if both are set.</p>
 <td><code>-admin-addr</code></td>
 <td></td>
 <td><code>127.0.0.1:8081</code></td>
-<td>Loopback address for the admin endpoints <code>flockdeck-relay invite</code>, <code>stats</code> and <code>plan</code> use — see <a href="admin-and-invites.html">Admin and invites</a>. Empty turns them off.</td>
+<td>Loopback address for the admin endpoints <code>flockdeck-relay invite</code>, <code>stats</code>, <code>plan</code>, <code>user revoke</code> and <code>audit export</code> use — see <a href="admin-and-invites.html">Admin and invites</a>. Empty turns them off.</td>
 </tr>
 </tbody>
 </table>
@@ -191,7 +191,7 @@ variable if both are set.</p>
 <td><code>-database-ca</code></td>
 <td><code>FLOCKDECK_RELAY_DATABASE_CA</code></td>
 <td></td>
-<td>Path to a CA certificate for the MySQL connection.</td>
+<td>A file path for the flag, or the PEM text itself in the environment variable. Refused without <code>-database</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -208,7 +208,7 @@ variable if both are set.</p>
 <tr>
 <td><code>-registration</code></td>
 <td><code>open</code></td>
-<td>Who can register a new desktop: <code>open</code>, <code>invite</code> (needs an invite code from an admin — see <a href="admin-and-invites.html">Admin and invites</a>), or <code>closed</code>.</td>
+<td>Who may create a new account: <code>open</code>, <code>invite</code> (needs an invite code from an admin — see <a href="admin-and-invites.html">Admin and invites</a>), or <code>closed</code>. A desktop joining an existing account with a join code from <code>flockdeck remote pair -desktop</code> is always allowed.</td>
 </tr>
 <tr>
 <td><code>-max-hosts</code></td>
@@ -421,15 +421,16 @@ supported, self-hosted relay, single sign-on included. See
 does and doesn't capture.</p>
 <h2 id="an-example">An example</h2>
 <p>Behind a reverse proxy, with MySQL, registration by invite only, and push
-notifications on:</p>
-<pre><code>flockdeck-relay serve \
+notifications on. The database address and the VAPID private key are set in
+the environment, so neither appears in a process listing; the public key is
+worked out from the private one.</p>
+<pre><code>export FLOCKDECK_RELAY_DATABASE_URL=&quot;flockdeck:$MYSQL_PASSWORD@tcp(db.internal:3306)/flockdeck_relay?tls=true&quot;
+export FLOCKDECK_RELAY_VAPID_PRIVATE_KEY=&quot;$VAPID_PRIVATE_KEY&quot;
+flockdeck-relay serve \
   -public-url https://relay.example.com \
   -addr 127.0.0.1:8080 \
   -trust-proxy \
-  -database &quot;flockdeck:$MYSQL_PASSWORD@tcp(db.internal:3306)/flockdeck_relay&quot; \
-  -registration invite \
-  -vapid-private-key &quot;$VAPID_PRIVATE_KEY&quot; \
-  -vapid-public-key &quot;$VAPID_PUBLIC_KEY&quot;
+  -registration invite
 </code></pre>
 
   </article>

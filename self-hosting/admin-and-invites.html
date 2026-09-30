@@ -91,32 +91,45 @@
 <p class="doc-lede">The relay has a small admin surface, separate from the public one desktops
 and devices talk to.</p>
 <h2 id="the-admin-api">The admin API</h2>
-<p>The admin API listens on <code>127.0.0.1:8081</code> — local only, never exposed to
-the network the relay itself is reachable from. Reach it from the same
-machine, or over SSH port forwarding, or from a sidecar in the same pod;
-don't put it behind a public reverse proxy.</p>
+<p>The admin API listens on <code>-admin-addr</code>, which defaults to loopback
+(<code>127.0.0.1:8081</code>); keep it there, off the network the relay itself is
+reachable from. Reach it from the same machine, or over SSH port
+forwarding, or from a sidecar in the same pod; don't put it behind a public
+reverse proxy. The relay warns if it is listening beyond loopback.</p>
 <p>It's authenticated with a token the relay writes to <code>admin.json</code> in the
-data directory (<code>-data</code>) the first time it starts. Keep that file as
-tightly held as you would a root credential — anyone with it has full admin
-access.</p>
+data directory (<code>-data</code>). The relay writes a fresh token on every start and
+removes the file when it stops, so run the admin commands (<code>invite</code>,
+<code>stats</code>, <code>plan</code>, <code>user revoke</code> and <code>audit export</code>) where they can read
+<code>-data</code>, for example <code>docker exec &lt;container&gt; /flockdeck-relay invite -data /data</code>. Keep that file as tightly held as you would a root credential —
+anyone with it has full admin access.</p>
 <h2 id="inviting-a-desktop">Inviting a desktop</h2>
 <p>If <code>-registration</code> is set to <code>invite</code> (see <a href="configuration.html">Configuration</a>),
 a new desktop can't register itself; an admin has to issue an invite code
 first:</p>
 <pre><code>flockdeck-relay invite -data /data -note &quot;jane's laptop&quot;
 </code></pre>
-<p>The <code>-note</code> is just for your own records in the stats output below — it
-isn't shown to the desktop that redeems the code.</p>
+<p>The command prints the code, and the exact <code>flockdeck remote enable -relay … -invite &lt;code&gt;</code> command to hand over. The <code>-note</code> is kept with the invite
+for your own records; <code>stats</code> doesn't print it, and it isn't shown to the
+desktop that redeems the code.</p>
 <h2 id="usage-stats">Usage stats</h2>
 <pre><code>flockdeck-relay stats -data /data
 </code></pre>
-<p>prints a summary of what's registered: how many desktops, how many paired
-devices, and how close the deployment is to the limits set by <code>-max-hosts</code>
-and <code>-max-devices</code>.</p>
+<p>prints the relay's version and uptime, and a summary of what it holds: how
+many accounts, desktops (and how many are connected), devices (and how many
+are notified by push), pairing codes waiting and invites unused, the plans
+if the relay enforces them, and how many requests each limit has refused.
+The refused counts show a proxy that makes every client look like one
+address. <code>-max-hosts</code> and <code>-max-devices</code> are per account, so <code>stats</code> doesn't
+show headroom against them.</p>
 <h2 id="revoking-access">Revoking access</h2>
-<p>There's no separate admin command for this yet — turning off remote access
-from a desktop's own Settings, or running <code>flockdeck remote disable</code> there,
-removes it from the relay it was registered with.</p>
+<p>To revoke a person, run <code>flockdeck-relay user revoke -data /data sam@example.com</code>. It revokes every device that person paired, and needs a
+relay run with <code>-oidc-issuer</code>, which is how a device is recorded against an
+email; disable them at the identity provider too, or they could pair a
+device again.</p>
+<p>To remove a desktop, turn off remote access from its own Settings, or run
+<code>flockdeck remote disable</code> there; that removes it from the relay it was
+registered with.</p>
+<p>To export the audit log, run <code>flockdeck-relay audit export -data /data -format csv -o audit.csv</code>.</p>
 
   </article>
 </main>

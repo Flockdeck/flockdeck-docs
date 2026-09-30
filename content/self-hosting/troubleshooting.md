@@ -44,9 +44,10 @@ directly sidesteps this.
 
 If `-registration` is `invite`, every new desktop needs a code from
 `flockdeck-relay invite` first — see [Admin and invites](admin-and-invites.html).
-If it's `closed`, no new desktop can register regardless. Check
-`-max-hosts` too: once it's reached, registration fails until an existing
-desktop is removed.
+If it's `closed`, no new account can be created; `closed` stops new
+accounts, not joins with `-join`. Check `-max-hosts` too: it is per
+account, so a join fails once that account has that many desktops, until
+one is removed.
 
 ## Rate limiting
 
