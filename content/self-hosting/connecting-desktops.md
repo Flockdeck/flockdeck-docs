@@ -16,20 +16,28 @@ before Flockdeck starts, if you'd rather configure it that way across a
 fleet of machines than run the command on each one by hand. The flag wins
 if both are set.
 
-This registers the desktop with your relay (or, with `-registration invite`,
-redeems an invite code an admin issued — see [Admin and
-invites](admin-and-invites.html)) and turns remote access on, exactly as
+This registers the desktop with your relay and turns remote access on. With
+`-registration invite`, the relay needs an invite code an admin issued —
+see [Admin and invites](admin-and-invites.html), where `flockdeck-relay
+invite` prints the exact command to hand over:
+
+```
+flockdeck remote enable -relay https://relay.example.com -invite <code>
+```
+
+Everything else is exactly as
 [Remote access](/app/remote.html) describes for the shared relay — pairing a
 phone with a QR code, notifications, everything — just against your own
 infrastructure instead.
 
 ## A second desktop on the same relay
 
-Each desktop that should be reachable through your relay runs its own
-`flockdeck remote enable -relay ...` (or has `FLOCKDECK_RELAY` set). There's
-no separate "join" step for a second desktop beyond registering it the same
-way as the first, subject to whatever `-registration` mode and `-max-hosts`
-limit your relay is configured with.
+A plain `flockdeck remote enable` creates a separate account. To put a second
+desktop on the same account, run `flockdeck remote pair -desktop` on a
+desktop already on the relay, and on the new one run `flockdeck remote enable
+-relay https://relay.example.com -join <code>`. Joining never needs an
+invite and works even with `-registration closed`; `-max-hosts` is per
+account, so a join fails once the account has that many desktops.
 
 ## Switching a desktop back to the shared relay
 

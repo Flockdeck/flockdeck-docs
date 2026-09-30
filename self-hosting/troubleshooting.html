@@ -124,9 +124,10 @@ directly sidesteps this.</p>
 <h2 id="new-desktops-cant-register">New desktops can't register</h2>
 <p>If <code>-registration</code> is <code>invite</code>, every new desktop needs a code from
 <code>flockdeck-relay invite</code> first — see <a href="admin-and-invites.html">Admin and invites</a>.
-If it's <code>closed</code>, no new desktop can register regardless. Check
-<code>-max-hosts</code> too: once it's reached, registration fails until an existing
-desktop is removed.</p>
+If it's <code>closed</code>, no new account can be created; <code>closed</code> stops new
+accounts, not joins with <code>-join</code>. Check <code>-max-hosts</code> too: it is per
+account, so a join fails once that account has that many desktops, until
+one is removed.</p>
 <h2 id="rate-limiting">Rate limiting</h2>
 <p><code>-register-per-hour</code>, <code>-pair-per-minute</code> and <code>-connects-per-minute</code> (see
 <a href="configuration.html">Configuration</a>) are all per source address. Behind a

@@ -124,7 +124,7 @@ the relay can get and renew its own certificate:</p>
 <p>This is the simplest option when there's nothing else in front of the
 relay.</p>
 <h3 id="2-your-own-certificate">2. Your own certificate</h3>
-<pre><code>flockdeck-relay serve -tls-cert /etc/relay/fullchain.pem -tls-key /etc/relay/privkey.pem -data /data
+<pre><code>flockdeck-relay serve -public-url https://relay.example.com -addr :443 -tls-cert /etc/relay/fullchain.pem -tls-key /etc/relay/privkey.pem -data /data
 </code></pre>
 <p>The relay watches these files and reloads them when they change, so a
 certificate renewal elsewhere on the machine doesn't need a restart.</p>

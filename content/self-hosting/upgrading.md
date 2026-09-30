@@ -13,8 +13,9 @@ again, then restart the process under whatever supervises it.
 
 ## Container deployments
 
-Deploy a newer image tag and let your orchestrator do its usual rolling
-restart. Because desktops hold a persistent connection to the relay, a
+Deploy a newer image tag, stopping the old relay before starting the new one
+(a recreate, not a rolling restart): never run two relays against the same
+data. Because desktops hold a persistent connection to the relay, a
 restart drops every open tunnel; desktops reconnect automatically, so a
 brief gap in remote access during the restart is the only visible effect —
 nothing an agent is doing locally is interrupted.
@@ -30,5 +31,7 @@ anything it calls out about storage.
 ## Checking what's running
 
 `/healthz` and `/readyz` (see [Deploying the relay](deploying-the-relay.html))
-don't report a version. Check the binary or image tag you deployed against
-the relay's own release notes to know what you're running.
+don't report a version. Three things do: `flockdeck-relay version`, the first
+line of `flockdeck-relay stats`, and the `version=` field in the relay's
+"relay listening" log line at startup. Check that against the relay's own
+release notes to know what you're running.

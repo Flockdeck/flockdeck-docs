@@ -58,4 +58,5 @@ for you. See [Configuration](configuration.html).
 ## What you don't need
 
 No database migrations to run by hand, no message queue, no separate cache.
-The relay is one process and one data directory.
+The relay is one process and one data directory, and always exactly one
+process: no clustering.

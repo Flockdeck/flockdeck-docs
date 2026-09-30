@@ -5,15 +5,19 @@ and devices talk to.
 
 ## The admin API
 
-The admin API listens on `127.0.0.1:8081` — local only, never exposed to
-the network the relay itself is reachable from. Reach it from the same
-machine, or over SSH port forwarding, or from a sidecar in the same pod;
-don't put it behind a public reverse proxy.
+The admin API listens on `-admin-addr`, which defaults to loopback
+(`127.0.0.1:8081`); keep it there, off the network the relay itself is
+reachable from. Reach it from the same machine, or over SSH port
+forwarding, or from a sidecar in the same pod; don't put it behind a public
+reverse proxy. The relay warns if it is listening beyond loopback.
 
 It's authenticated with a token the relay writes to `admin.json` in the
-data directory (`-data`) the first time it starts. Keep that file as
-tightly held as you would a root credential — anyone with it has full admin
-access.
+data directory (`-data`). The relay writes a fresh token on every start and
+removes the file when it stops, so run the admin commands (`invite`,
+`stats`, `plan`, `user revoke` and `audit export`) where they can read
+`-data`, for example `docker exec <container> /flockdeck-relay invite -data
+/data`. Keep that file as tightly held as you would a root credential —
+anyone with it has full admin access.
 
 ## Inviting a desktop
 
@@ -25,8 +29,10 @@ first:
 flockdeck-relay invite -data /data -note "jane's laptop"
 ```
 
-The `-note` is just for your own records in the stats output below — it
-isn't shown to the desktop that redeems the code.
+The command prints the code, and the exact `flockdeck remote enable -relay
+… -invite <code>` command to hand over. The `-note` is kept with the invite
+for your own records; `stats` doesn't print it, and it isn't shown to the
+desktop that redeems the code.
 
 ## Usage stats
 
@@ -34,12 +40,25 @@ isn't shown to the desktop that redeems the code.
 flockdeck-relay stats -data /data
 ```
 
-prints a summary of what's registered: how many desktops, how many paired
-devices, and how close the deployment is to the limits set by `-max-hosts`
-and `-max-devices`.
+prints the relay's version and uptime, and a summary of what it holds: how
+many accounts, desktops (and how many are connected), devices (and how many
+are notified by push), pairing codes waiting and invites unused, the plans
+if the relay enforces them, and how many requests each limit has refused.
+The refused counts show a proxy that makes every client look like one
+address. `-max-hosts` and `-max-devices` are per account, so `stats` doesn't
+show headroom against them.
 
 ## Revoking access
 
-There's no separate admin command for this yet — turning off remote access
-from a desktop's own Settings, or running `flockdeck remote disable` there,
-removes it from the relay it was registered with.
+To revoke a person, run `flockdeck-relay user revoke -data /data
+sam@example.com`. It revokes every device that person paired, and needs a
+relay run with `-oidc-issuer`, which is how a device is recorded against an
+email; disable them at the identity provider too, or they could pair a
+device again.
+
+To remove a desktop, turn off remote access from its own Settings, or run
+`flockdeck remote disable` there; that removes it from the relay it was
+registered with.
+
+To export the audit log, run `flockdeck-relay audit export -data /data
+-format csv -o audit.csv`.

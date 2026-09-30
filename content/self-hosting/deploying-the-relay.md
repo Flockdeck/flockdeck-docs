@@ -58,7 +58,7 @@ relay.
 ### 2. Your own certificate
 
 ```
-flockdeck-relay serve -tls-cert /etc/relay/fullchain.pem -tls-key /etc/relay/privkey.pem -data /data
+flockdeck-relay serve -public-url https://relay.example.com -addr :443 -tls-cert /etc/relay/fullchain.pem -tls-key /etc/relay/privkey.pem -data /data
 ```
 
 The relay watches these files and reloads them when they change, so a

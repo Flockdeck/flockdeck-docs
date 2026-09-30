@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Storage and data | Flockdeck docs</title>
-<meta name="description" content="The relay keeps one kind of state: which desktops are registered, which devices are paired to them, and their active sessions. There&#39;s no per-message or per-keystroke history to store — traffic is proxied through, not recorded.">
+<meta name="description" content="The relay keeps account and device records: accounts, desktops (name and when last seen), devices (name, browser user agent and session expiry), pairing codes and invites not yet used (with the admin&#39;s note on an invite), push subscriptions, and the end-to-end public keys of desktops and devices. Some settings add more: with single sign-on, each person&#39;s identity and email; with -audit, the audit log (emails and names, and addresses with -audit-ip); with verified registration, the verified email. There&#39;s no per-message or per-keystroke history to store — traffic is proxied through, not recorded, and nothing typed or shown is kept.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Storage and data | Flockdeck docs">
-<meta property="og:description" content="The relay keeps one kind of state: which desktops are registered, which devices are paired to them, and their active sessions. There&#39;s no per-message or per-keystroke history to store — traffic is proxied through, not recorded.">
+<meta property="og:description" content="The relay keeps account and device records: accounts, desktops (name and when last seen), devices (name, browser user agent and session expiry), pairing codes and invites not yet used (with the admin&#39;s note on an invite), push subscriptions, and the end-to-end public keys of desktops and devices. Some settings add more: with single sign-on, each person&#39;s identity and email; with -audit, the audit log (emails and names, and addresses with -audit-ip); with verified registration, the verified email. There&#39;s no per-message or per-keystroke history to store — traffic is proxied through, not recorded, and nothing typed or shown is kept.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/self-hosting/storage-and-data.html">
 <meta name="twitter:card" content="summary">
@@ -88,10 +88,15 @@
   <article class="prose">
     <p class="eyebrow">Self-hosting</p>
 <h1 id="storage-and-data">Storage and data</h1>
-<p class="doc-lede">The relay keeps one kind of state: which desktops are registered, which
-devices are paired to them, and their active sessions. There's no
-per-message or per-keystroke history to store — traffic is proxied through,
-not recorded.</p>
+<p class="doc-lede">The relay keeps account and device records: accounts, desktops (name and
+when last seen), devices (name, browser user agent and session expiry),
+pairing codes and invites not yet used (with the admin's note on an
+invite), push subscriptions, and the end-to-end public keys of desktops and
+devices. Some settings add more: with single sign-on, each person's
+identity and email; with <code>-audit</code>, the audit log (emails and names, and
+addresses with <code>-audit-ip</code>); with verified registration, the verified email.
+There's no per-message or per-keystroke history to store — traffic is
+proxied through, not recorded, and nothing typed or shown is kept.</p>
 <h2 id="the-embedded-database">The embedded database</h2>
 <p>By default, pointing <code>-data</code> at a directory is all storage configuration the
 relay needs. It keeps a single database file (<code>relay.db</code>) there, using an
@@ -102,8 +107,11 @@ process, one volume, nothing else to operate.</p>
 <h2 id="mysql">MySQL</h2>
 <p>For a deployment that wants the relay's state in a database it already
 runs, set <code>-database</code> (or <code>FLOCKDECK_RELAY_DATABASE_URL</code>) to a MySQL 8 or
-later DSN instead of <code>-data</code>. Use <code>-database-ca</code> if the connection needs a
-CA certificate verified.</p>
+later DSN instead of the embedded database. <code>-data</code> is still used, for the
+admin token and ACME certificates, just not for state. Use <code>-database-ca</code>
+if the connection needs a CA certificate verified. The relay creates and
+updates its own tables on start, so its database user needs to be able to
+create and alter tables.</p>
 <p><code>/readyz</code> doesn't answer until the database connection is live, so a load
 balancer or orchestrator waiting on readiness won't route traffic to a
 relay that can't reach its database yet.</p>
