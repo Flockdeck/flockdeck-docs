@@ -55,6 +55,7 @@
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/recording.html">Recording a pane</a></li>
       <li><a href="/app/projects.html">Projects</a></li>
       <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
       <li><a href="/app/remote.html">Remote access</a></li>
@@ -154,7 +155,27 @@ Closing a tab's last pane closes the tab, and the <code>×</code> on a tab close
 pane in it.</li>
 </ul>
 <p>The buttons in a pane header do the same things: fan out, include in
-broadcast, restart, zoom, close.</p>
+broadcast, restart, zoom, record, lock, close. Record is off until you turn it
+on: see <a href="/app/recording.html">Recording a pane</a>.</p>
+<h2>Locking a pane</h2>
+<p><strong>Lock pane</strong>, in the command palette and as the padlock in the pane
+header, locks a pane so it cannot be closed by accident. The same action
+unlocks it again, and the palette names it <strong>Unlock pane</strong> while the pane is
+locked. A locked pane shows a padlock and the word &quot;Locked&quot; in its header, and
+while it is locked:</p>
+<ul>
+<li><kbd>Ctrl+Shift+W</kbd> and the <code>×</code> in its header do nothing but say the pane is locked.</li>
+<li>Its tab cannot be closed, by the <code>×</code> on the tab or the middle button, while
+any pane in it is locked, and neither can a project that holds one.</li>
+<li><strong>Close finished panes</strong> leaves it open and says how many it left.</li>
+<li><code>flockdeck close</code> refuses it, and <code>--force</code> does not change that: <code>--force</code>
+is for a pane still working, and a lock is something only you undo.
+<code>flockdeck close --finished</code> skips it and reports how many it skipped.</li>
+</ul>
+<p><strong>Restart pane</strong> still works on a locked pane and leaves it locked. The
+lock is kept with the layout, so it survives a restart of Flockdeck, and it
+moves with the pane when you drag it to another tab. Quitting Flockdeck is
+not closing a pane, so a lock does not stop it.</p>
 <h2>Naming a tab</h2>
 <p>A tab names itself after the first thing its agent is asked. To call it
 something else, double-click it, press F2 while the keyboard is on it, or

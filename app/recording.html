@@ -1,0 +1,251 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recording a pane | Flockdeck docs</title>
+<meta name="description" content="Start recording, from the command palette or the record button in a pane header, saves a structured transcript of that pane&#39;s agent interaction to a file on this machine. It is off for every pane until you turn it on, and the palette names the action Stop recording while the pane is recording. A recording pane shows a red dot and the word &#34;Recording&#34; in its header, and its record button is pressed.">
+<link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Recording a pane | Flockdeck docs">
+<meta property="og:description" content="Start recording, from the command palette or the record button in a pane header, saves a structured transcript of that pane&#39;s agent interaction to a file on this machine. It is off for every pane until you turn it on, and the palette names the action Stop recording while the pane is recording. A recording pane shows a red dot and the word &#34;Recording&#34; in its header, and its record button is pressed.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/recording.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/recording.html">
+<link rel="preload" href="/fonts/ibm-plex-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><circle fill="#93A1A9" cx="9" cy="5.5" r="3.3"/><circle fill="#93A1A9" cx="16" cy="10.75" r="3.3"/><circle fill="#93A1A9" cx="16" cy="21.25" r="3.3"/><circle fill="#93A1A9" cx="9" cy="26.5" r="3.3"/><circle fill="#4FD1DB" cx="23" cy="16" r="3.3"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/Flockdeck/flockdeck-docs">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/todo.html">Todo</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/github.html">GitHub</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/recording.html" aria-current="page">Recording a pane</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Recording a pane</h1>
+<p class="doc-lede"><strong>Start recording</strong>, from the command palette or the record button in a pane
+header, saves a structured transcript of that pane's agent interaction to a
+file on this machine. It is off for every pane until you turn it on, and the
+palette names the action <strong>Stop recording</strong> while the pane is recording. A
+recording pane shows a red dot and the word &quot;Recording&quot; in its header, and its
+record button is pressed.</p>
+<p>Only agent panes can record: a shell reports no events, so it has no record
+button. The first time you turn recording on, Flockdeck asks you to confirm,
+and tells you what is kept.</p>
+<h2>What is recorded</h2>
+<p>One JSON object per line, in the order things happened. Every line has a
+timestamp (<code>time</code>), the pane's id and name (<code>pane</code>, <code>paneName</code>), the <code>project</code>,
+the <code>agent</code> and <code>model</code>, and a <code>type</code>:</p>
+<table>
+<thead>
+<tr>
+<th><code>type</code></th>
+<th>What it holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>recording_started</code>, <code>recording_stopped</code></td>
+<td>The first and last line of a session, with why</td>
+</tr>
+<tr>
+<td><code>session</code></td>
+<td>The agent's session starting or ending</td>
+</tr>
+<tr>
+<td><code>user_prompt</code></td>
+<td>What you asked (<code>text</code>)</td>
+</tr>
+<tr>
+<td><code>assistant_message</code></td>
+<td>The agent's message at the end of a turn (<code>text</code>)</td>
+</tr>
+<tr>
+<td><code>tool_call</code></td>
+<td>The tool (<code>tool</code>) and its <code>input</code></td>
+</tr>
+<tr>
+<td><code>tool_result</code></td>
+<td>What the tool printed (<code>output</code>), and <code>isError</code> or <code>interrupted</code> where it failed or you stopped it</td>
+</tr>
+<tr>
+<td><code>permission_prompt</code></td>
+<td>A permission dialog opening, for a tool and its <code>input</code></td>
+</tr>
+<tr>
+<td><code>permission_outcome</code></td>
+<td>How it was answered: <code>allowed</code>, <code>denied</code>, or <code>auto_approved</code> by auto-review, with <code>inferred: true</code> where it was worked out from what happened next</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>The pane's status changing, with the <code>previous</code> one</td>
+</tr>
+<tr>
+<td><code>recording_truncated</code></td>
+<td>The file reached its size cap and the recording ended</td>
+</tr>
+</tbody>
+</table>
+<p>A tool call made by a subagent has a <code>subagent</code> field naming it. Every line also
+has a <code>seq</code> number, counted from 1 in its file, and a line with anything
+removed from it says so with <code>redacted</code> or <code>clipped</code>. The format has a version,
+<code>v</code>, which goes up if a field ever changes meaning.</p>
+<p>The complete field reference, a JSON Schema, what each agent can report,
+ordering and crash behaviour, and <code>jq</code> examples are in
+<a href="https://github.com/Flockdeck/flockdeck/blob/main/docs/recording-format.md" target="_blank" rel="noopener noreferrer">the transcript format reference</a> (<code>docs/recording-format.md</code> in
+the Flockdeck repository).</p>
+<p>Everything here comes from the events the agent reports to Flockdeck, not from
+what the terminal shows. That leaves some gaps, which are Claude Code's to
+close:</p>
+<ul>
+<li><strong>Assistant messages</strong> are only the last one of each turn. Claude Code reports
+no event for the messages it writes between tool calls, and a Claude Code too
+old to include the final message in its stop event gives none at all.</li>
+<li><strong>Permission outcomes are inferred.</strong> There is no event for your answer to a
+permission prompt, so it is read from what came next: the tool ran
+(<code>allowed</code>), or the turn moved on without it (<code>denied</code>).</li>
+<li><strong>Status changes</strong> are the ones agent events cause. A pane going quiet, or its
+process ending, is not recorded as one.</li>
+<li><strong>Agents that report no events</strong> record only what they do report. The built-in
+chat client gives session, prompt, status and tool-name lines but no tool
+inputs, results or messages, and Codex, Gemini CLI, Aider, opencode and Cursor
+Agent report nothing, so their recordings hold only the start and the end.</li>
+</ul>
+<h2>Where it goes</h2>
+<p>Under Flockdeck's own state directory, never in your project:</p>
+<pre><code class="language-text">&lt;state directory&gt;/recordings/&lt;project&gt;-&lt;hash&gt;/&lt;start time&gt;-&lt;pane&gt;.jsonl
+</code></pre>
+<p>There is one file per recording session, from turning recording on to turning
+it off, closing the pane, or a restart of Flockdeck while it is on. The files are
+readable by you only. A pane left recording is still recording after a restart,
+in a new file, and the setting moves with the pane when you drag it to another
+tab.</p>
+<p><strong>Open recordings folder</strong> opens the folder. <code>flockdeck recordings</code> lists the
+recordings, newest first, and <code>flockdeck recordings -dir</code> prints the folder.
+There is no replay view: the files are plain JSON lines, for <code>jq</code> or a script.</p>
+<h3>Size and retention</h3>
+<p>A file stops at 16 MiB: it ends with a <code>recording_truncated</code> line, the pane stops
+recording and Flockdeck says so. Any one string is cut at 8 KiB (a prompt or
+message at 32 KiB), with a marker saying how much was cut. When a recording
+starts, the project's folder is tidied: files older than 30 days are deleted, then
+the oldest until at most 100 files and 256 MiB are left.</p>
+<h2>Secrets</h2>
+<p>A transcript can contain secrets: they are in the prompts you type, the files an
+agent reads and the commands it runs. Flockdeck removes what it can recognise:</p>
+<ul>
+<li>private key blocks, common token shapes (Anthropic, OpenAI, GitHub, GitLab,
+Slack, AWS and Google keys, JWTs) and <code>Authorization</code> credentials;</li>
+<li>passwords inside URLs;</li>
+<li>the value of anything named like a secret: <code>API_KEY=...</code>, <code>password: ...</code>,
+<code>&quot;client_secret&quot;: ...</code>;</li>
+<li>the output of reading a file named like a secret (<code>.env</code>, private keys,
+<code>credentials</code> files), and what is written to one.</li>
+</ul>
+<p><strong>This is best effort.</strong> A secret in an unusual shape, in text that does not name
+it as one, is recorded as it was. In particular it does not catch a secret under
+an unconventional name (<code>SESSION_COOKIE</code>, <code>DATABASE_URL</code>), one that is base64- or
+URL-encoded or split across lines, or the contents of a secret file reached
+through a symlink or an ordinary-looking name. Treat a recording as being as
+sensitive as the conversation itself, assume a secret may be in it even when no
+line is marked redacted, and delete the files you do not want kept. Transcripts
+are saved on this machine (user-only on Linux and macOS; on Windows, readable by
+you and a local administrator, like any file in your profile) — &quot;on this
+machine&quot;, not &quot;private to you&quot;.</p>
+<p>Nothing is sent anywhere: recordings stay on this machine, and <code>Open recordings folder</code> only works from the machine Flockdeck runs on, not from a phone.</p>
+<h2>Starting a helper recorded</h2>
+<p>An agent can start a helper whose interaction is recorded from the first
+message:</p>
+<pre><code class="language-sh">flockdeck spawn --record &quot;refactor the parser&quot;
+</code></pre>
+<p>This only works once you have turned recording on yourself, in the window, and
+read what it keeps: an agent cannot be the first to switch it on. Without
+<code>--record</code> a helper is not recorded, even if its parent is.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free, with its source available for noncommercial use.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/Flockdeck/flockdeck-docs">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
