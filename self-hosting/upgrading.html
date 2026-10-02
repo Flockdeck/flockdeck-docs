@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Upgrading | Flockdeck docs</title>
-<meta name="description" content="The relay is one process with no in-place schema you have to migrate by hand — restart it on a newer build and it&#39;s upgraded.">
+<meta name="description" content="The relay is one process, and you don&#39;t migrate its database by hand: a newer build updates its own tables when it starts. Changes to the schema only ever add tables and columns, so the release before runs on the database a newer one left behind, unless a release&#39;s own notes say otherwise.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Upgrading | Flockdeck docs">
-<meta property="og:description" content="The relay is one process with no in-place schema you have to migrate by hand — restart it on a newer build and it&#39;s upgraded.">
+<meta property="og:description" content="The relay is one process, and you don&#39;t migrate its database by hand: a newer build updates its own tables when it starts. Changes to the schema only ever add tables and columns, so the release before runs on the database a newer one left behind, unless a release&#39;s own notes say otherwise.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/self-hosting/upgrading.html">
 <meta name="twitter:card" content="summary">
@@ -89,14 +89,27 @@
   <article class="prose">
     <p class="eyebrow">Self-hosting</p>
 <h1 id="upgrading">Upgrading</h1>
-<p class="doc-lede">The relay is one process with no in-place schema you have to migrate by
-hand — restart it on a newer build and it's upgraded.</p>
+<p class="doc-lede">The relay is one process, and you don't migrate its database by hand: a newer
+build updates its own tables when it starts. Changes to the schema only ever
+add tables and columns, so the release before runs on the database a newer one
+left behind, unless a release's own notes say otherwise.</p>
+<h2 id="before-an-upgrade">Before an upgrade</h2>
+<p>Read the release notes of every release between the one you run and the one you
+are moving to; each says whether it changes the database and anything you have
+to do. Back up the state first: a snapshot of the volume, or a copy of <code>relay.db</code>
+taken while the relay is stopped; with MySQL, a dump of the database. Check the
+relay is healthy now (<code>/readyz</code>, and <code>flockdeck-relay stats -data /data</code>, noting
+how many desktops are connected), so anything wrong afterwards is known to be
+new. The relay's repository has an upgrade guide, <code>docs/UPGRADING.md</code>, with the
+order of operations for the Helm chart and for rolling back; it comes with the
+kit a licensed company is given.</p>
 <h2 id="binary-installs">Binary installs</h2>
-<pre><code>go install github.com/jmwri/flockdeck-relay/cmd/flockdeck-relay@latest
-</code></pre>
-<p>again, then restart the process under whatever supervises it.</p>
+<p>Build the new version from a checkout of the relay's repository, as in <a href="deploying-the-relay.html#as-a-binary">Deploying
+the relay</a>, stop the old process, replace
+the binary and start it again under whatever supervises it. Never run two
+relays against the same data.</p>
 <h2 id="container-deployments">Container deployments</h2>
-<p>Deploy a newer image tag, stopping the old relay before starting the new one
+<p>Pin the image tag, so a relay is upgraded when you say so. Deploy a newer one, stopping the old relay before starting the new one
 (a recreate, not a rolling restart): never run two relays against the same
 data. Because desktops hold a persistent connection to the relay, a
 restart drops every open tunnel; desktops reconnect automatically, so a
@@ -104,10 +117,10 @@ brief gap in remote access during the restart is the only visible effect —
 nothing an agent is doing locally is interrupted.</p>
 <h2 id="storage-across-an-upgrade">Storage across an upgrade</h2>
 <p>There's no separate export/import step to run yourself; the relay opens its
-existing data directory or database on startup. Back up the data directory
-or database before upgrading regardless, the way you would before
-upgrading any stateful service, and check that release's own notes for
-anything it calls out about storage.</p>
+existing data directory or database on startup and updates its tables. To go
+back, put the previous image or binary back: it ignores what it doesn't know. A
+release whose notes say otherwise is the exception, and says what to do
+instead, restoring the backup among it.</p>
 <h2 id="checking-whats-running">Checking what's running</h2>
 <p><code>/healthz</code> and <code>/readyz</code> (see <a href="deploying-the-relay.html">Deploying the relay</a>)
 don't report a version. Three things do: <code>flockdeck-relay version</code>, the first

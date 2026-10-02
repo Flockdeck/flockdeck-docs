@@ -64,4 +64,5 @@ To export the audit log, run `flockdeck-relay audit export -data /data
 -format csv -o audit.csv`. `-format` is `csv` (the default) or `json`; `-since`
 and `-until` bound it by a date (`2026-09-01`) or a time
 (`2026-09-01T09:00:00Z`); without `-o` it writes to the standard output. The
-relay has to be running with `-audit`.
+relay does not have to be running with `-audit`: without it, the command says
+the relay is not keeping the log now, and writes what was kept before.

@@ -133,7 +133,8 @@ registered with.</p>
 <p>To export the audit log, run <code>flockdeck-relay audit export -data /data -format csv -o audit.csv</code>. <code>-format</code> is <code>csv</code> (the default) or <code>json</code>; <code>-since</code>
 and <code>-until</code> bound it by a date (<code>2026-09-01</code>) or a time
 (<code>2026-09-01T09:00:00Z</code>); without <code>-o</code> it writes to the standard output. The
-relay has to be running with <code>-audit</code>.</p>
+relay does not have to be running with <code>-audit</code>: without it, the command says
+the relay is not keeping the log now, and writes what was kept before.</p>
 
   </article>
 </main>

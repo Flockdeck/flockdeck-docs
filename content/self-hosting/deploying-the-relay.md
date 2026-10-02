@@ -7,15 +7,17 @@ serve` with flags (or the matching environment variables — see
 ## As a binary
 
 The relay's source is in a private repository, so there is no public
-download or `go install` for it: you build it from a checkout, which an
-Enterprise licence gives you access to. It is pure Go, so one command in the
-checkout builds it for the machine it runs on:
+download or `go install` for it. A licensed company is given a kit for running
+it (the image, a Helm chart, and the upgrade and security guides, below); this
+page doesn't say whether a licence also includes read access to the source. With
+a checkout, the relay is pure Go, and one command builds it for the machine it
+runs on:
 
 ```
 go build -trimpath -o flockdeck-relay ./cmd/flockdeck-relay
 ```
 
-Building needs a Go toolchain of the version in `go.mod`, and a git
+Building needs read access to the repository, a Go toolchain of the version in `go.mod`, and a git
 credential that can read the web client's module (`github.com/Flockdeck/flockdeck-remote`,
 also private), with `GOPRIVATE` set to it. Run the binary directly, or under
 whatever process supervisor your platform already uses (systemd, a container
@@ -24,7 +26,7 @@ daemonize.
 
 ## As a container
 
-The relay's repository has a Dockerfile. Building it needs a build secret,
+The relay's repository has a Dockerfile. Building the image yourself needs a build secret,
 because the relay embeds Flockdeck's own web client and that module isn't
 public:
 
@@ -32,9 +34,9 @@ public:
 docker build --secret id=flockdeck_remote_token,env=FLOCKDECK_REMOTE_TOKEN -t flockdeck-relay .
 ```
 
-An Enterprise licence includes access to a built image, `ghcr.io/flockdeck/flockdeck-relay`
-(in a private registry, so pulling it needs the credential issued with the
-licence), so you don't need to build it yourself. The image's command is
+A licensed company is given a built image, `ghcr.io/flockdeck/flockdeck-relay`,
+in a private registry: pulling it needs the pull token issued with the
+licence, so it needn't build the image itself. The image's command is
 `serve -data /data -addr :8080`; `-public-url` has no default and is always
 given at run time. Running it looks like:
 
