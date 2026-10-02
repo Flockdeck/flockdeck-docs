@@ -98,7 +98,9 @@ at <code>remote.flockdeck.ai</code>.</p>
 <p>or set the <code>FLOCKDECK_RELAY</code> environment variable to the same address
 before Flockdeck starts, if you'd rather configure it that way across a
 fleet of machines than run the command on each one by hand. The flag wins
-if both are set.</p>
+if both are set. <code>-invite</code>, <code>-join</code> and <code>-name</code> have environment variables
+too (<code>FLOCKDECK_REMOTE_INVITE</code>, <code>FLOCKDECK_REMOTE_JOIN</code> and
+<code>FLOCKDECK_REMOTE_NAME</code>), for enrolling with no one at the keyboard.</p>
 <p>This registers the desktop with your relay and turns remote access on. With
 <code>-registration invite</code>, the relay needs an invite code an admin issued —
 see <a href="admin-and-invites.html">Admin and invites</a>, where <code>flockdeck-relay invite</code> prints the exact command to hand over:</p>
@@ -114,13 +116,24 @@ desktop on the same account, run <code>flockdeck remote pair -desktop</code> on 
 desktop already on the relay, and on the new one run <code>flockdeck remote enable -relay https://relay.example.com -join &lt;code&gt;</code>. Joining never needs an
 invite and works even with <code>-registration closed</code>; <code>-max-hosts</code> is per
 account, so a join fails once the account has that many desktops.</p>
+<h2 id="a-desktop-that-is-already-on-another-relay">A desktop that is already on another relay</h2>
+<pre><code>flockdeck remote move https://relay.example.com
+</code></pre>
+<p>enrols the desktop with your relay first, and leaves the one it was on only
+once yours answers. Add <code>-invite &lt;code&gt;</code> or <code>-join &lt;code&gt;</code> as for <code>enable</code>,
+and <code>-yes</code> to skip the question it asks. Every device paired with the desktop
+has to pair again afterwards, because a device's pairing belongs to the relay
+it was made on.</p>
 <h2 id="switching-a-desktop-back-to-the-shared-relay">Switching a desktop back to the shared relay</h2>
+<pre><code>flockdeck remote move https://remote.flockdeck.ai
+</code></pre>
+<p>or, step by step:</p>
 <pre><code>flockdeck remote disable
 flockdeck remote enable
 </code></pre>
 <p><code>disable</code> removes the desktop from whichever relay it was registered with;
 running <code>enable</code> again with no <code>-relay</code> flag and no <code>FLOCKDECK_RELAY</code> set
-registers it with the shared one.</p>
+registers it with the shared one. Either way the devices pair again.</p>
 <h2 id="confirming-its-talking-to-the-right-relay">Confirming it's talking to the right relay</h2>
 <p>Settings → Remote access shows which relay a desktop is currently registered
 with. If a desktop that should be on your relay is showing up against the

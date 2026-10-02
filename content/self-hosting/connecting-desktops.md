@@ -14,7 +14,9 @@ flockdeck remote enable -relay https://relay.example.com
 or set the `FLOCKDECK_RELAY` environment variable to the same address
 before Flockdeck starts, if you'd rather configure it that way across a
 fleet of machines than run the command on each one by hand. The flag wins
-if both are set.
+if both are set. `-invite`, `-join` and `-name` have environment variables
+too (`FLOCKDECK_REMOTE_INVITE`, `FLOCKDECK_REMOTE_JOIN` and
+`FLOCKDECK_REMOTE_NAME`), for enrolling with no one at the keyboard.
 
 This registers the desktop with your relay and turns remote access on. With
 `-registration invite`, the relay needs an invite code an admin issued —
@@ -39,7 +41,25 @@ desktop already on the relay, and on the new one run `flockdeck remote enable
 invite and works even with `-registration closed`; `-max-hosts` is per
 account, so a join fails once the account has that many desktops.
 
+## A desktop that is already on another relay
+
+```
+flockdeck remote move https://relay.example.com
+```
+
+enrols the desktop with your relay first, and leaves the one it was on only
+once yours answers. Add `-invite <code>` or `-join <code>` as for `enable`,
+and `-yes` to skip the question it asks. Every device paired with the desktop
+has to pair again afterwards, because a device's pairing belongs to the relay
+it was made on.
+
 ## Switching a desktop back to the shared relay
+
+```
+flockdeck remote move https://remote.flockdeck.ai
+```
+
+or, step by step:
 
 ```
 flockdeck remote disable
@@ -48,7 +68,7 @@ flockdeck remote enable
 
 `disable` removes the desktop from whichever relay it was registered with;
 running `enable` again with no `-relay` flag and no `FLOCKDECK_RELAY` set
-registers it with the shared one.
+registers it with the shared one. Either way the devices pair again.
 
 ## Confirming it's talking to the right relay
 

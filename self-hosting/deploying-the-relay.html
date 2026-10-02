@@ -92,19 +92,31 @@
 <p class="doc-lede">The relay is one Go program, <code>flockdeck-relay</code>, run as <code>flockdeck-relay serve</code> with flags (or the matching environment variables — see
 <a href="configuration.html">Configuration</a>).</p>
 <h2 id="as-a-binary">As a binary</h2>
-<pre><code>go install github.com/jmwri/flockdeck-relay/cmd/flockdeck-relay@latest
+<p>The relay's source is in a private repository, so there is no public
+download or <code>go install</code> for it. A licensed company is given a kit for running
+it (the image, a Helm chart, and the upgrade and security guides, below); this
+page doesn't say whether a licence also includes read access to the source. With
+a checkout, the relay is pure Go, and one command builds it for the machine it
+runs on:</p>
+<pre><code>go build -trimpath -o flockdeck-relay ./cmd/flockdeck-relay
 </code></pre>
-<p>installs the current release. Run it directly, or under whatever process
-supervisor your platform already uses (systemd, a container orchestrator's
-own restart policy, and so on) — the relay itself doesn't daemonize.</p>
+<p>Building needs read access to the repository, a Go toolchain of the version in <code>go.mod</code>, and a git
+credential that can read the web client's module (<code>github.com/Flockdeck/flockdeck-remote</code>,
+also private), with <code>GOPRIVATE</code> set to it. Run the binary directly, or under
+whatever process supervisor your platform already uses (systemd, a container
+orchestrator's own restart policy, and so on) — the relay itself doesn't
+daemonize.</p>
 <h2 id="as-a-container">As a container</h2>
-<p>The relay's repository has a Dockerfile. Building it needs a build secret,
+<p>The relay's repository has a Dockerfile. Building the image yourself needs a build secret,
 because the relay embeds Flockdeck's own web client and that module isn't
 public:</p>
 <pre><code>docker build --secret id=flockdeck_remote_token,env=FLOCKDECK_REMOTE_TOKEN -t flockdeck-relay .
 </code></pre>
-<p>An Enterprise licence includes access to a built image, so you don't need to
-build it yourself. Once you have an image, running it looks like:</p>
+<p>A licensed company is given a built image, <code>ghcr.io/flockdeck/flockdeck-relay</code>,
+in a private registry: pulling it needs the pull token issued with the
+licence, so it needn't build the image itself. The image's command is
+<code>serve -data /data -addr :8080</code>; <code>-public-url</code> has no default and is always
+given at run time. Running it looks like:</p>
 <pre><code>docker run \
   -p 127.0.0.1:8080:8080 \
   -v relay-data:/data \
@@ -115,7 +127,17 @@ build it yourself. Once you have an image, running it looks like:</p>
     -data /data
 </code></pre>
 <p><code>-v relay-data:/data</code> is the volume that has to survive restarts — see
-<a href="storage-and-data.html">Storage and data</a>.</p>
+<a href="storage-and-data.html">Storage and data</a>. The image runs as a non-root user,
+and <code>/data</code> in it is owned by that user, so a fresh named volume works as is.</p>
+<h2 id="on-kubernetes">On Kubernetes</h2>
+<p>The relay's repository also has a Helm chart, <code>deploy/helm/flockdeck-relay</code>,
+for a licensed company running the relay on its own cluster. It runs exactly
+one pod and replaces it on an upgrade rather than rolling it: the relay keeps
+every desktop's tunnel in memory, so a second replica would be a second relay
+that knows about only some of the desktops. It needs Kubernetes 1.24 or later,
+Helm 3, an ingress that passes WebSockets through without buffering, a TLS
+certificate for the relay's hostname, and the pull token issued with the
+licence. The chart's own README walks through installing it.</p>
 <h2 id="three-ways-to-terminate-tls">Three ways to terminate TLS</h2>
 <h3 id="1-the-relays-own-acme-client">1. The relay's own ACME client</h3>
 <p>If DNS for your relay's hostname points straight at the machine running it,
@@ -123,11 +145,17 @@ the relay can get and renew its own certificate:</p>
 <pre><code>flockdeck-relay serve -acme-domain relay.example.com -acme-email ops@example.com -data /data
 </code></pre>
 <p>This is the simplest option when there's nothing else in front of the
-relay.</p>
+relay. It listens on <code>:443</code> unless you give <code>-addr</code>, and on <code>:80</code> for the
+challenges and a redirect to https. <code>-public-url</code> defaults to <code>https://</code> and
+the first domain, and a list of domains (comma-separated) gets a certificate
+for each; one of them has to be the host of <code>-public-url</code>. The certificates
+are kept in <code>acme</code> under <code>-data</code>. It can't be combined with <code>-tls-cert</code>, and
+it can't get the wildcard certificate <code>-desk-domain</code> needs.</p>
 <h3 id="2-your-own-certificate">2. Your own certificate</h3>
 <pre><code>flockdeck-relay serve -public-url https://relay.example.com -addr :443 -tls-cert /etc/relay/fullchain.pem -tls-key /etc/relay/privkey.pem -data /data
 </code></pre>
-<p>The relay watches these files and reloads them when they change, so a
+<p><code>-tls-cert</code> and <code>-tls-key</code> go together, and <code>-public-url</code> has to be <code>https://</code>.
+The relay watches these files and reloads them when they change, so a
 certificate renewal elsewhere on the machine doesn't need a restart.</p>
 <h3 id="3-behind-a-reverse-proxy-or-load-balancer">3. Behind a reverse proxy or load balancer</h3>
 <p>If something else — an ingress controller, a load balancer, another proxy —

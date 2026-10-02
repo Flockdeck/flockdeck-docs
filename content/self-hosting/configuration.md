@@ -10,13 +10,13 @@ variable if both are set.
 | --- | --- | --- | --- |
 | `-addr` | | `:8080` (`:443` with `-acme-domain`) | Address to listen on. |
 | `-public-url` | `FLOCKDECK_RELAY_PUBLIC_URL` | | The address people open, at the root of its host. Required, except with `-acme-domain`, where it defaults to `https://` plus that domain. Must be `https://` when the relay serves TLS itself. |
-| `-trust-proxy` | | off | Take the client address from forwarded headers instead of the TCP connection. Only turn this on when something trusted sits in front of the relay. |
-| `-acme-domain` | | | Domain to get a certificate for automatically. Requires the relay to be reachable on port 80 and 443 directly. |
-| `-acme-email` | | | Contact address for the ACME account. |
+| `-trust-proxy` | | off | Take the client address from `X-Forwarded-For` instead of the TCP connection. Only turn this on when every request comes through a proxy that sets it: any client can write the header, and a relay serving TLS itself (`-acme-domain` or `-tls-cert`) logs a warning if it is set. |
+| `-acme-domain` | | | Domain to get a certificate for automatically, and any other names the relay answers to, comma-separated after it. Requires the relay to be reachable on port 80 and 443 directly. One name has to be the host of `-public-url`. Not with `-tls-cert`, and not with `-desk-domain`. |
+| `-acme-email` | | | Contact address for the ACME account. Does nothing without `-acme-domain`, and is refused if set without it. |
 | `-http-addr` | | `:80` | With `-acme-domain`, the address answering ACME challenges and redirecting to https. Does nothing without `-acme-domain`, and is refused if set without it. |
-| `-tls-cert` / `-tls-key` | | | Your own certificate and key. Reloaded automatically when the files change. |
+| `-tls-cert` / `-tls-key` | | | Your own certificate and key, which go together. Reloaded automatically when the files change. |
 | `-client-dir` | | | Serve the remote client from this directory instead of the one built into the relay. |
-| `-desk-domain` | `FLOCKDECK_RELAY_DESK_DOMAIN` | | Base domain for giving each paired desktop its own subdomain. Needs a wildcard DNS record and certificate. |
+| `-desk-domain` | `FLOCKDECK_RELAY_DESK_DOMAIN` | | Base domain for giving each paired desktop its own origin, `https://<hostId>.<domain>/`. Needs a wildcard DNS record and certificate, which `-acme-domain` cannot get: give the relay one with `-tls-cert`/`-tls-key`, or terminate TLS in front of it. Without it, each desktop is reached at `/h/<hostId>/` on `-public-url` itself, which puts every desktop of an account on one origin. |
 | `-admin-addr` | | `127.0.0.1:8081` | Loopback address for the admin endpoints `flockdeck-relay invite`, `stats`, `plan`, `user revoke` and `audit export` use — see [Admin and invites](admin-and-invites.html). Empty turns them off. |
 
 ## Storage
@@ -35,16 +35,16 @@ variable if both are set.
 | `-max-hosts` | 10 | Maximum number of desktops per account (0: no limit). |
 | `-max-devices` | 20 | Maximum number of paired phones/browsers per account (0: no limit). |
 | `-max-pairings` | 5 | Unused pairing codes an account can hold at once; a new one replaces the oldest (0: no limit). |
-| `-pairing-ttl` | 10m | How long a pairing link or QR code stays valid. |
-| `-session-ttl` | 720h (30 days) | How long a device stays paired without being used, before it has to pair again. |
-| `-max-streams` | 256 | Connections open to one desktop at once. |
+| `-pairing-ttl` | 10m | How long a pairing or join code, in a link or QR code, stays valid. More than 0. |
+| `-session-ttl` | 720h (30 days) | How long a device stays paired without being used, before it has to pair again. More than 0. |
+| `-max-streams` | 256 | Connections open to one desktop at once. More than 0. |
 | `-register-per-hour` | 5 | Accounts made, and join codes that don't work, per client address per hour (0: no limit). |
 | `-pair-per-minute` | 10 | Pairing attempts per client address per minute (0: no limit). |
 | `-connects-per-minute` | 60 | Desktop tunnels opened with a token that doesn't work, per client address per minute (0: no limit). |
 | `-tunnels-per-address` | 20 | Maximum desktops connected from one address at once (0: no limit). |
 | `-max-tunnels` | 1000 | Maximum desktops connected to the relay at once (0: no limit). |
 | `-log-level` | `info` | `debug`, `info`, `warn` or `error`. |
-| `-memory-limit` | | A Go `GOMEMLIMIT`-style soft memory cap for the process. |
+| `-memory-limit` | none | A soft limit on the memory the relay uses, taken from the `GOMEMLIMIT` environment variable when the flag is not given, and written as it is, for example `220MiB`: nearing it, the garbage collector works harder. |
 
 ## Verified registration
 
@@ -70,13 +70,20 @@ for it instead. See [Remote access](/app/remote.html).
 | Flag | Env | What it does |
 | --- | --- | --- |
 | `-vapid-private-key` | `FLOCKDECK_RELAY_VAPID_PRIVATE_KEY` | Private key for signing web push messages. |
-| `-vapid-public-key` | `FLOCKDECK_RELAY_VAPID_PUBLIC_KEY` | The matching public key, which paired devices are given. |
+| `-vapid-public-key` | `FLOCKDECK_RELAY_VAPID_PUBLIC_KEY` | The matching public key, which paired devices are given. Worked out from the private key when left out. |
 
 Generate a pair with:
 
 ```
 flockdeck-relay vapid-keys
 ```
+
+It prints `FLOCKDECK_RELAY_VAPID_PUBLIC_KEY=…` and
+`FLOCKDECK_RELAY_VAPID_PRIVATE_KEY=…` lines, and sends nothing anywhere. Keep
+the pair: a browser subscribed under one pair is sent nothing signed with
+another. The private key can also be given as `-vapid-private-key` (base64url
+or PEM), but the environment variable keeps it out of a process listing; the
+public key is worked out from the private one when left out.
 
 Without these set, the relay runs fine; paired devices just don't get push
 notifications.

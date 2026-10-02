@@ -52,7 +52,8 @@ tools/docdrift/generated.sh regenerate v0.3.41  # or a named one
 
 That needs `go` and `gh`; it clones flockdeck itself. Four guards (the
 comparison logic is `tools/docdrift`, a small stdlib-only Go program with its
-own tests) keep the docs honest. Each is its own job, so a failure says which:
+own tests, which a fifth job, *Drift tool tests*, runs on every PR) keep the
+docs honest. Each is its own job, so a failure says which:
 
 | Guard | When | What it catches |
 | --- | --- | --- |
@@ -134,9 +135,19 @@ Deployed the same way flockdeck-site is, to the wost Kubernetes cluster:
    `docs.flockdeck.ai` DNS record, the namespace, and the registry pull
    secrets.
 
-So a release is: regenerate and merge. The auto-tag workflow
-(`.github/workflows/autotag.yml`) tags main once CI has passed on a commit that
-changes the site, and the tag is what CI builds into the deployed image.
+So a release is: regenerate and merge. Merging to main deploys nothing by
+itself: the auto-tag workflow (`.github/workflows/autotag.yml`) tags main once
+CI has passed on a commit that changes the site, and the tag is what CI builds
+into the deployed image.
+
+The regeneration itself is normally not done by hand. When Flockdeck publishes
+a release, the `followups` job of its `release.yml` runs the same regeneration
+and opens one pull request here (a branch named `auto/regen-…`), which merges
+itself when `Check the site` passes. A pull request that changes `content/`
+or the tooling is an ordinary one, regenerated against the stamped release as
+described above. The `PR review` workflows (`pr-review.yml`, then
+`pr-review-post.yml`) review pull requests, including ones from forks, without
+giving the untrusted half any secret.
 
 ## Licence
 
