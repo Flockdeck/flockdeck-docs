@@ -144,6 +144,10 @@ switched from inside the window. These are what is left.</p>
 <td>List the transcripts panes have recorded, newest first; <code>-dir</code> prints the folder, <code>-json</code> prints one JSON object per recording</td>
 </tr>
 <tr>
+<td><code>flockdeck recordings export</code></td>
+<td>Write an agent's stored conversation as a transcript, whether or not the pane was recorded; <code>-o</code> chooses the file</td>
+</tr>
+<tr>
 <td><code>flockdeck agents</code></td>
 <td>List the agents and models that <code>-agent</code> and <code>spawn</code> accept, and which are installed here</td>
 </tr>
@@ -230,6 +234,23 @@ script. It reads the state directory, so it works with no Flockdeck running, and
 from any terminal. Nothing is recorded unless a pane's Record toggle is on:
 see <a href="/app/recording.html">Recording a pane</a>, which links the format reference for the
 files it lists.</p>
+<h3>recordings export</h3>
+<pre><code class="language-sh">flockdeck recordings export [-o file] [-reveal] &lt;pane-id | conversation-id&gt;
+</code></pre>
+<p>Writes the whole conversation an agent has stored as a transcript in the same
+format, <strong>whether or not the pane was ever recorded</strong>; a recording and an export
+of one conversation are the same lines. The id is a pane's, as the saved layouts
+hold it, or a Claude Code conversation's (its file's name under
+<code>~/.claude/projects</code>). By default the file goes in the <code>exports</code> folder of the
+project's folder under the recordings folder; <code>-o</code> names a file of your own,
+which must not exist and must not be inside the project or a git repository.
+It is written readable by you only. <code>-reveal</code> shows the file in your file
+manager, selected, when it has been written.</p>
+<p>It prints how many lines it wrote, and how many entries it could not read. For
+an agent that stores no conversation Flockdeck can read (anything but Claude
+Code today) it says so, and writes nothing. The transcript can contain secrets:
+common ones are removed, but that is best effort. It works with no Flockdeck
+running.</p>
 <h2>keys</h2>
 <p>An API agent — one Flockdeck talks to directly rather than through a CLI of its
 own — needs a key. It is looked for in that agent's own environment variables
