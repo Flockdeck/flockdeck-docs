@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Recording a pane | Flockdeck docs</title>
-<meta name="description" content="Start recording, from the command palette or the record button in a pane header, saves a structured transcript of that pane&#39;s agent interaction to a file on this machine. It is off for every pane until you turn it on, and the palette names the action Stop recording while the pane is recording. A recording pane shows a red dot and the word &#34;Recording&#34; in its header, and its record button is pressed.">
+<meta name="description" content="Start recording, from the command palette or the record button in a pane header, saves a structured transcript of that pane&#39;s conversation to a file on this machine, and keeps adding to it as the conversation goes on. It is off for every pane until you turn it on, and the palette names the action Stop recording while the pane is recording. A recording pane shows a red dot and the word &#34;Recording&#34; in its header, and its record button is pressed.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Recording a pane | Flockdeck docs">
-<meta property="og:description" content="Start recording, from the command palette or the record button in a pane header, saves a structured transcript of that pane&#39;s agent interaction to a file on this machine. It is off for every pane until you turn it on, and the palette names the action Stop recording while the pane is recording. A recording pane shows a red dot and the word &#34;Recording&#34; in its header, and its record button is pressed.">
+<meta property="og:description" content="Start recording, from the command palette or the record button in a pane header, saves a structured transcript of that pane&#39;s conversation to a file on this machine, and keeps adding to it as the conversation goes on. It is off for every pane until you turn it on, and the palette names the action Stop recording while the pane is recording. A recording pane shows a red dot and the word &#34;Recording&#34; in its header, and its record button is pressed.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/app/recording.html">
 <meta name="twitter:card" content="summary">
@@ -90,18 +90,37 @@
     <p class="eyebrow">Using Flockdeck</p>
 <h1>Recording a pane</h1>
 <p class="doc-lede"><strong>Start recording</strong>, from the command palette or the record button in a pane
-header, saves a structured transcript of that pane's agent interaction to a
-file on this machine. It is off for every pane until you turn it on, and the
-palette names the action <strong>Stop recording</strong> while the pane is recording. A
-recording pane shows a red dot and the word &quot;Recording&quot; in its header, and its
-record button is pressed.</p>
-<p>Only agent panes can record: a shell reports no events, so it has no record
+header, saves a structured transcript of that pane's conversation to a file on
+this machine, and keeps adding to it as the conversation goes on. It is off for
+every pane until you turn it on, and the palette names the action <strong>Stop
+recording</strong> while the pane is recording. A recording pane shows a red dot and
+the word &quot;Recording&quot; in its header, and its record button is pressed.</p>
+<p>Only agent panes can record: a shell has no conversation, so it has no record
 button. The first time you turn recording on, Flockdeck asks you to confirm,
 and tells you what is kept.</p>
+<h2>Exporting without having recorded</h2>
+<p><strong>Export transcript</strong>, from the command palette or the export button in a
+pane header, writes the pane's whole conversation as a transcript <strong>whether or
+not recording is on</strong>, and says where it put it. It asks every time, because it
+writes the whole of a conversation at once: what is written, and that it can
+contain secrets. <code>flockdeck recordings export</code> does the same from a terminal.
+See <a href="/app/cli.html">the command line</a>.</p>
+<p>A recording and an export of the same conversation are the same lines. Both are
+made from the conversation the agent stores itself (for Claude Code, the file
+under <code>~/.claude/projects</code> that <strong>Resume a past conversation</strong> reads), by one
+piece of code. Turning recording on writes the conversation so far, from its
+first message, and then follows it; it does not begin at the moment you turned
+it on. Export is only from the machine Flockdeck runs on, not from a phone.</p>
+<p><strong>Only agents that store their conversation in a form Flockdeck can read have
+anything to record or export.</strong> That is Claude Code today. For Codex, Gemini
+CLI, Aider, opencode, Cursor Agent and the built-in chat clients, Flockdeck says
+so, and nothing is exported; turning recording on for one is refused, saying so.</p>
 <h2>What is recorded</h2>
 <p>One JSON object per line, in the order things happened. Every line has a
-timestamp (<code>time</code>), the pane's id and name (<code>pane</code>, <code>paneName</code>), the <code>project</code>,
-the <code>agent</code> and <code>model</code>, and a <code>type</code>:</p>
+timestamp (<code>time</code>), the conversation's id (<code>pane</code>, <code>conversation</code>), the
+<code>project</code> and the <code>agent</code>, and a <code>type</code>. A pane's name and model are not in the
+lines: they are the pane's, not the conversation's, and an export has to match a
+recording of the same conversation:</p>
 <table>
 <thead>
 <tr>
@@ -112,11 +131,7 @@ the <code>agent</code> and <code>model</code>, and a <code>type</code>:</p>
 <tbody>
 <tr>
 <td><code>recording_started</code>, <code>recording_stopped</code></td>
-<td>The first and last line of a session, with why</td>
-</tr>
-<tr>
-<td><code>session</code></td>
-<td>The agent's session starting or ending</td>
+<td>The first and last line of a transcript</td>
 </tr>
 <tr>
 <td><code>user_prompt</code></td>
@@ -124,7 +139,7 @@ the <code>agent</code> and <code>model</code>, and a <code>type</code>:</p>
 </tr>
 <tr>
 <td><code>assistant_message</code></td>
-<td>The agent's message at the end of a turn (<code>text</code>)</td>
+<td>What the agent said (<code>text</code>): every message, including the ones between tool calls</td>
 </tr>
 <tr>
 <td><code>tool_call</code></td>
@@ -135,66 +150,70 @@ the <code>agent</code> and <code>model</code>, and a <code>type</code>:</p>
 <td>What the tool printed (<code>output</code>), and <code>isError</code> or <code>interrupted</code> where it failed or you stopped it</td>
 </tr>
 <tr>
-<td><code>permission_prompt</code></td>
-<td>A permission dialog opening, for a tool and its <code>input</code></td>
-</tr>
-<tr>
-<td><code>permission_outcome</code></td>
-<td>How it was answered: <code>allowed</code>, <code>denied</code>, or <code>auto_approved</code> by auto-review, with <code>inferred: true</code> where it was worked out from what happened next</td>
-</tr>
-<tr>
-<td><code>status</code></td>
-<td>The pane's status changing, with the <code>previous</code> one</td>
-</tr>
-<tr>
 <td><code>recording_truncated</code></td>
-<td>The file reached its size cap and the recording ended</td>
+<td>The file reached its size cap and ended there</td>
 </tr>
 </tbody>
 </table>
-<p>A tool call made by a subagent has a <code>subagent</code> field naming it. Every line also
-has a <code>seq</code> number, counted from 1 in its file, and a line with anything
+<p><code>time</code> is when the thing happened, as the agent's own record has it. Every line
+also has a <code>seq</code> number, counted from 1 in its file, and a line with anything
 removed from it says so with <code>redacted</code> or <code>clipped</code>. The format has a version,
 <code>v</code>, which goes up if a field ever changes meaning.</p>
-<p>The complete field reference, a JSON Schema, what each agent can report,
-ordering and crash behaviour, and <code>jq</code> examples are in
+<p>The complete field reference, a JSON Schema, ordering and crash behaviour, and
+<code>jq</code> examples are in
 <a href="https://github.com/Flockdeck/flockdeck/blob/main/docs/recording-format.md" target="_blank" rel="noopener noreferrer">the transcript format reference</a> (<code>docs/recording-format.md</code> in
 the Flockdeck repository).</p>
-<p>Everything here comes from the events the agent reports to Flockdeck, not from
-what the terminal shows. That leaves some gaps, which are Claude Code's to
-close:</p>
+<p>A transcript is built from what the agent stored, so it holds what that holds
+and nothing else:</p>
 <ul>
-<li><strong>Assistant messages</strong> are only the last one of each turn. Claude Code reports
-no event for the messages it writes between tool calls, and a Claude Code too
-old to include the final message in its stop event gives none at all.</li>
-<li><strong>Permission outcomes are inferred.</strong> There is no event for your answer to a
-permission prompt, so it is read from what came next: the tool ran
-(<code>allowed</code>), or the turn moved on without it (<code>denied</code>).</li>
-<li><strong>Status changes</strong> are the ones agent events cause. A pane going quiet, or its
-process ending, is not recorded as one.</li>
-<li><strong>Agents that report no events</strong> record only what they do report. The built-in
-chat client gives session, prompt, status and tool-name lines but no tool
-inputs, results or messages, and Codex, Gemini CLI, Aider, opencode and Cursor
-Agent report nothing, so their recordings hold only the start and the end.</li>
+<li><strong>No permission prompts or their answers, no status changes, no session
+lines.</strong> Claude Code's stored conversation does not record that a dialog was
+shown, how you answered it, or when the pane went idle or waiting. Earlier
+versions of Flockdeck wrote these lines from the agent's live events;
+recordings made then still have them, and the format still defines them.</li>
+<li><strong>Only what you typed is a prompt.</strong> Entries Claude Code writes for itself
+(a slash command and its output, injected reminders, the note a conversation
+continued from a summary opens with) are left out, and so is a subagent's own
+work. Its result to the main agent is in the main agent's tool results.</li>
+<li><strong>An entry over 8 MiB</strong> (a pasted screenshot, a huge tool result) cannot be
+read, and is left out. Flockdeck tells you how many.</li>
+<li><strong>Thinking</strong> is not in it.</li>
 </ul>
 <h2>Where it goes</h2>
 <p>Under Flockdeck's own state directory, never in your project:</p>
-<pre><code class="language-text">&lt;state directory&gt;/recordings/&lt;project&gt;-&lt;hash&gt;/&lt;start time&gt;-&lt;pane&gt;.jsonl
+<pre><code class="language-text">&lt;state directory&gt;/recordings/&lt;project&gt;-&lt;hash&gt;/&lt;start time&gt;-&lt;conversation&gt;.jsonl
+&lt;state directory&gt;/recordings/&lt;project&gt;-&lt;hash&gt;/exports/&lt;start time&gt;-&lt;conversation&gt;.jsonl
 </code></pre>
-<p>There is one file per recording session, from turning recording on to turning
-it off, closing the pane, or a restart of Flockdeck while it is on. The files are
-readable by you only. A pane left recording is still recording after a restart,
-in a new file, and the setting moves with the pane when you drag it to another
-tab.</p>
+<p>There is one file per conversation: <code>&lt;start time&gt;</code> is when its first message
+was, and a new one starts when the agent goes on in a conversation of its own
+(after <code>/clear</code>, say). Recording again, or exporting again, makes the same file
+again rather than another, so a recording left on across a restart of Flockdeck
+catches up from the stored conversation. The new file replaces the earlier one
+only if it has every event the earlier one had; if the stored conversation has
+been cut or changed so that it does not, the earlier file is kept, Flockdeck says
+so, and <code>flockdeck recordings export</code> exits with an error. Delete the file to have
+a fresh one. The files are readable by you only, and the setting moves with the
+pane when you drag it to another tab.</p>
+<p><strong>Reveal transcript</strong>, from the command palette or the pane header, opens
+your file manager with that pane's transcript file selected: the file it is
+recording to if it is recording, otherwise its latest export, and a notice if it
+has neither. Like opening the folder it only works from the machine Flockdeck
+runs on, and only for a file in the recordings folder. <code>flockdeck recordings export -reveal</code> does it for the file it has just written.</p>
 <p><strong>Open recordings folder</strong> opens the folder. <code>flockdeck recordings</code> lists the
 recordings, newest first, and <code>flockdeck recordings -dir</code> prints the folder.
-There is no replay view: the files are plain JSON lines, for <code>jq</code> or a script.</p>
+<code>flockdeck recordings export -o file</code> writes an export to a path of your
+choice, which must not exist and cannot be inside the project or any git
+repository. There is no replay view: the files are plain JSON lines, for <code>jq</code>
+or a script.</p>
 <h3>Size and retention</h3>
 <p>A file stops at 16 MiB: it ends with a <code>recording_truncated</code> line, the pane stops
-recording and Flockdeck says so. Any one string is cut at 8 KiB (a prompt or
+recording and Flockdeck says so. A conversation already longer than that when you
+turn recording on is cut at the same place, the same as an export of it, and
+recording ends at once. Any one string is cut at 8 KiB (a prompt or
 message at 32 KiB), with a marker saying how much was cut. When a recording
 starts, the project's folder is tidied: files older than 30 days are deleted, then
-the oldest until at most 100 files and 256 MiB are left.</p>
+the oldest until at most 100 files and 256 MiB are left. <strong>Exports are kept until
+you delete them yourself</strong>: they are not tidied, and making one deletes nothing.</p>
 <h2>Secrets</h2>
 <p>A transcript can contain secrets: they are in the prompts you type, the files an
 agent reads and the commands it runs. Flockdeck removes what it can recognise:</p>
@@ -208,18 +227,18 @@ Slack, AWS and Google keys, JWTs) and <code>Authorization</code> credentials;</l
 <code>credentials</code> files), and what is written to one.</li>
 </ul>
 <p><strong>This is best effort.</strong> A secret in an unusual shape, in text that does not name
-it as one, is recorded as it was. In particular it does not catch a secret under
+it as one, is written as it was. In particular it does not catch a secret under
 an unconventional name (<code>SESSION_COOKIE</code>, <code>DATABASE_URL</code>), one that is base64- or
 URL-encoded or split across lines, or the contents of a secret file reached
-through a symlink or an ordinary-looking name. Treat a recording as being as
+through a symlink or an ordinary-looking name. Treat a transcript as being as
 sensitive as the conversation itself, assume a secret may be in it even when no
 line is marked redacted, and delete the files you do not want kept. Transcripts
 are saved on this machine (user-only on Linux and macOS; on Windows, readable by
 you and a local administrator, like any file in your profile) — &quot;on this
 machine&quot;, not &quot;private to you&quot;.</p>
-<p>Nothing is sent anywhere: recordings stay on this machine, and <code>Open recordings folder</code> only works from the machine Flockdeck runs on, not from a phone.</p>
+<p>Nothing is sent anywhere: transcripts stay on this machine, and <code>Open recordings folder</code> only works from the machine Flockdeck runs on, not from a phone.</p>
 <h2>Starting a helper recorded</h2>
-<p>An agent can start a helper whose interaction is recorded from the first
+<p>An agent can start a helper whose conversation is recorded from the first
 message:</p>
 <pre><code class="language-sh">flockdeck spawn --record &quot;refactor the parser&quot;
 </code></pre>
