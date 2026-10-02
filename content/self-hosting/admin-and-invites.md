@@ -61,4 +61,7 @@ To remove a desktop, turn off remote access from its own Settings, or run
 registered with.
 
 To export the audit log, run `flockdeck-relay audit export -data /data
--format csv -o audit.csv`.
+-format csv -o audit.csv`. `-format` is `csv` (the default) or `json`; `-since`
+and `-until` bound it by a date (`2026-09-01`) or a time
+(`2026-09-01T09:00:00Z`); without `-o` it writes to the standard output. The
+relay has to be running with `-audit`.

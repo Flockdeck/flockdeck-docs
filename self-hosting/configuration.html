@@ -119,19 +119,19 @@ variable if both are set.</p>
 <td><code>-trust-proxy</code></td>
 <td></td>
 <td>off</td>
-<td>Take the client address from forwarded headers instead of the TCP connection. Only turn this on when something trusted sits in front of the relay.</td>
+<td>Take the client address from <code>X-Forwarded-For</code> instead of the TCP connection. Only turn this on when every request comes through a proxy that sets it: any client can write the header, and a relay serving TLS itself (<code>-acme-domain</code> or <code>-tls-cert</code>) logs a warning if it is set.</td>
 </tr>
 <tr>
 <td><code>-acme-domain</code></td>
 <td></td>
 <td></td>
-<td>Domain to get a certificate for automatically. Requires the relay to be reachable on port 80 and 443 directly.</td>
+<td>Domain to get a certificate for automatically, and any other names the relay answers to, comma-separated after it. Requires the relay to be reachable on port 80 and 443 directly. One name has to be the host of <code>-public-url</code>. Not with <code>-tls-cert</code>, and not with <code>-desk-domain</code>.</td>
 </tr>
 <tr>
 <td><code>-acme-email</code></td>
 <td></td>
 <td></td>
-<td>Contact address for the ACME account.</td>
+<td>Contact address for the ACME account. Does nothing without <code>-acme-domain</code>, and is refused if set without it.</td>
 </tr>
 <tr>
 <td><code>-http-addr</code></td>
@@ -143,7 +143,7 @@ variable if both are set.</p>
 <td><code>-tls-cert</code> / <code>-tls-key</code></td>
 <td></td>
 <td></td>
-<td>Your own certificate and key. Reloaded automatically when the files change.</td>
+<td>Your own certificate and key, which go together. Reloaded automatically when the files change.</td>
 </tr>
 <tr>
 <td><code>-client-dir</code></td>
@@ -155,7 +155,7 @@ variable if both are set.</p>
 <td><code>-desk-domain</code></td>
 <td><code>FLOCKDECK_RELAY_DESK_DOMAIN</code></td>
 <td></td>
-<td>Base domain for giving each paired desktop its own subdomain. Needs a wildcard DNS record and certificate.</td>
+<td>Base domain for giving each paired desktop its own origin, <code>https://&lt;hostId&gt;.&lt;domain&gt;/</code>. Needs a wildcard DNS record and certificate, which <code>-acme-domain</code> cannot get: give the relay one with <code>-tls-cert</code>/<code>-tls-key</code>, or terminate TLS in front of it. Without it, each desktop is reached at <code>/h/&lt;hostId&gt;/</code> on <code>-public-url</code> itself, which puts every desktop of an account on one origin.</td>
 </tr>
 <tr>
 <td><code>-admin-addr</code></td>
@@ -229,17 +229,17 @@ variable if both are set.</p>
 <tr>
 <td><code>-pairing-ttl</code></td>
 <td>10m</td>
-<td>How long a pairing link or QR code stays valid.</td>
+<td>How long a pairing or join code, in a link or QR code, stays valid. More than 0.</td>
 </tr>
 <tr>
 <td><code>-session-ttl</code></td>
 <td>720h (30 days)</td>
-<td>How long a device stays paired without being used, before it has to pair again.</td>
+<td>How long a device stays paired without being used, before it has to pair again. More than 0.</td>
 </tr>
 <tr>
 <td><code>-max-streams</code></td>
 <td>256</td>
-<td>Connections open to one desktop at once.</td>
+<td>Connections open to one desktop at once. More than 0.</td>
 </tr>
 <tr>
 <td><code>-register-per-hour</code></td>
@@ -273,8 +273,8 @@ variable if both are set.</p>
 </tr>
 <tr>
 <td><code>-memory-limit</code></td>
-<td></td>
-<td>A Go <code>GOMEMLIMIT</code>-style soft memory cap for the process.</td>
+<td>none</td>
+<td>A soft limit on the memory the relay uses, taken from the <code>GOMEMLIMIT</code> environment variable when the flag is not given, and written as it is, for example <code>220MiB</code>: nearing it, the garbage collector works harder.</td>
 </tr>
 </tbody>
 </table>
@@ -340,13 +340,19 @@ for it instead. See <a href="/app/remote.html">Remote access</a>.</p>
 <tr>
 <td><code>-vapid-public-key</code></td>
 <td><code>FLOCKDECK_RELAY_VAPID_PUBLIC_KEY</code></td>
-<td>The matching public key, which paired devices are given.</td>
+<td>The matching public key, which paired devices are given. Worked out from the private key when left out.</td>
 </tr>
 </tbody>
 </table>
 <p>Generate a pair with:</p>
 <pre><code>flockdeck-relay vapid-keys
 </code></pre>
+<p>It prints <code>FLOCKDECK_RELAY_VAPID_PUBLIC_KEY=…</code> and
+<code>FLOCKDECK_RELAY_VAPID_PRIVATE_KEY=…</code> lines, and sends nothing anywhere. Keep
+the pair: a browser subscribed under one pair is sent nothing signed with
+another. The private key can also be given as <code>-vapid-private-key</code> (base64url
+or PEM), but the environment variable keeps it out of a process listing; the
+public key is worked out from the private one when left out.</p>
 <p>Without these set, the relay runs fine; paired devices just don't get push
 notifications.</p>
 <h2 id="single-sign-on">Single sign-on</h2>
