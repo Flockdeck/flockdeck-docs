@@ -12,25 +12,24 @@ flockdeck remote enable -relay https://relay.example.com
 ```
 
 or set the `FLOCKDECK_RELAY` environment variable to the same address
-before Flockdeck starts, if you'd rather configure it that way across a
-fleet of machines than run the command on each one by hand. The flag wins
-if both are set. `-invite`, `-join` and `-name` have environment variables
+before Flockdeck starts, which is easier across a fleet of machines than
+running the command on each one. The flag wins if both are set. `-invite`, `-join` and `-name` have environment variables
 too (`FLOCKDECK_REMOTE_INVITE`, `FLOCKDECK_REMOTE_JOIN` and
 `FLOCKDECK_REMOTE_NAME`), for enrolling with no one at the keyboard.
 
 This registers the desktop with your relay and turns remote access on. With
-`-registration invite`, the relay needs an invite code an admin issued —
-see [Admin and invites](admin-and-invites.html), where `flockdeck-relay
+`-registration invite`, the relay needs an invite code an admin issued.
+See [Admin and invites](admin-and-invites.html), where `flockdeck-relay
 invite` prints the exact command to hand over:
 
 ```
 flockdeck remote enable -relay https://relay.example.com -invite <code>
 ```
 
-Everything else is exactly as
-[Remote access](/app/remote.html) describes for the shared relay — pairing a
-phone with a QR code, notifications, everything — just against your own
-infrastructure instead.
+Everything else works as
+[Remote access](/app/remote.html) describes for the shared relay, including
+pairing a phone with a QR code and notifications, but against your own
+infrastructure.
 
 ## A second desktop on the same relay
 
@@ -74,7 +73,7 @@ registers it with the shared one. Either way the devices pair again.
 
 Settings → Remote access shows which relay a desktop is currently registered
 with. If a desktop that should be on your relay is showing up against the
-shared one instead, check that `FLOCKDECK_RELAY` is actually set in the
-environment Flockdeck is launched from — a value set in one shell profile
+shared one instead, check that `FLOCKDECK_RELAY` is set in the
+environment Flockdeck is launched from. A value set in one shell profile
 won't reach a copy of Flockdeck started from a desktop shortcut, a different
 shell, or a service manager.

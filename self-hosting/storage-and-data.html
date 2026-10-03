@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Storage and data | Flockdeck docs</title>
-<meta name="description" content="The relay keeps account and device records: accounts, desktops (name and when last seen), devices (name, browser user agent and session expiry), pairing codes and invites not yet used (with the admin&#39;s note on an invite), push subscriptions, and the end-to-end public keys of desktops and devices. Some settings add more: with single sign-on, each person&#39;s identity and email; with -audit, the audit log (emails and names, and addresses with -audit-ip); with verified registration, the verified email. There&#39;s no per-message or per-keystroke history to store — traffic is proxied through, not recorded, and nothing typed or shown is kept.">
+<meta name="description" content="The relay keeps account and device records: accounts, desktops (name and when last seen), devices (name, browser user agent and session expiry), pairing codes and invites not yet used (with the admin&#39;s note on an invite), push subscriptions, and the end-to-end public keys of desktops and devices. Some settings add more: with single sign-on, each person&#39;s identity and email; with -audit, the audit log (emails and names, and addresses with -audit-ip); with verified registration, the verified email. There&#39;s no per-message or per-keystroke history to store: traffic is proxied through, not recorded, and nothing typed or shown is kept.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Storage and data | Flockdeck docs">
-<meta property="og:description" content="The relay keeps account and device records: accounts, desktops (name and when last seen), devices (name, browser user agent and session expiry), pairing codes and invites not yet used (with the admin&#39;s note on an invite), push subscriptions, and the end-to-end public keys of desktops and devices. Some settings add more: with single sign-on, each person&#39;s identity and email; with -audit, the audit log (emails and names, and addresses with -audit-ip); with verified registration, the verified email. There&#39;s no per-message or per-keystroke history to store — traffic is proxied through, not recorded, and nothing typed or shown is kept.">
+<meta property="og:description" content="The relay keeps account and device records: accounts, desktops (name and when last seen), devices (name, browser user agent and session expiry), pairing codes and invites not yet used (with the admin&#39;s note on an invite), push subscriptions, and the end-to-end public keys of desktops and devices. Some settings add more: with single sign-on, each person&#39;s identity and email; with -audit, the audit log (emails and names, and addresses with -audit-ip); with verified registration, the verified email. There&#39;s no per-message or per-keystroke history to store: traffic is proxied through, not recorded, and nothing typed or shown is kept.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/self-hosting/storage-and-data.html">
 <meta name="twitter:card" content="summary">
@@ -96,13 +96,13 @@ invite), push subscriptions, and the end-to-end public keys of desktops and
 devices. Some settings add more: with single sign-on, each person's
 identity and email; with <code>-audit</code>, the audit log (emails and names, and
 addresses with <code>-audit-ip</code>); with verified registration, the verified email.
-There's no per-message or per-keystroke history to store — traffic is
+There's no per-message or per-keystroke history to store: traffic is
 proxied through, not recorded, and nothing typed or shown is kept.</p>
 <h2 id="the-embedded-database">The embedded database</h2>
-<p>By default, pointing <code>-data</code> at a directory is all storage configuration the
-relay needs. It keeps a single database file (<code>relay.db</code>) there, using an
-embedded key-value store — no separate database server, no migrations to
-run by hand.</p>
+<p>By default, pointing <code>-data</code> at a directory is all the storage configuration
+the relay needs. It keeps a single database file (<code>relay.db</code>) there, using an
+embedded key-value store, with no separate database server and no migrations
+to run by hand.</p>
 <p>This is the right choice for most self-hosted deployments: one relay
 process, one volume, nothing else to operate.</p>
 <h2 id="mysql">MySQL</h2>
@@ -117,10 +117,10 @@ create and alter tables.</p>
 balancer or orchestrator waiting on readiness won't route traffic to a
 relay that can't reach its database yet.</p>
 <h2 id="backing-it-up">Backing it up</h2>
-<p>Whichever storage you use, back it up like you would any other small
-stateful service: a volume snapshot for the embedded database, or your
+<p>Back it up like any other small stateful service, whichever storage you
+use: a volume snapshot for the embedded database, or your
 existing MySQL backup process. Losing it means every desktop and device has
-to register and pair again — nobody's agents or conversations are affected,
+to register and pair again. Nobody's agents or conversations are affected,
 since none of that passes through or is kept by the relay.</p>
 <h2 id="moving-between-them">Moving between them</h2>
 <p>There's no built-in migration between the embedded database and MySQL.

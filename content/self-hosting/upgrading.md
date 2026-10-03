@@ -26,12 +26,12 @@ relays against the same data.
 
 ## Container deployments
 
-Pin the image tag, so a relay is upgraded when you say so. Deploy a newer one, stopping the old relay before starting the new one
-(a recreate, not a rolling restart): never run two relays against the same
-data. Because desktops hold a persistent connection to the relay, a
-restart drops every open tunnel; desktops reconnect automatically, so a
-brief gap in remote access during the restart is the only visible effect —
-nothing an agent is doing locally is interrupted.
+Pin the image tag, so a relay is upgraded when you say so. To upgrade, stop
+the old relay before starting the new one (a recreate, not a rolling
+restart): never run two relays against the same data. Desktops hold a
+persistent connection to the relay, so a restart drops every open tunnel.
+They reconnect automatically, so the only visible effect is a brief gap in
+remote access. Nothing an agent is doing locally is interrupted.
 
 ## Storage across an upgrade
 

@@ -16,13 +16,13 @@ data directory (`-data`). The relay writes a fresh token on every start and
 removes the file when it stops, so run the admin commands (`invite`,
 `stats`, `plan`, `user revoke` and `audit export`) where they can read
 `-data`, for example `docker exec <container> /flockdeck-relay invite -data
-/data`. Keep that file as tightly held as you would a root credential —
+/data`. Keep that file as tightly held as you would a root credential:
 anyone with it has full admin access.
 
 ## Inviting a desktop
 
 If `-registration` is set to `invite` (see [Configuration](configuration.html)),
-a new desktop can't register itself; an admin has to issue an invite code
+a new desktop can't register itself. An admin has to issue an invite code
 first:
 
 ```

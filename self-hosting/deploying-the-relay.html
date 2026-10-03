@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Deploying the relay | Flockdeck docs</title>
-<meta name="description" content="The relay is one Go program, flockdeck-relay, run as flockdeck-relay serve with flags (or the matching environment variables — see Configuration).">
+<meta name="description" content="The relay is one Go program, flockdeck-relay, run as flockdeck-relay serve with flags (or the matching environment variables; see Configuration).">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Deploying the relay | Flockdeck docs">
-<meta property="og:description" content="The relay is one Go program, flockdeck-relay, run as flockdeck-relay serve with flags (or the matching environment variables — see Configuration).">
+<meta property="og:description" content="The relay is one Go program, flockdeck-relay, run as flockdeck-relay serve with flags (or the matching environment variables; see Configuration).">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/self-hosting/deploying-the-relay.html">
 <meta name="twitter:card" content="summary">
@@ -89,7 +89,7 @@
   <article class="prose">
     <p class="eyebrow">Self-hosting</p>
 <h1 id="deploying-the-relay">Deploying the relay</h1>
-<p class="doc-lede">The relay is one Go program, <code>flockdeck-relay</code>, run as <code>flockdeck-relay serve</code> with flags (or the matching environment variables — see
+<p class="doc-lede">The relay is one Go program, <code>flockdeck-relay</code>, run as <code>flockdeck-relay serve</code> with flags (or the matching environment variables; see
 <a href="configuration.html">Configuration</a>).</p>
 <h2 id="as-a-binary">As a binary</h2>
 <p>The relay's source is in a private repository, so there is no public
@@ -104,7 +104,7 @@ runs on:</p>
 credential that can read the web client's module (<code>github.com/Flockdeck/flockdeck-remote</code>,
 also private), with <code>GOPRIVATE</code> set to it. Run the binary directly, or under
 whatever process supervisor your platform already uses (systemd, a container
-orchestrator's own restart policy, and so on) — the relay itself doesn't
+orchestrator's own restart policy, and so on). The relay itself doesn't
 daemonize.</p>
 <h2 id="as-a-container">As a container</h2>
 <p>The relay's repository has a Dockerfile. Building the image yourself needs a build secret,
@@ -114,7 +114,7 @@ public:</p>
 </code></pre>
 <p>A licensed company is given a built image, <code>ghcr.io/flockdeck/flockdeck-relay</code>,
 in a private registry: pulling it needs the pull token issued with the
-licence, so it needn't build the image itself. The image's command is
+licence, so it doesn't need to build the image itself. The image's command is
 <code>serve -data /data -addr :8080</code>; <code>-public-url</code> has no default and is always
 given at run time. Running it looks like:</p>
 <pre><code>docker run \
@@ -126,13 +126,13 @@ given at run time. Running it looks like:</p>
     -trust-proxy \
     -data /data
 </code></pre>
-<p><code>-v relay-data:/data</code> is the volume that has to survive restarts — see
+<p><code>-v relay-data:/data</code> is the volume that has to survive restarts; see
 <a href="storage-and-data.html">Storage and data</a>. The image runs as a non-root user,
 and <code>/data</code> in it is owned by that user, so a fresh named volume works as is.</p>
 <h2 id="on-kubernetes">On Kubernetes</h2>
 <p>The relay's repository also has a Helm chart, <code>deploy/helm/flockdeck-relay</code>,
 for a licensed company running the relay on its own cluster. It runs exactly
-one pod and replaces it on an upgrade rather than rolling it: the relay keeps
+one pod and replaces it on an upgrade instead of rolling it: the relay keeps
 every desktop's tunnel in memory, so a second replica would be a second relay
 that knows about only some of the desktops. It needs Kubernetes 1.24 or later,
 Helm 3, an ingress that passes WebSockets through without buffering, a TLS
@@ -144,8 +144,7 @@ licence. The chart's own README walks through installing it.</p>
 the relay can get and renew its own certificate:</p>
 <pre><code>flockdeck-relay serve -acme-domain relay.example.com -acme-email ops@example.com -data /data
 </code></pre>
-<p>This is the simplest option when there's nothing else in front of the
-relay. It listens on <code>:443</code> unless you give <code>-addr</code>, and on <code>:80</code> for the
+<p>Use this when there's nothing else in front of the relay. It listens on <code>:443</code> unless you give <code>-addr</code>, and on <code>:80</code> for the
 challenges and a redirect to https. <code>-public-url</code> defaults to <code>https://</code> and
 the first domain, and a list of domains (comma-separated) gets a certificate
 for each; one of them has to be the host of <code>-public-url</code>. The certificates
@@ -158,7 +157,7 @@ it can't get the wildcard certificate <code>-desk-domain</code> needs.</p>
 The relay watches these files and reloads them when they change, so a
 certificate renewal elsewhere on the machine doesn't need a restart.</p>
 <h3 id="3-behind-a-reverse-proxy-or-load-balancer">3. Behind a reverse proxy or load balancer</h3>
-<p>If something else — an ingress controller, a load balancer, another proxy —
+<p>If something else (an ingress controller, a load balancer, another proxy)
 already terminates TLS, run the relay on plain HTTP behind it:</p>
 <pre><code>flockdeck-relay serve -public-url https://relay.example.com -addr 127.0.0.1:8080 -trust-proxy -data /data
 </code></pre>
@@ -167,12 +166,12 @@ though it's listening on plain HTTP internally. <code>-trust-proxy</code> tells 
 take the client address from forwarded headers rather than the TCP
 connection, which is the proxy's, not the visitor's.</p>
 <p>Whichever proxy sits in front, it has to forward WebSocket upgrades without
-buffering — see <a href="requirements.html">Requirements</a>.</p>
+buffering; see <a href="requirements.html">Requirements</a>.</p>
 <h2 id="confirm-its-up">Confirm it's up</h2>
 <p>Two health endpoints:</p>
 <ul>
 <li><code>/healthz</code> answers as soon as the process is up.</li>
-<li><code>/readyz</code> answers only once its storage is ready — with MySQL, that means
+<li><code>/readyz</code> answers only once its storage is ready. With MySQL, that means
 the database connection is live. Point a load balancer or orchestrator's
 readiness probe at this one, not <code>/healthz</code>, or it'll route traffic to a
 relay that can't yet serve it.</li>

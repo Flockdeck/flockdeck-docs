@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Security and privacy | Flockdeck docs</title>
-<meta name="description" content="What a relay — yours or the shared one — can and can&#39;t see, so you can weigh that against what your own rules require.">
+<meta name="description" content="What a relay (yours or the shared one) can and can&#39;t see, so you can weigh that against what your own rules require.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Security and privacy | Flockdeck docs">
-<meta property="og:description" content="What a relay — yours or the shared one — can and can&#39;t see, so you can weigh that against what your own rules require.">
+<meta property="og:description" content="What a relay (yours or the shared one) can and can&#39;t see, so you can weigh that against what your own rules require.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/self-hosting/security-and-privacy.html">
 <meta name="twitter:card" content="summary">
@@ -89,17 +89,17 @@
   <article class="prose">
     <p class="eyebrow">Self-hosting</p>
 <h1 id="security-and-privacy">Security and privacy</h1>
-<p class="doc-lede">What a relay — yours or the shared one — can and can't see, so you can
+<p class="doc-lede">What a relay (yours or the shared one) can and can't see, so you can
 weigh that against what your own rules require.</p>
 <h2 id="end-to-end-encrypted-terminal-traffic-with-one-caveat">End-to-end encrypted terminal traffic, with one caveat</h2>
 <p>Traffic between a desktop and a paired device is encrypted with TLS to the
-relay and from the relay onward. On top of that, terminal traffic — what you
-type and what an agent prints back — is end-to-end encrypted by the desktop
+relay and from the relay onward. On top of that, terminal traffic (what you
+type and what an agent prints back) is end-to-end encrypted by the desktop
 app and the paired device themselves, using keys the relay hands out but
-never holds: the relay has to route it, to know which desktop a browser's
+never holds. The relay has to route it, to know which desktop a browser's
 request is for, but it cannot read it unless it actively tampers with the client
 it serves (below). This is true of the shared relay at
-<code>remote.flockdeck.ai</code> and of a relay you run yourself in exactly the same
+<code>remote.flockdeck.ai</code> and of a relay you run yourself, in exactly the same
 way.</p>
 <p>Only the terminal is end-to-end encrypted, and only when the desktop and the
 paired device have each registered a key. A terminal opened when either has
@@ -113,7 +113,7 @@ phone, diffs and commit, push and pull request data, and an API key typed
 into a dialog.</p>
 <p>End-to-end encryption defeats an honestly-run relay. It doesn't defend
 against a relay that's been actively compromised and tampered with to swap
-the keys it hands out at pairing. The <strong>Verify</strong> code beside each device in
+the keys it hands out at pairing. The Verify code beside each device in
 the desktop's Remote access dialog is the check for that: compare it with
 the code the device shows on its own Devices page, and if they differ,
 unpair the device. Running your own relay narrows who mounting that attack
@@ -125,7 +125,7 @@ origin, under a Content Security Policy that allows only its own scripts. With
 <code>-desk-domain</code> it also proxies each desktop's own pages on that desktop's
 origin. A relay that actively tampers, or an attacker who controls it, can
 serve altered client code or altered desktop pages, which can read what the
-browser types and shows, and can report matching codes in <strong>Verify</strong>. So the
+browser types and shows, and can report matching codes in Verify. So the
 guarantee is that the relay can read nothing that passes through it unless it
 actively tampers with the client it serves: the web client's JavaScript, and the
 desktop pages it proxies on a desk origin. Neither the pairing handshake nor the
@@ -142,8 +142,8 @@ verified registration (<code>/auth/verify</code> and <code>/verify</code>) are t
 script is inline, so their policy allows <code>'unsafe-inline'</code> for scripts, and
 still allows no third-party script, style or connection.</p>
 <h2 id="what-the-relay-routes-and-what-it-stores">What the relay routes, and what it stores</h2>
-<p>The relay proxies a desktop's Flockdeck window — every pane, every agent
-conversation, any photo attached from a phone — to a paired device, and
+<p>The relay proxies a desktop's Flockdeck window (every pane, every agent
+conversation, any photo attached from a phone) to a paired device, and
 back. None of that is written to the relay's storage; <a href="storage-and-data.html">Storage and
 data</a> lists what is kept, which is account and device
 records and never anything that passes between them. A desktop the relay has
@@ -152,7 +152,7 @@ connected and after 30 days otherwise, with its devices and, for the last
 desktop, the account.</p>
 <h2 id="push-notifications-are-the-exception">Push notifications are the exception</h2>
 <p>A push notification's content is encrypted on the desktop, for the specific
-device it's going to, before it reaches the relay — the relay delivers it
+device it's going to, before it reaches the relay. The relay delivers it
 without being able to read it, and the desktop pads every message to one
 length, so even its size tells the push service nothing. This is the one thing a self-hosted relay
 handles no differently from the shared one: neither can see what a
@@ -162,7 +162,7 @@ notification says.</p>
 relay at all. With it off, nothing about a desktop's agents, panes or
 projects is sent anywhere related to remote access. With it on, the
 desktop's outbound connection to the relay carries exactly what's described
-above — proxied window content for paired devices, and nothing about
+above: proxied window content for paired devices, and nothing about
 projects, agents or conversations that aren't being viewed remotely.</p>
 <h2 id="plans-and-billing">Plans and billing</h2>
 <p>A relay you run for yourself has no plans. A relay run with <code>-enforce-plans</code>
@@ -175,7 +175,7 @@ carries it to the billing service, which opens Paddle. The relay itself calls
 nothing: the billing service calls it, to set the plan.</p>
 <h2 id="the-audit-log">The audit log</h2>
 <p><code>-audit</code> (see <a href="configuration.html">Configuration</a>) turns on a log of who
-reached which desktop, from which device, and when — never what was typed
+reached which desktop, from which device, and when. It never records what was typed
 or shown, since that's the terminal traffic <a href="#end-to-end-encrypted-terminal-traffic-with-one-caveat">above</a>
 this relay can't read either way. <code>-audit-ip</code> adds the address each event
 came from, and <code>-audit-retention</code> bounds how long events are kept; both are
@@ -184,9 +184,9 @@ refused without <code>-audit</code> itself on, and the relay won't start.</p>
 <p>Treat it like any other service that terminates or proxies encrypted
 traffic for your organisation: TLS between every hop (see
 <a href="requirements.html">Requirements</a>), the admin API kept off the public
-network — <code>-admin-addr</code> defaults to loopback already; set it to empty to
-turn the admin endpoints off entirely (see
-<a href="admin-and-invites.html">Admin and invites</a>) — the data directory or
+network (<code>-admin-addr</code> defaults to loopback already; set it to empty to
+turn the admin endpoints off entirely, see
+<a href="admin-and-invites.html">Admin and invites</a>), the data directory or
 database backed up and access-controlled, and the relay itself kept current
 (see <a href="upgrading.html">Upgrading</a>).</p>
 
