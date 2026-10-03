@@ -17,7 +17,7 @@ variable if both are set.
 | `-tls-cert` / `-tls-key` | | | Your own certificate and key, which go together. Reloaded automatically when the files change. |
 | `-client-dir` | | | Serve the remote client from this directory instead of the one built into the relay. |
 | `-desk-domain` | `FLOCKDECK_RELAY_DESK_DOMAIN` | | Base domain for giving each paired desktop its own origin, `https://<hostId>.<domain>/`. Needs a wildcard DNS record and certificate, which `-acme-domain` cannot get: give the relay one with `-tls-cert`/`-tls-key`, or terminate TLS in front of it. Without it, each desktop is reached at `/h/<hostId>/` on `-public-url` itself, which puts every desktop of an account on one origin. |
-| `-admin-addr` | | `127.0.0.1:8081` | Loopback address for the admin endpoints `flockdeck-relay invite`, `stats`, `plan`, `user revoke` and `audit export` use — see [Admin and invites](admin-and-invites.html). Empty turns them off. |
+| `-admin-addr` | | `127.0.0.1:8081` | Loopback address for the admin endpoints `flockdeck-relay invite`, `stats`, `plan`, `user revoke` and `audit export` use. See [Admin and invites](admin-and-invites.html). Empty turns them off. |
 
 ## Storage
 
@@ -31,7 +31,7 @@ variable if both are set.
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-registration` | `open` | Who may create a new account: `open`, `invite` (needs an invite code from an admin — see [Admin and invites](admin-and-invites.html)), or `closed`. A desktop joining an existing account with a join code from `flockdeck remote pair -desktop` is always allowed. |
+| `-registration` | `open` | Who may create a new account: `open`, `invite` (needs an invite code from an admin, see [Admin and invites](admin-and-invites.html)), or `closed`. A desktop joining an existing account with a join code from `flockdeck remote pair -desktop` is always allowed. |
 | `-max-hosts` | 10 | Maximum number of desktops per account (0: no limit). |
 | `-max-devices` | 20 | Maximum number of paired phones/browsers per account (0: no limit). |
 | `-max-pairings` | 5 | Unused pairing codes an account can hold at once; a new one replaces the oldest (0: no limit). |
@@ -55,8 +55,8 @@ variable if both are set.
 | `-verify-email-per-hour` | | 5 | Verification emails started or resent per client address per hour (0: no limit). |
 | `-verification-ttl` | | 30m | How long someone has to click a verification email's link before it expires. |
 
-The Postmark server token itself is read only from `FLOCKDECK_RELAY_POSTMARK_TOKEN`
-— there is no flag for it, so it never appears in a process listing.
+The Postmark server token itself is read only from `FLOCKDECK_RELAY_POSTMARK_TOKEN`.
+There is no flag for it, so it never appears in a process listing.
 `-require-verified-registration` refuses to start without both it and
 `-mail-from` set.
 
@@ -85,7 +85,7 @@ another. The private key can also be given as `-vapid-private-key` (base64url
 or PEM), but the environment variable keeps it out of a process listing; the
 public key is worked out from the private one when left out.
 
-Without these set, the relay runs fine; paired devices just don't get push
+Without these set, the relay still runs; paired devices just don't get push
 notifications.
 
 ## Single sign-on
@@ -94,7 +94,7 @@ notifications.
 | --- | --- | --- |
 | `-oidc-issuer` | `FLOCKDECK_RELAY_OIDC_ISSUER` | Have everyone pairing a device sign in with this OpenID Connect issuer first, e.g. `https://example.okta.com`. |
 | `-oidc-client-id` | `FLOCKDECK_RELAY_OIDC_CLIENT_ID` | The relay's client id at the identity provider. |
-| `-oidc-client-secret-file` | `FLOCKDECK_RELAY_OIDC_CLIENT_SECRET` | File holding the relay's client secret at the identity provider — or, in the environment variable, the secret itself. There's no `-oidc-client-secret` flag, so it never has to appear in a process listing. |
+| `-oidc-client-secret-file` | `FLOCKDECK_RELAY_OIDC_CLIENT_SECRET` | File holding the relay's client secret at the identity provider, or, in the environment variable, the secret itself. There's no `-oidc-client-secret` flag, so it never has to appear in a process listing. |
 | `-oidc-name` | `FLOCKDECK_RELAY_OIDC_NAME` | What the sign-in button calls the identity provider. The provider's own host by default. |
 | `-oidc-email-domains` | `FLOCKDECK_RELAY_OIDC_EMAIL_DOMAINS` | Comma-separated email domains whose people may sign in. Anyone the provider signs in, by default. |
 

@@ -1,18 +1,18 @@
 # Security and privacy
 
-What a relay — yours or the shared one — can and can't see, so you can
+What a relay (yours or the shared one) can and can't see, so you can
 weigh that against what your own rules require.
 
 ## End-to-end encrypted terminal traffic, with one caveat
 
 Traffic between a desktop and a paired device is encrypted with TLS to the
-relay and from the relay onward. On top of that, terminal traffic — what you
-type and what an agent prints back — is end-to-end encrypted by the desktop
+relay and from the relay onward. On top of that, terminal traffic (what you
+type and what an agent prints back) is end-to-end encrypted by the desktop
 app and the paired device themselves, using keys the relay hands out but
-never holds: the relay has to route it, to know which desktop a browser's
+never holds. The relay has to route it, to know which desktop a browser's
 request is for, but it cannot read it unless it actively tampers with the client
 it serves (below). This is true of the shared relay at
-`remote.flockdeck.ai` and of a relay you run yourself in exactly the same
+`remote.flockdeck.ai` and of a relay you run yourself, in exactly the same
 way.
 
 Only the terminal is end-to-end encrypted, and only when the desktop and the
@@ -29,7 +29,7 @@ into a dialog.
 
 End-to-end encryption defeats an honestly-run relay. It doesn't defend
 against a relay that's been actively compromised and tampered with to swap
-the keys it hands out at pairing. The **Verify** code beside each device in
+the keys it hands out at pairing. The Verify code beside each device in
 the desktop's Remote access dialog is the check for that: compare it with
 the code the device shows on its own Devices page, and if they differ,
 unpair the device. Running your own relay narrows who mounting that attack
@@ -42,7 +42,7 @@ origin, under a Content Security Policy that allows only its own scripts. With
 `-desk-domain` it also proxies each desktop's own pages on that desktop's
 origin. A relay that actively tampers, or an attacker who controls it, can
 serve altered client code or altered desktop pages, which can read what the
-browser types and shows, and can report matching codes in **Verify**. So the
+browser types and shows, and can report matching codes in Verify. So the
 guarantee is that the relay can read nothing that passes through it unless it
 actively tampers with the client it serves: the web client's JavaScript, and the
 desktop pages it proxies on a desk origin. Neither the pairing handshake nor the
@@ -64,8 +64,8 @@ still allows no third-party script, style or connection.
 
 ## What the relay routes, and what it stores
 
-The relay proxies a desktop's Flockdeck window — every pane, every agent
-conversation, any photo attached from a phone — to a paired device, and
+The relay proxies a desktop's Flockdeck window (every pane, every agent
+conversation, any photo attached from a phone) to a paired device, and
 back. None of that is written to the relay's storage; [Storage and
 data](storage-and-data.html) lists what is kept, which is account and device
 records and never anything that passes between them. A desktop the relay has
@@ -76,7 +76,7 @@ desktop, the account.
 ## Push notifications are the exception
 
 A push notification's content is encrypted on the desktop, for the specific
-device it's going to, before it reaches the relay — the relay delivers it
+device it's going to, before it reaches the relay. The relay delivers it
 without being able to read it, and the desktop pads every message to one
 length, so even its size tells the push service nothing. This is the one thing a self-hosted relay
 handles no differently from the shared one: neither can see what a
@@ -88,7 +88,7 @@ Turning on remote access is the only thing that makes a desktop talk to a
 relay at all. With it off, nothing about a desktop's agents, panes or
 projects is sent anywhere related to remote access. With it on, the
 desktop's outbound connection to the relay carries exactly what's described
-above — proxied window content for paired devices, and nothing about
+above: proxied window content for paired devices, and nothing about
 projects, agents or conversations that aren't being viewed remotely.
 
 ## Plans and billing
@@ -105,7 +105,7 @@ nothing: the billing service calls it, to set the plan.
 ## The audit log
 
 `-audit` (see [Configuration](configuration.html)) turns on a log of who
-reached which desktop, from which device, and when — never what was typed
+reached which desktop, from which device, and when. It never records what was typed
 or shown, since that's the terminal traffic [above](#end-to-end-encrypted-terminal-traffic-with-one-caveat)
 this relay can't read either way. `-audit-ip` adds the address each event
 came from, and `-audit-retention` bounds how long events are kept; both are
@@ -116,8 +116,8 @@ refused without `-audit` itself on, and the relay won't start.
 Treat it like any other service that terminates or proxies encrypted
 traffic for your organisation: TLS between every hop (see
 [Requirements](requirements.html)), the admin API kept off the public
-network — `-admin-addr` defaults to loopback already; set it to empty to
-turn the admin endpoints off entirely (see
-[Admin and invites](admin-and-invites.html)) — the data directory or
+network (`-admin-addr` defaults to loopback already; set it to empty to
+turn the admin endpoints off entirely, see
+[Admin and invites](admin-and-invites.html)), the data directory or
 database backed up and access-controlled, and the relay itself kept current
 (see [Upgrading](upgrading.html)).

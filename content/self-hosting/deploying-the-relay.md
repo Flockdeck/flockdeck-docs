@@ -1,7 +1,7 @@
 # Deploying the relay
 
 The relay is one Go program, `flockdeck-relay`, run as `flockdeck-relay
-serve` with flags (or the matching environment variables — see
+serve` with flags (or the matching environment variables; see
 [Configuration](configuration.html)).
 
 ## As a binary
@@ -21,7 +21,7 @@ Building needs read access to the repository, a Go toolchain of the version in `
 credential that can read the web client's module (`github.com/Flockdeck/flockdeck-remote`,
 also private), with `GOPRIVATE` set to it. Run the binary directly, or under
 whatever process supervisor your platform already uses (systemd, a container
-orchestrator's own restart policy, and so on) — the relay itself doesn't
+orchestrator's own restart policy, and so on). The relay itself doesn't
 daemonize.
 
 ## As a container
@@ -36,7 +36,7 @@ docker build --secret id=flockdeck_remote_token,env=FLOCKDECK_REMOTE_TOKEN -t fl
 
 A licensed company is given a built image, `ghcr.io/flockdeck/flockdeck-relay`,
 in a private registry: pulling it needs the pull token issued with the
-licence, so it needn't build the image itself. The image's command is
+licence, so it doesn't need to build the image itself. The image's command is
 `serve -data /data -addr :8080`; `-public-url` has no default and is always
 given at run time. Running it looks like:
 
@@ -51,7 +51,7 @@ docker run \
     -data /data
 ```
 
-`-v relay-data:/data` is the volume that has to survive restarts — see
+`-v relay-data:/data` is the volume that has to survive restarts; see
 [Storage and data](storage-and-data.html). The image runs as a non-root user,
 and `/data` in it is owned by that user, so a fresh named volume works as is.
 
@@ -59,7 +59,7 @@ and `/data` in it is owned by that user, so a fresh named volume works as is.
 
 The relay's repository also has a Helm chart, `deploy/helm/flockdeck-relay`,
 for a licensed company running the relay on its own cluster. It runs exactly
-one pod and replaces it on an upgrade rather than rolling it: the relay keeps
+one pod and replaces it on an upgrade instead of rolling it: the relay keeps
 every desktop's tunnel in memory, so a second replica would be a second relay
 that knows about only some of the desktops. It needs Kubernetes 1.24 or later,
 Helm 3, an ingress that passes WebSockets through without buffering, a TLS
@@ -77,8 +77,7 @@ the relay can get and renew its own certificate:
 flockdeck-relay serve -acme-domain relay.example.com -acme-email ops@example.com -data /data
 ```
 
-This is the simplest option when there's nothing else in front of the
-relay. It listens on `:443` unless you give `-addr`, and on `:80` for the
+Use this when there's nothing else in front of the relay. It listens on `:443` unless you give `-addr`, and on `:80` for the
 challenges and a redirect to https. `-public-url` defaults to `https://` and
 the first domain, and a list of domains (comma-separated) gets a certificate
 for each; one of them has to be the host of `-public-url`. The certificates
@@ -97,7 +96,7 @@ certificate renewal elsewhere on the machine doesn't need a restart.
 
 ### 3. Behind a reverse proxy or load balancer
 
-If something else — an ingress controller, a load balancer, another proxy —
+If something else (an ingress controller, a load balancer, another proxy)
 already terminates TLS, run the relay on plain HTTP behind it:
 
 ```
@@ -110,14 +109,14 @@ take the client address from forwarded headers rather than the TCP
 connection, which is the proxy's, not the visitor's.
 
 Whichever proxy sits in front, it has to forward WebSocket upgrades without
-buffering — see [Requirements](requirements.html).
+buffering; see [Requirements](requirements.html).
 
 ## Confirm it's up
 
 Two health endpoints:
 
 - `/healthz` answers as soon as the process is up.
-- `/readyz` answers only once its storage is ready — with MySQL, that means
+- `/readyz` answers only once its storage is ready. With MySQL, that means
   the database connection is live. Point a load balancer or orchestrator's
   readiness probe at this one, not `/healthz`, or it'll route traffic to a
   relay that can't yet serve it.

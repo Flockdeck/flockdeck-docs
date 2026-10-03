@@ -7,9 +7,9 @@ look.
 
 Almost always a proxy swallowing WebSocket upgrades. If the relay is behind
 a reverse proxy or load balancer, confirm it's configured to forward
-WebSocket connections through unbuffered — see
+WebSocket connections through unbuffered; see
 [Requirements](requirements.html). A proxy that works for ordinary HTTP
-traffic can still silently break this.
+traffic can still break this without any error.
 
 ## `/readyz` never returns healthy
 
@@ -24,7 +24,7 @@ process can actually write to.
 - Using `-acme-domain`: the relay needs to be reachable on ports 80 and 443
   directly from the internet for the ACME challenge to complete. Behind a
   proxy or load balancer, use `-tls-cert`/`-tls-key` or terminate TLS at the
-  proxy instead — see [Deploying the relay](deploying-the-relay.html).
+  proxy instead; see [Deploying the relay](deploying-the-relay.html).
 - Using `-tls-cert`/`-tls-key`: the relay reloads these when they change, so
   check the files were actually replaced (not just touched) and that the
   process can read them.
@@ -34,7 +34,7 @@ process can actually write to.
 ## A desktop registers against the shared relay instead of yours
 
 `FLOCKDECK_RELAY` has to be set in the environment the copy of Flockdeck
-that's actually running was launched from — see [Connecting
+that's running was launched from. See [Connecting
 desktops](connecting-desktops.html). A variable set in one shell profile
 doesn't reach Flockdeck launched from a desktop shortcut, a different
 shell, or a service manager. Passing `-relay` on `flockdeck remote enable`
@@ -43,7 +43,7 @@ directly sidesteps this.
 ## New desktops can't register
 
 If `-registration` is `invite`, every new desktop needs a code from
-`flockdeck-relay invite` first — see [Admin and invites](admin-and-invites.html).
+`flockdeck-relay invite` first; see [Admin and invites](admin-and-invites.html).
 If it's `closed`, no new account can be created; `closed` stops new
 accounts, not joins with `-join`. Check `-max-hosts` too: it is per
 account, so a join fails once that account has that many desktops, until
@@ -54,12 +54,12 @@ one is removed.
 `-register-per-hour`, `-pair-per-minute` and `-connects-per-minute` (see
 [Configuration](configuration.html)) are all per source address. Behind a
 proxy, if `-trust-proxy` isn't set, the relay sees every request as coming
-from the proxy's own address and rate-limits everyone behind it together —
-turn it on, and make sure the proxy is actually setting the forwarded
-headers it relies on.
+from the proxy's own address and rate-limits everyone behind it together.
+Turn it on, and make sure the proxy sets the forwarded headers it
+relies on.
 
 ## Still stuck
 
-Confirm the relay itself considers itself healthy — `/healthz` and
-`/readyz` — before chasing anything else; a relay that isn't up yet
-produces symptoms that look like every problem above at once.
+Check that the relay reports itself healthy (`/healthz` and `/readyz`)
+before chasing anything else. A relay that isn't up yet produces symptoms
+that look like every problem above at once.
