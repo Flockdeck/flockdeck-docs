@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Self-hosting the Flockdeck relay | Flockdeck docs</title>
-<meta name="description" content="Remote access normally goes through the shared relay at remote.flockdeck.ai: your desktop dials out to it, and your phone or laptop reaches your desktop through it. That relay is operated by Flockdeck; only terminal traffic is end-to-end encrypted through it, and everything else, the state of your panes included, passes through decrypted — see Security and privacy.">
+<meta name="description" content="Remote access normally goes through the shared relay at remote.flockdeck.ai: your desktop dials out to it, and your phone or laptop reaches your desktop through it. Flockdeck operates that relay. Only terminal traffic is end-to-end encrypted through it; everything else, the state of your panes included, passes through decrypted. See Security and privacy.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Self-hosting the Flockdeck relay | Flockdeck docs">
-<meta property="og:description" content="Remote access normally goes through the shared relay at remote.flockdeck.ai: your desktop dials out to it, and your phone or laptop reaches your desktop through it. That relay is operated by Flockdeck; only terminal traffic is end-to-end encrypted through it, and everything else, the state of your panes included, passes through decrypted — see Security and privacy.">
+<meta property="og:description" content="Remote access normally goes through the shared relay at remote.flockdeck.ai: your desktop dials out to it, and your phone or laptop reaches your desktop through it. Flockdeck operates that relay. Only terminal traffic is end-to-end encrypted through it; everything else, the state of your panes included, passes through decrypted. See Security and privacy.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/self-hosting/overview.html">
 <meta name="twitter:card" content="summary">
@@ -91,53 +91,51 @@
 <h1 id="self-hosting-the-flockdeck-relay">Self-hosting the Flockdeck relay</h1>
 <p class="doc-lede">Remote access normally goes through the shared relay at <code>remote.flockdeck.ai</code>:
 your desktop dials out to it, and your phone or laptop reaches your desktop
-through it. That relay is operated by Flockdeck; only terminal traffic is
-end-to-end encrypted through it, and everything else, the state of your
-panes included, passes through decrypted — see <a href="security-and-privacy.html">Security and
+through it. Flockdeck operates that relay. Only terminal traffic is
+end-to-end encrypted through it; everything else, the state of your panes
+included, passes through decrypted. See <a href="security-and-privacy.html">Security and
 privacy</a>.</p>
 <p>For a company whose rules don't allow a third party to decrypt developers'
 terminal traffic, the relay can instead be run on your own infrastructure.
-That is <strong>Flockdeck Enterprise</strong>: the licensed, supported, self-hosted relay,
-single sign-on included; see
-<a href="configuration.html#single-sign-on">Configuration</a>. It's announced on
+That is Flockdeck Enterprise: the licensed, supported, self-hosted relay,
+single sign-on included (see
+<a href="configuration.html#single-sign-on">Configuration</a>). It's announced on
 <a href="https://flockdeck.ai/#enterprise">flockdeck.ai</a> as coming soon and isn't
 generally available yet.</p>
 <p>This section documents the relay as it exists and runs today, for a
-platform or ops team evaluating what self-hosting will involve: how it's
+platform or ops team evaluating what self-hosting involves: how it's
 deployed, how it's configured, what it needs, and how a desktop points at it
-instead of the shared one. Everything here is accurate to the relay's
-current behaviour, single sign-on included. When you're ready to run this in
-production, get in touch through
-<a href="https://flockdeck.ai/#enterprise">flockdeck.ai</a> for access and support.</p>
+instead of the shared one. It covers the relay's current behaviour, single
+sign-on included. When you're ready to run this in production, get in touch
+through <a href="https://flockdeck.ai/#enterprise">flockdeck.ai</a> for access and
+support.</p>
 <h2 id="what-the-relay-does">What the relay does</h2>
 <p>The relay is a single Go program. A desktop running Flockdeck connects
-<em>out</em> to it over a WebSocket and keeps that connection open — nothing has to
-be opened on the desktop's own network. A browser (your phone, tablet or
+<em>out</em> to it over a WebSocket and keeps that connection open, so nothing has
+to be opened on the desktop's own network. A browser (your phone, tablet or
 another computer) connects to the relay too, and the relay proxies its
 requests down the desktop's tunnel to the copy of Flockdeck running there.
 No ports are opened on the desktop's router, and no VPN is involved.</p>
-<p>Everything else in this section assumes you're comfortable operating a small
-stateful Go service: a binary or a container, a place to keep its data, and
-a certificate.</p>
+<p>You'll need to be comfortable operating a small stateful Go service: a
+binary or a container, a place to keep its data, and a certificate.</p>
 <h2 id="whats-on-the-following-pages">What's on the following pages</h2>
 <ul>
-<li><a href="requirements.html">Requirements</a> — what the relay needs to run: ports,
-TLS, DNS, storage.</li>
-<li><a href="deploying-the-relay.html">Deploying the relay</a> — running it as a binary
+<li><a href="requirements.html">Requirements</a>: ports, TLS, DNS and storage.</li>
+<li><a href="deploying-the-relay.html">Deploying the relay</a>: running it as a binary
 or a container, behind a reverse proxy, with your own certificate or with
-Flockdeck's built-in ACME support.</li>
-<li><a href="configuration.html">Configuration</a> — every flag and environment
+the relay's built-in ACME support.</li>
+<li><a href="configuration.html">Configuration</a>: every flag and environment
 variable, in one table.</li>
-<li><a href="storage-and-data.html">Storage and data</a> — the embedded database and the
+<li><a href="storage-and-data.html">Storage and data</a>: the embedded database and the
 MySQL alternative.</li>
-<li><a href="admin-and-invites.html">Admin and invites</a> — the local admin API,
+<li><a href="admin-and-invites.html">Admin and invites</a>: the local admin API,
 inviting desktops, and usage stats.</li>
-<li><a href="connecting-desktops.html">Connecting desktops</a> — pointing Flockdeck at
+<li><a href="connecting-desktops.html">Connecting desktops</a>: pointing Flockdeck at
 your relay instead of the shared one.</li>
-<li><a href="security-and-privacy.html">Security and privacy</a> — what the relay can
+<li><a href="security-and-privacy.html">Security and privacy</a>: what the relay can
 see, and what it can't.</li>
-<li><a href="upgrading.html">Upgrading</a> — keeping a self-hosted relay current.</li>
-<li><a href="troubleshooting.html">Troubleshooting</a> — the usual ways a first deploy
+<li><a href="upgrading.html">Upgrading</a>: keeping a self-hosted relay current.</li>
+<li><a href="troubleshooting.html">Troubleshooting</a>: the usual ways a first deploy
 goes wrong.</li>
 </ul>
 

@@ -161,7 +161,7 @@ variable if both are set.</p>
 <td><code>-admin-addr</code></td>
 <td></td>
 <td><code>127.0.0.1:8081</code></td>
-<td>Loopback address for the admin endpoints <code>flockdeck-relay invite</code>, <code>stats</code>, <code>plan</code>, <code>user revoke</code> and <code>audit export</code> use — see <a href="admin-and-invites.html">Admin and invites</a>. Empty turns them off.</td>
+<td>Loopback address for the admin endpoints <code>flockdeck-relay invite</code>, <code>stats</code>, <code>plan</code>, <code>user revoke</code> and <code>audit export</code> use. See <a href="admin-and-invites.html">Admin and invites</a>. Empty turns them off.</td>
 </tr>
 </tbody>
 </table>
@@ -209,7 +209,7 @@ variable if both are set.</p>
 <tr>
 <td><code>-registration</code></td>
 <td><code>open</code></td>
-<td>Who may create a new account: <code>open</code>, <code>invite</code> (needs an invite code from an admin — see <a href="admin-and-invites.html">Admin and invites</a>), or <code>closed</code>. A desktop joining an existing account with a join code from <code>flockdeck remote pair -desktop</code> is always allowed.</td>
+<td>Who may create a new account: <code>open</code>, <code>invite</code> (needs an invite code from an admin, see <a href="admin-and-invites.html">Admin and invites</a>), or <code>closed</code>. A desktop joining an existing account with a join code from <code>flockdeck remote pair -desktop</code> is always allowed.</td>
 </tr>
 <tr>
 <td><code>-max-hosts</code></td>
@@ -315,8 +315,8 @@ variable if both are set.</p>
 </tr>
 </tbody>
 </table>
-<p>The Postmark server token itself is read only from <code>FLOCKDECK_RELAY_POSTMARK_TOKEN</code>
-— there is no flag for it, so it never appears in a process listing.
+<p>The Postmark server token itself is read only from <code>FLOCKDECK_RELAY_POSTMARK_TOKEN</code>.
+There is no flag for it, so it never appears in a process listing.
 <code>-require-verified-registration</code> refuses to start without both it and
 <code>-mail-from</code> set.</p>
 <p>The desktop app's command-palette dialog can't yet wait on a verification
@@ -353,7 +353,7 @@ the pair: a browser subscribed under one pair is sent nothing signed with
 another. The private key can also be given as <code>-vapid-private-key</code> (base64url
 or PEM), but the environment variable keeps it out of a process listing; the
 public key is worked out from the private one when left out.</p>
-<p>Without these set, the relay runs fine; paired devices just don't get push
+<p>Without these set, the relay still runs; paired devices just don't get push
 notifications.</p>
 <h2 id="single-sign-on">Single sign-on</h2>
 <table>
@@ -378,7 +378,7 @@ notifications.</p>
 <tr>
 <td><code>-oidc-client-secret-file</code></td>
 <td><code>FLOCKDECK_RELAY_OIDC_CLIENT_SECRET</code></td>
-<td>File holding the relay's client secret at the identity provider — or, in the environment variable, the secret itself. There's no <code>-oidc-client-secret</code> flag, so it never has to appear in a process listing.</td>
+<td>File holding the relay's client secret at the identity provider, or, in the environment variable, the secret itself. There's no <code>-oidc-client-secret</code> flag, so it never has to appear in a process listing.</td>
 </tr>
 <tr>
 <td><code>-oidc-name</code></td>

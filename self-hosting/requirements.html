@@ -91,18 +91,18 @@
 <h1 id="requirements">Requirements</h1>
 <p class="doc-lede">What a self-hosted relay needs before you deploy it.</p>
 <h2 id="a-domain-and-dns-you-control">A domain, and DNS you control</h2>
-<p>The relay serves everything from the root of one hostname — for example
-<code>relay.example.com</code> — not from a subpath of a site you already run. Point
-that hostname's A/AAAA record at wherever the relay will listen, whether
-that's the relay itself (with its built-in ACME support) or a load balancer
-or reverse proxy in front of it.</p>
+<p>The relay serves everything from the root of one hostname, for example
+<code>relay.example.com</code>, not from a subpath of a site you already run. Point
+that hostname's A/AAAA record at wherever the relay will listen: the relay
+itself (with its built-in ACME support) or a load balancer or reverse proxy
+in front of it.</p>
 <p>If you want each paired desktop to get its own subdomain (<code>-desk-domain</code>,
 see <a href="configuration.html">Configuration</a>), you'll also need a wildcard record
-— <code>*.relay.example.com</code> — and a wildcard certificate to match. This is
+(<code>*.relay.example.com</code>) and a wildcard certificate to match. This is
 optional; the relay works without it.</p>
 <h2 id="tls">TLS</h2>
-<p>The relay needs to be reachable over HTTPS. Three ways to get there, covered
-in <a href="deploying-the-relay.html">Deploying the relay</a>:</p>
+<p>The relay needs to be reachable over HTTPS. There are three ways to get
+there, covered in <a href="deploying-the-relay.html">Deploying the relay</a>:</p>
 <ul>
 <li>the relay's own built-in ACME client, if it's the thing your DNS record
 points straight at;</li>
@@ -111,17 +111,17 @@ when the files change; or</li>
 <li>a reverse proxy or load balancer in front of it that terminates TLS
 itself, with the relay behind it on plain HTTP.</li>
 </ul>
-<p>Whichever you choose, WebSocket upgrades have to reach the relay unbuffered
-— that's how a desktop's connection and a browser's both stay open. A proxy
-that buffers or times out long-lived connections will break both.</p>
+<p>Whichever you choose, WebSocket upgrades have to reach the relay unbuffered,
+because that's how a desktop's connection and a browser's both stay open. A
+proxy that buffers or times out long-lived connections will break both.</p>
 <h2 id="compute">Compute</h2>
-<p>The relay is a single small Go binary with modest resource needs — closer
+<p>The relay is a single small Go binary with modest resource needs, closer
 to a sidecar than a service you'd size a cluster around. It keeps no
 per-request state beyond the open tunnels themselves, so it scales with the
 number of connected desktops and devices, not with traffic volume.</p>
 <h2 id="storage">Storage</h2>
-<p>By default the relay keeps its state — paired desktops, devices, sessions —
-in an embedded database file on disk, no separate database server needed.
+<p>By default the relay keeps its state (paired desktops, devices, sessions)
+in an embedded database file on disk, with no separate database server.
 MySQL 8 or later is supported as well, for a deployment that wants its state
 in a database it already operates. See <a href="storage-and-data.html">Storage and
 data</a>.</p>

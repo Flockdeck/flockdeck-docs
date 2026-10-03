@@ -94,9 +94,9 @@ look.</p>
 <h2 id="desktops-or-devices-cant-connect-at-all">Desktops or devices can't connect at all</h2>
 <p>Almost always a proxy swallowing WebSocket upgrades. If the relay is behind
 a reverse proxy or load balancer, confirm it's configured to forward
-WebSocket connections through unbuffered — see
+WebSocket connections through unbuffered; see
 <a href="requirements.html">Requirements</a>. A proxy that works for ordinary HTTP
-traffic can still silently break this.</p>
+traffic can still break this without any error.</p>
 <h2 id="readyz-never-returns-healthy"><code>/readyz</code> never returns healthy</h2>
 <p>With MySQL storage, this means the relay can't reach the database: check
 <code>-database</code> (or <code>FLOCKDECK_RELAY_DATABASE_URL</code>), that the database exists,
@@ -108,7 +108,7 @@ process can actually write to.</p>
 <li>Using <code>-acme-domain</code>: the relay needs to be reachable on ports 80 and 443
 directly from the internet for the ACME challenge to complete. Behind a
 proxy or load balancer, use <code>-tls-cert</code>/<code>-tls-key</code> or terminate TLS at the
-proxy instead — see <a href="deploying-the-relay.html">Deploying the relay</a>.</li>
+proxy instead; see <a href="deploying-the-relay.html">Deploying the relay</a>.</li>
 <li>Using <code>-tls-cert</code>/<code>-tls-key</code>: the relay reloads these when they change, so
 check the files were actually replaced (not just touched) and that the
 process can read them.</li>
@@ -117,14 +117,14 @@ process can read them.</li>
 </ul>
 <h2 id="a-desktop-registers-against-the-shared-relay-instead-of-yours">A desktop registers against the shared relay instead of yours</h2>
 <p><code>FLOCKDECK_RELAY</code> has to be set in the environment the copy of Flockdeck
-that's actually running was launched from — see <a href="connecting-desktops.html">Connecting
+that's running was launched from. See <a href="connecting-desktops.html">Connecting
 desktops</a>. A variable set in one shell profile
 doesn't reach Flockdeck launched from a desktop shortcut, a different
 shell, or a service manager. Passing <code>-relay</code> on <code>flockdeck remote enable</code>
 directly sidesteps this.</p>
 <h2 id="new-desktops-cant-register">New desktops can't register</h2>
 <p>If <code>-registration</code> is <code>invite</code>, every new desktop needs a code from
-<code>flockdeck-relay invite</code> first — see <a href="admin-and-invites.html">Admin and invites</a>.
+<code>flockdeck-relay invite</code> first; see <a href="admin-and-invites.html">Admin and invites</a>.
 If it's <code>closed</code>, no new account can be created; <code>closed</code> stops new
 accounts, not joins with <code>-join</code>. Check <code>-max-hosts</code> too: it is per
 account, so a join fails once that account has that many desktops, until
@@ -133,13 +133,13 @@ one is removed.</p>
 <p><code>-register-per-hour</code>, <code>-pair-per-minute</code> and <code>-connects-per-minute</code> (see
 <a href="configuration.html">Configuration</a>) are all per source address. Behind a
 proxy, if <code>-trust-proxy</code> isn't set, the relay sees every request as coming
-from the proxy's own address and rate-limits everyone behind it together —
-turn it on, and make sure the proxy is actually setting the forwarded
-headers it relies on.</p>
+from the proxy's own address and rate-limits everyone behind it together.
+Turn it on, and make sure the proxy sets the forwarded headers it
+relies on.</p>
 <h2 id="still-stuck">Still stuck</h2>
-<p>Confirm the relay itself considers itself healthy — <code>/healthz</code> and
-<code>/readyz</code> — before chasing anything else; a relay that isn't up yet
-produces symptoms that look like every problem above at once.</p>
+<p>Check that the relay reports itself healthy (<code>/healthz</code> and <code>/readyz</code>)
+before chasing anything else. A relay that isn't up yet produces symptoms
+that look like every problem above at once.</p>
 
   </article>
 </main>

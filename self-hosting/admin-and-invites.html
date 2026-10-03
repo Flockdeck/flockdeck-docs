@@ -101,11 +101,11 @@ reverse proxy. The relay warns if it is listening beyond loopback.</p>
 data directory (<code>-data</code>). The relay writes a fresh token on every start and
 removes the file when it stops, so run the admin commands (<code>invite</code>,
 <code>stats</code>, <code>plan</code>, <code>user revoke</code> and <code>audit export</code>) where they can read
-<code>-data</code>, for example <code>docker exec &lt;container&gt; /flockdeck-relay invite -data /data</code>. Keep that file as tightly held as you would a root credential —
+<code>-data</code>, for example <code>docker exec &lt;container&gt; /flockdeck-relay invite -data /data</code>. Keep that file as tightly held as you would a root credential:
 anyone with it has full admin access.</p>
 <h2 id="inviting-a-desktop">Inviting a desktop</h2>
 <p>If <code>-registration</code> is set to <code>invite</code> (see <a href="configuration.html">Configuration</a>),
-a new desktop can't register itself; an admin has to issue an invite code
+a new desktop can't register itself. An admin has to issue an invite code
 first:</p>
 <pre><code>flockdeck-relay invite -data /data -note &quot;jane's laptop&quot;
 </code></pre>
