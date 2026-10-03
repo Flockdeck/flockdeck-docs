@@ -7,9 +7,16 @@ end-to-end encrypted through it; everything else, the state of your panes
 included, passes through decrypted. See [Security and
 privacy](security-and-privacy.html).
 
-For a company whose rules don't allow a third party to decrypt developers'
-terminal traffic, the relay can instead be run on your own infrastructure.
-That is Flockdeck Enterprise: the licensed, supported, self-hosted relay,
+Terminal traffic is end-to-end encrypted with keys the relay never holds, so
+even the shared relay can't read it, unless a terminal falls back to plaintext
+because either side has no registered key, or the relay tampers with the client
+it serves or swaps the keys it hands out. Apart from push notification content,
+which neither the relay nor the push service can read, whoever operates the
+relay can read the rest of what passes through: pane state, the chat view,
+diffs, photos and typed API keys (see [Security and
+privacy](security-and-privacy.html)). For a company whose rules don't allow a
+third party to read those, the relay can instead be run on your own
+infrastructure. That is Flockdeck Enterprise: the licensed, supported, self-hosted relay,
 single sign-on included (see
 [Configuration](configuration.html#single-sign-on)). It's announced on
 [flockdeck.ai](https://flockdeck.ai/#enterprise) as coming soon and isn't
