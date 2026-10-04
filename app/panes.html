@@ -106,7 +106,7 @@ and a tab can hold one or several, split however you like.</p>
 </tr>
 <tr>
 <td><kbd>Ctrl+Shift+N</kbd></td>
-<td>A tab with a plain shell — no agent, no hooks</td>
+<td>A tab with a plain shell (no agent, no hooks)</td>
 </tr>
 <tr>
 <td><kbd>Ctrl+Shift+D</kbd></td>
@@ -128,18 +128,19 @@ beside the <code>+</code> that opens a new tab, or take the two picker entries o
 command palette; <a href="/app/agents.html">Agents and models</a> is the page for all of it. The pane header then names what it got, beside the branch.</p>
 <p>A shell pane is an ordinary terminal in the same directory. It is there for
 the <code>git</code>, <code>npm</code> or <code>go</code> command you want to run yourself while the agents
-work, and for watching a build — which is why it can be split in beside an
+work, and for watching a build. That is why it can be split in beside an
 agent as well as opened in a tab of its own.</p>
 <h2>Working in them</h2>
 <p>Click a pane to give it the keyboard. Everything you type goes to the agent in
-it — that is the point, and it is why almost all of this application's own
+it. That is the point, and it is why almost all of this application's own
 shortcuts are on <kbd>Ctrl+Shift</kbd>, which agents do not use.</p>
 <ul>
-<li>Drag the divider between two panes to resize them — or reach it with
+<li>Drag the divider between two panes to resize them, or reach it with
 <kbd>Tab</kbd> and use the arrow keys, and <kbd>Home</kbd> to share the room
 equally again.</li>
-<li><kbd>Ctrl+Shift+Z</kbd> gives the focused pane the whole tab, and gives it back.
-The others keep running; they are simply not on screen.</li>
+<li><kbd>Ctrl+Shift+Z</kbd> gives the focused pane the whole tab, and gives it back;
+so does double-clicking the pane's header. The others keep running; they
+are simply not on screen.</li>
 <li><kbd>Ctrl+Shift+F</kbd> searches the focused terminal's scrollback.</li>
 <li>Select text with the mouse and <kbd>Ctrl+C</kbd> copies it; <kbd>Ctrl+V</kbd>
 pastes. With nothing selected, <kbd>Ctrl+C</kbd> goes to the agent, as it
@@ -147,16 +148,72 @@ always did. <a href="/app/shortcuts.html">Keyboard shortcuts</a> has the rest, a
 <li><kbd>Ctrl+Shift+W</kbd> closes a pane and stops the agent in it, without asking.
 It also ends what was started in the pane and is still running there: a
 shell's background jobs, a server an agent left going, a job that ignores
-the hangup. A program with windows of its own — a browser, an editor
-started with <code>code .</code> — stays open, as it does when a terminal is closed,
+the hangup. A program with windows of its own (a browser, an editor
+started with <code>code .</code>) stays open, as it does when a terminal is closed,
 and so does what it runs, such as the terminals in that editor.
 On macOS a background job that ignores the hangup (<code>nohup</code>) keeps running.
-Closing a tab's last pane closes the tab, and the <code>×</code> on a tab closes every
-pane in it.</li>
+Closing a tab's last pane closes the tab, and the <code>×</code> on a tab, or a click
+on it with the middle button, closes every pane in it.</li>
 </ul>
-<p>The buttons in a pane header do the same things: fan out, include in
-broadcast, restart, zoom, export transcript, record, lock, close. Record is off until you turn it
-on: see <a href="/app/recording.html">Recording a pane</a>.</p>
+<p>The buttons in a pane header, in order: fan out (<code>⑂</code>), save the plan as a
+todo (<code>☑</code>), include in broadcast (<code>⇉</code>), auto-review (<code>✓</code>), restart, zoom,
+export transcript, reveal transcript, record, pane info (<code>ⓘ</code>), lock, close. Auto-review is off
+until you turn it on, pane by pane (the ✓'s tooltip counts the commands it has
+let through unasked so far), and the pane keeps the setting across a
+restart of Flockdeck: see <a href="/app/status.html">Knowing who needs you</a>. Record is off
+until you turn it on too; export, reveal and record are not shown on a shell
+pane, which has no conversation, and reveal works only in a window on the
+machine Flockdeck runs on: see <a href="/app/recording.html">Recording a pane</a>.</p>
+<h2>One pane, several windows</h2>
+<p>A pane has one terminal however many windows show it (a second window, a
+phone over <a href="/app/remote.html">remote access</a>), and that terminal is the size of the
+window last used on it: the one you focus or type in. Every other window draws
+it at that same size, so what the agent prints lands where it should. Where
+that is larger than the pane's room in a window, the window shows the part of
+it nearest the bottom left, where the latest lines are, with a note such as
+<strong>Viewing 120×40 · fit to this window</strong>; click it to size the pane for this
+window instead. A pane's terminal is never
+made smaller than 20 columns by 5 rows or larger than 500 by 200.</p>
+<h2>Pane info</h2>
+<p><kbd>Ctrl+Shift+Y</kbd>, in the command palette and as the <code>ⓘ</code> in the pane header,
+lists what names a pane in files, logs and commands, each with a <strong>Copy</strong>
+button, and <strong>Copy all</strong> puts the whole list on the clipboard as plain text.
+A value the pane does not have yet says &quot;not set&quot;. The list has:</p>
+<ul>
+<li>The pane id, which <code>flockdeck close</code> takes and which transcript files hold as
+<code>pane</code>.</li>
+<li>The pane's name, its project and project folder, its directory (a worktree
+has its own), its branch and its tab.</li>
+<li>For an agent, the agent, the model and the <strong>conversation id</strong>, which is the
+agent's own id for the conversation. It changes after <code>/clear</code>. The first 8
+characters of it are in a transcript's file name, and it is the file name of
+the conversation the agent stores under <code>~/.claude/projects</code>.</li>
+<li>The process id, the peer name set by <code>flockdeck peer-name</code>, and the pane's
+status.</li>
+<li>Whether the pane is recording, the path of its transcript file (the one it is
+recording to, or its latest export) and the path of the conversation file the
+agent stores itself. That last path is shown for panes that run Claude Code
+(including a second Claude account) and for Flockdeck's own API agents, once
+the agent has written the file. Until then, and for every other agent, it says
+&quot;not set&quot;. Only Claude Code panes can be exported or recorded, so an API
+agent's transcript path always says &quot;not set&quot;.</li>
+</ul>
+<p>A shell has no agent, conversation or transcript, so those are left out for it.
+Nothing secret is listed: no keys, tokens or environment. A path can name your
+own folders, so look at <strong>Copy all</strong> before pasting it somewhere public. The
+list is read on the machine Flockdeck runs on and is not sent anywhere else, so
+a window reached through <a href="/app/remote.html">remote access</a> cannot open it.</p>
+<h2>Finding a pane</h2>
+<p><kbd>Ctrl+Shift+L</kbd>, in the command palette, searches every pane in every open
+project. Type part of a pane's name, project, tab, agent, model, directory,
+branch, pane id, conversation id, process id or peer name; several words must
+all match, in any of those, and case does not matter. A conversation id matches
+from its first characters, so the 8 in a transcript's file name will do. Each
+result shows the pane, its project and tab, and what matched. Press
+<kbd>Enter</kbd> for the first result or click one: Flockdeck goes to that
+project and tab and gives the pane the keyboard. <kbd>Esc</kbd> closes the
+search. <a href="/app/status.html">All agents across projects</a> lists the same panes by what needs
+you, rather than by what you type.</p>
 <h2>Locking a pane</h2>
 <p><strong>Lock pane</strong>, in the command palette and as the padlock in the pane
 header, locks a pane so it cannot be closed by accident. The same action
@@ -168,9 +225,9 @@ while it is locked:</p>
 <li>Its tab cannot be closed, by the <code>×</code> on the tab or the middle button, while
 any pane in it is locked, and neither can a project that holds one.</li>
 <li><strong>Close finished panes</strong> leaves it open and says how many it left.</li>
-<li><code>flockdeck close</code> refuses it, and <code>--force</code> does not change that: <code>--force</code>
+<li><code>flockdeck close</code> refuses it, and <code>-force</code> does not change that: <code>-force</code>
 is for a pane still working, and a lock is something only you undo.
-<code>flockdeck close --finished</code> skips it and reports how many it skipped.</li>
+<code>flockdeck close -finished</code> skips it and reports how many it skipped.</li>
 </ul>
 <p><strong>Restart pane</strong> still works on a locked pane and leaves it locked. The
 lock is kept with the layout, so it survives a restart of Flockdeck, and it
@@ -186,11 +243,12 @@ renamed. Either way the name is kept with the layout.</p>
 <h2>Restarting</h2>
 <p><strong>Restart pane</strong>, in the command palette and in the pane header, stops the
 process and starts it again in the same directory, with the same agent and
-model — resuming the same conversation where that agent can, because a pane and
+model. It resumes the same conversation where that agent can, because a pane and
 its conversation are one identity. Use it when an agent is stuck or has wedged
 itself, not to clear the screen.</p>
-<p>A pane whose process exits covers its terminal with a <strong>Restart</strong> button
-rather than leaving a dead black rectangle.</p>
+<p>A pane whose process exits covers its terminal with what happened and two
+buttons, <strong>Restart</strong> and <strong>Close pane</strong>, rather than leaving a dead black
+rectangle.</p>
 <h2>Font size</h2>
 <p><kbd>Ctrl+=</kbd> and <kbd>Ctrl+-</kbd> change the terminal font size for every
 pane; <kbd>Ctrl+0</kbd> puts it back.</p>

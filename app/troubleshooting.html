@@ -92,10 +92,12 @@
 <p class="doc-lede">The things that go wrong most often, and what they mean.</p>
 <h2>It will not start at all</h2>
 <p>Started from a shortcut, Flockdeck has no terminal to print to, so a failure to
-start is also written to <code>error.log</code> in the state directory — <a href="/app/settings.html">Settings</a> says
-where that is. Running <code>flockdeck</code> from a terminal shows the same message there.
-What goes wrong as it stops — a layout it could not save, an update it could
-not put in place, a restart that did not come back — is written there too.</p>
+start is also written to <code>error.log</code> in the state directory (<a href="/app/settings.html">Settings</a> says
+where that is). Running <code>flockdeck</code> from a terminal shows the same message there.
+What goes wrong as it stops (a layout it could not save, an update it could
+not put in place, a restart that did not come back) is written there too, and
+so are a few notes for diagnosing a problem later: a window link that was
+refused, and windows that disagree about a pane's size (see below).</p>
 <p>When the layout cannot be saved, Quit and Restart say why and stop there
 rather than lose what changed; asking a second time goes ahead anyway.</p>
 <h2>macOS or Windows will not open a Flockdeck I downloaded</h2>
@@ -109,9 +111,9 @@ Run anyway, or run <code>Unblock-File</code> on the program in PowerShell. The i
 scripts download with curl and PowerShell, which leave no such mark.</p>
 <h2>A pane says its CLI was not found on PATH</h2>
 <p>The agent's command is not on your <code>PATH</code>, so the pane shows that message where
-its terminal would be. Install it — the picker shows where to get every agent it
+its terminal would be. Install it (the picker shows where to get every agent it
 knows about, and Claude Code is at
-<a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer">claude.com/claude-code</a> — then press
+<a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer">claude.com/claude-code</a>), then press
 <strong>Restart</strong> on the pane. The command is looked for each time a pane starts, but
 in the <code>PATH</code> Flockdeck itself was started with: if the installer added a new
 directory to <code>PATH</code> rather than using one already on it, quit Flockdeck and
@@ -123,16 +125,16 @@ environment variables it looks at, and nothing in Flockdeck's own store. <code>f
 rest. The OpenAI-compatible endpoint ships with no address, because none would
 be right for everybody: pick it, and the picker asks for one. It shows as
 available once it has a key, or at once when that address is on this machine
-and needs none. Unavailable agents are shown rather than hidden on purpose, so that an
-agent you have not installed is a decision rather than an absence.</p>
+and needs none. Unavailable agents are shown rather than hidden, so that an
+agent you have not installed is a visible choice.</p>
 <h2>A pane is dead, with a Restart button</h2>
 <p>The process exited. <strong>Restart pane</strong> starts it again in the same directory
 and, where the agent can, resumes the same conversation. If it exits immediately every time, run the
-agent's own command yourself in that directory to see what it says — a bad
+agent's own command yourself in that directory to see what it says. A bad
 model id and an expired login both look like this from outside.</p>
 <h2>An agent stopped to ask about trusting a folder</h2>
-<p>A worktree is a directory the agent has never seen, and some agents — Claude
-Code among them — ask before working in one. Answer it once and it will not ask
+<p>A worktree is a directory the agent has never seen, and some agents (Claude
+Code among them) ask before working in one. Answer it once and it will not ask
 again for that directory; to avoid it entirely when fanning out, use the trust
 checkbox in the <a href="/app/fanout.html">Fan out</a> dialog, which carries over the answer already given for
 the project. It carries Claude Code's &quot;Allow external CLAUDE.md file imports?&quot;
@@ -151,24 +153,24 @@ hook that cannot reach the application, or that is turned away by it, says so
 on its standard error, and that is where Claude Code shows it.</p>
 <h2>A pane's status is vague, or late</h2>
 <p>Check what is running in it. An agent with no lifecycle of its own to report is
-read from its terminal instead — the bell, a quiet timer and, if its entry has
-<code>patterns</code>, the lines it prints — which is a guess, and a guess is sometimes a beat behind and sometimes
+read from its terminal instead (the bell, a quiet timer and, if its entry has
+<code>patterns</code>, the lines it prints). That is a guess, and a guess is sometimes a beat behind and sometimes
 wrong. <a href="/app/agents.html">Agents and models</a> says which agents report and which are read. There
-is nothing to fix here; it is the price of running an agent that was never
+is nothing to fix here. It is the price of running an agent that was never
 built to be watched.</p>
 <h2>A Claude pane shows no usage limit</h2>
 <p>Claude Code hands its five-hour and weekly windows only to its status line,
 only on a Pro or Max plan, and only after the first answer in a session. By
 default Flockdeck reads them only where you have a status line of your own;
-<strong>Settings › Agents › Claude Code's usage limits › Always</strong> reads them in every
+<strong>Settings › Agents &amp; models › Claude Code's usage limits › Always</strong> reads them in every
 Claude pane. That choice, and any change to your own status line, applies to a
 pane when it starts, so use <strong>Restart pane</strong> on one already running.
 <a href="/app/spend.html">Spend and limits</a> has the rest.</p>
 <h2>A fan-out shows no routed rows</h2>
-<p>Routing is off until you turn it on, in <strong>Settings › Agents › Routing</strong>. When
+<p>Routing is off until you turn it on, in <strong>Settings › Routing</strong>. When
 it is on, it still leaves a line alone when no rule matches its task, when the
-run is on a model whose size it does not know — Claude Code's <strong>Default</strong> among
-them — and when the agent has no model in the tier the rule asks for. The
+run is on a model whose size it does not know (Claude Code's <strong>Default</strong> among
+them), and when the agent has no model in the tier the rule asks for. The
 dialog says so when routing can do nothing for the run's model.
 <a href="/app/agents.html">Agents and models</a> has the rules.</p>
 <h2>Push, pull or fetch fails over ssh</h2>
@@ -184,8 +186,8 @@ unlocked without asking for it. Add it to your ssh agent with <code>ssh-add</cod
 the panel uses it from there. If it still fails, the remote does not know the
 key, and <code>git fetch</code> from a terminal says more.</li>
 </ul>
-<p>An ssh command of your own — <code>core.sshCommand</code> in git's config, or
-<code>GIT_SSH_COMMAND</code> or <code>GIT_SSH</code> in the environment — is left as it is, without
+<p>An ssh command of your own (<code>core.sshCommand</code> in git's config, or
+<code>GIT_SSH_COMMAND</code> or <code>GIT_SSH</code> in the environment) is left as it is, without
 that setting. Where ssh can ask for a passphrase in a window of its own, as on
 some Linux desktops, <code>git config core.sshCommand ssh</code> in the checkout is how
 to keep that window.</p>
@@ -196,33 +198,47 @@ macOS, WebKitGTK on Linux) directly inside the binary. If the platform has no
 working webview it opens as an ordinary tab in your default browser instead,
 which works but looks less like an application.</p>
 <h2>Nothing is exposed to the network</h2>
-<p>The server binds to <code>127.0.0.1</code> on a random port, and every request — the page,
-the assets and both WebSockets — must carry a token generated fresh for each
+<p>The server binds to <code>127.0.0.1</code> on a random port, and every request (the page,
+the assets and both WebSockets) must carry a token generated fresh for each
 run. A second launch of the binary reaches the running instance through that
 same loopback address.</p>
-<p>The window's own browser is never started with that token, or even with the
-one-time link that stands in for it, on its command line: another account on
-the same machine can often read one process's command line from another's,
-and a moment's head start with either would be enough to open a window onto
-your agents. The link is written into a file only your account can read
-instead, and the browser is pointed at that file. If a window ever shows &quot;This
-link has already been used&quot; and you did not just open one yourself, someone
-else on this computer may have — quit Flockdeck and start it again, which ends
-that session along with whichever window got to it first.</p>
+<p>The window is opened on a one-time link rather than on the token itself, and
+loads it inside Flockdeck's own process. Where it falls back to your default
+browser, the link is handed to the browser's launcher instead; either way it
+can be used once, within about a minute. If a window ever shows &quot;This link has
+already been used&quot; and you did not just open one yourself, someone else on
+this computer may have. Quit Flockdeck and start it again, which ends that
+session along with whichever window got to it first. &quot;This link has expired&quot;
+and &quot;This link isn't valid&quot; are answered the same way.</p>
 <p>Remote access, once you turn it on, is a connection this machine makes out to
 the relay. A request arriving through it is let in without the token, because
-the relay has already checked that the device asking is paired — <a href="/app/remote.html">Remote
+the relay has already checked that the device asking is paired. <a href="/app/remote.html">Remote
 access</a> has the rest.</p>
 <h2>Desktop notifications never appear</h2>
-<p>The browser asks for permission on your first interaction with the window. If
+<p>Check <strong>Settings › General › Desktop notifications</strong> first: off, nothing is
+raised. The browser asks for permission on your first interaction with the window. If
 it was refused, grant it in the browser's site settings for this window's
 address, for this run only: the address changes each time Flockdeck starts,
 and the question comes back with it. Notifications are only raised while the window is <em>not</em> in front.</p>
+<h2>A pane's text is garbled, or in the wrong place</h2>
+<p>A pane has one terminal however many windows show it, and that terminal is one
+size: the size of the window last used for it (typed into, or whose terminal
+was focused or tapped), or, until one has been, the smallest of them. Every
+window draws the pane at that size. A window too small for it shows the pane
+cropped, with <strong>Viewing N×M · fit to this window</strong> over it, N×M being the
+pane's own size: press it, or click or type in the pane there, and the pane is sized
+for that window instead. A pane is never smaller than 20×5 or larger than
+500×200.</p>
+<p>When windows disagree about a pane's size, a line saying
+so (sizes only, never what the pane shows) is written to <code>error.log</code>, at most
+once a minute per pane; in the window's developer tools,
+<code>window.flockdeckPanes()</code> lists each pane's terminal, pty and box sizes. Both
+are worth including if you report a pane that stays garbled.</p>
 <h2>An agent seems to think it is a child of another session</h2>
 <p>It is not: each pane is a separate top-level session with its own session id,
 its own generated settings file where the agent takes hooks, and an environment
 scrubbed of the markers a
-parent agent session would otherwise pass down — every agent's markers, not
+parent agent session would otherwise pass down. That covers every agent's markers, not
 only the ones belonging to whatever is in that pane, since Flockdeck may itself
 have been launched from inside one of them. If a pane is behaving as though it
 inherited something, restart it, and the state that survives a restart is the

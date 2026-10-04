@@ -101,9 +101,9 @@ the <code>+</code> that opens a new tab.</p>
 <p>The picker lists agents in two groups, <strong>installed</strong> and <strong>not installed</strong>. An
 agent you have not got is shown greyed with where to get it rather than
 hidden: somebody who has never installed Codex should still learn that Flockdeck
-would run it. Expand an agent for its models, with its default marked. Each
-model carries its tier — <strong>small</strong>, <strong>mid</strong> or <strong>top</strong>, how capable and so how
-costly it is among that agent's own — and a model of an API agent its published
+would run it. Expand an agent for its models, with its default marked. A
+model carries its tier where it has a fixed one (<strong>small</strong>, <strong>mid</strong> or <strong>top</strong>: how capable, and so how
+costly, it is among that agent's own models). A model of an API agent shows its published
 price per million tokens, in and out, with the day it was read. A command-line
 agent's models show no price: the same model may be billed per token or
 covered by a subscription, and only you know which. Every price comes from one
@@ -116,11 +116,11 @@ this project or for every project, so the one-keystroke split keeps doing the
 right thing. <strong>Use the default for every project</strong> removes this project's own
 choice.</p>
 <p>The pane header names what is running, beside the branch and in the same dim
-weight — <code>claude · sonnet</code>, <code>codex · gpt-5.6-sol</code>. A shell pane shows nothing there,
+weight: <code>claude · sonnet</code>, <code>codex · gpt-5.6-sol</code>. A shell pane shows nothing there,
 because there is nothing to choose. For the API agents, and for Claude Code
-where its status line is read, what the conversation has spent and how near its
-usage limit it is follow;
-<a href="/app/spend.html">Spend and limits</a> explains the figures.</p>
+where its status line is read, it is followed by what the conversation has
+spent and how near its usage limit it is; <a href="/app/spend.html">Spend and limits</a> explains
+the figures.</p>
 <h2>Two kinds of agent</h2>
 <p><strong>CLI agents</strong> are the tools you would run in a terminal yourself: Claude Code,
 Codex, Gemini, Aider, opencode, Cursor's agent. Flockdeck runs the command in the
@@ -129,34 +129,37 @@ whatever login that tool already has. Nothing is installed for you; an agent
 whose command is not on your <code>PATH</code> is the greyed kind.</p>
 <p><strong>API agents</strong> talk to a model API directly. There is no wrapper CLI, no node
 and no Python: Flockdeck runs its own chat client, <code>flockdeck chat</code>, in the pane. It is
-a real terminal chat client — streamed answers, a status line carrying the
+a real terminal chat client with streamed answers, a status line showing the
 model, its token counts and, for a model in the price table, the running cost,
 and tools for reading files, editing them and
-running commands; the ones that write a file or run a command ask before they
+running commands. The ones that write a file or run a command ask before they
 act. A command can be let through for the rest of the session by answering
-<em>always</em>; a write is asked about every time. <em>Always</em> is not offered for a
-command that can run anything at all — a shell, <code>git config</code>, <code>npm exec</code>,
-<code>docker run</code> — and a command with an option that writes a file wherever it
+<em>always</em>, and so can edits to files (except inside <code>.git</code> or <code>.hg</code>). <em>Always</em>
+is not offered for a
+command that can run anything at all (a shell, <code>git config</code>, <code>npm exec</code>,
+<code>docker run</code>), and a command with an option that writes a file wherever it
 says or runs a program it names, such as <code>git log --output</code> or
 <code>go test -exec</code>, is asked about even after <em>always</em>. Anthropic, OpenAI and
 Google are built in, and so is a plain OpenAI-compatible endpoint, which is how
-a local server — Ollama, LM Studio, vLLM — or a gateway becomes an agent.</p>
+a local server (Ollama, LM Studio, vLLM) or a gateway becomes an agent.</p>
 <p>The price table holds Anthropic's, OpenAI's and Google's models. A model is
 priced only when its id is one the table names, or a dated snapshot of one
 such as <code>claude-haiku-4-5-20251001</code>; any other id, including one that only
 begins like a priced model, is shown in tokens with no dollars, because a
-made-up price is worse than none.</p>
+made-up price is worse than none. An API agent given an address of its own,
+such as a gateway's, is not priced at all, since what it charges is not the
+vendor's list price.</p>
 <h2>An endpoint's address</h2>
 <p>The OpenAI-compatible endpoint ships with no address, because none would be
 right for everybody, so it waits under <strong>not installed</strong> until it has one.
 Pick it and the picker asks for the address there and then: type where the
-model server answers, starting <code>http://</code> or <code>https://</code> — <code>http://127.0.0.1:11434/v1</code>
-for Ollama, <code>http://127.0.0.1:1234/v1</code> for LM Studio — and press <code>Enter</code>.
+model server answers, starting <code>http://</code> or <code>https://</code> (<code>http://127.0.0.1:11434/v1</code>
+for Ollama, <code>http://127.0.0.1:1234/v1</code> for LM Studio), and press <code>Enter</code>.
 <code>Escape</code> puts the field away without saving anything.</p>
 <p>How much of the address to give depends on the path. For an OpenAI-compatible
 endpoint, <code>/v1</code> is added only to a bare address such as
-<code>http://127.0.0.1:11434</code>. An address with a path of its own — <code>.../v1</code>, or a
-gateway's <code>https://gateway.example/openai</code> — is taken as the whole of the API's
+<code>http://127.0.0.1:11434</code>. An address with a path of its own (<code>.../v1</code>, or a
+gateway's <code>https://gateway.example/openai</code>) is taken as the whole of the API's
 root, and nothing is added to it. So give the path your server or gateway
 documents, <code>/v1</code> included where it has one. For the Anthropic and Gemini
 agents, the API's version is added unless the address already ends in it. A
@@ -165,15 +168,16 @@ request's full address pasted in, ending <code>/chat/completions</code>, <code>/
 <p>An address on this machine needs no key, so a local model server is offered
 the moment its address is saved. One anywhere else, such as a gateway, needs a
 key as well, set under <strong>API keys…</strong>.</p>
-<p>Any other API agent that has been given an address — one of your own, or a
-built-in pointed at a proxy — shows it beside its name. Open the agent with the
+<p>Any other API agent that has been given an address (one of your own, or a
+built-in pointed at a proxy) shows it beside its name. Open the agent with the
 right arrow and choose its <strong>Address</strong> row to change it. Saved empty, the
 address is taken away, and a built-in goes back to its vendor's own.</p>
 <p>An address that is not one is refused under the field, with what to type
 instead: <code>localhost:11434</code> is answered with <code>http://localhost:11434</code>. An
 address with a name or password in it is refused too, because it is shown in
-the picker; the key goes under <strong>API keys…</strong>. A pane already running keeps
-the address it started with until it is restarted. From a terminal, <code>flockdeck keys endpoint &lt;agent&gt; &lt;address&gt;</code> does the same, and <code>default</code> in place of the
+the picker; the key goes under <strong>API keys…</strong>. A pane already running
+keeps the address it started with, until the old one cannot be reached: then
+it asks the new address instead, and says so. From a terminal, <code>flockdeck keys endpoint &lt;agent&gt; &lt;address&gt;</code> does the same, and <code>default</code> in place of the
 address goes back to the vendor's own.</p>
 <h2>Not every agent can do everything</h2>
 <p>Most of what Flockdeck does beyond drawing a terminal depends on the agent
@@ -208,9 +212,9 @@ cooperating, and they do not all cooperate in the same ways.</p>
 </tr>
 </tbody>
 </table>
-<p>An agent that does none of it still works perfectly well: it is a terminal with
-a program in it, which is where every one of these features started. Where a
-capability is missing Flockdeck falls back rather than failing — status comes from
+<p>An agent that does none of it still works: it is a terminal with
+a program in it. Where a
+capability is missing Flockdeck falls back rather than failing: status comes from
 the terminal bell and a quiet timer; fan out reads the screen; resume is not
 attempted, and the pane starts fresh.</p>
 <p>Of the built-in agents, Claude Code and the four API agents report their own
@@ -222,16 +226,16 @@ no task; Aider gets it only when there is a task, because <code>--message</code>
 answer once and exit, and a message that was all briefing would end the pane.
 An entry in <code>agents.json</code> can choose the same for its own agent with
 <code>&quot;caps&quot;: {&quot;context&quot;: &quot;prompt&quot;}</code> (or <code>&quot;task&quot;</code> for the Aider behaviour), and can give it
-<code>&quot;patterns&quot;</code> — <code>&quot;waiting&quot;</code> and <code>&quot;idle&quot;</code>, each a list of phrases its output
-shows in that state — so that its status is read from what it prints as well. They are plain text, not expressions, and
-case does not matter; none of the built-ins has any yet.</p>
+<code>&quot;patterns&quot;</code>: <code>&quot;waiting&quot;</code> and <code>&quot;idle&quot;</code>, each a list of phrases its output
+shows in that state, so that its status is read from what it prints as well. They are plain text and
+case does not matter. None of the built-ins has any yet.</p>
 <p>Aider is handed its opening task with <code>--message</code>, which Aider treats as a
 single message, so a pane started with a task (by a fan-out, say) may end when
 the task does.</p>
 <h2>Keys, for the API agents</h2>
 <p>A CLI agent uses the login it already has, and Flockdeck never sees it. An API
 agent needs a key, which is looked for in that agent's own environment
-variables first — <code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code> and the rest — then in
+variables first (<code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code> and the rest), then in
 Flockdeck's own store, and last in <code>FLOCKDECK_API_KEY</code>, which any API agent
 reads. A vendor's own variable is read only by an agent talking to that
 vendor's own address: a built-in given a gateway's or a proxy's address is
@@ -256,20 +260,25 @@ never sent the key you exported for the vendor, and uses the one stored for it.<
 <td><code>flockdeck keys clear openai</code></td>
 <td>Forgets the one Flockdeck stored</td>
 </tr>
+<tr>
+<td><code>flockdeck keys check openai</code></td>
+<td>Asks the agent's endpoint whether it takes the key a pane would use</td>
+</tr>
 </tbody>
 </table>
-<p>Or set them from the window: <strong>API keys…</strong>, in the command palette, lists
-every API agent with <strong>set</strong> or <strong>not set</strong> beside it — and, for one that is
-not, the environment variables it would look in — and offers <strong>Set…</strong> and
-<strong>Clear</strong>.</p>
+<p>Or set them from the window: <strong>API keys…</strong>, in the command palette, or
+<strong>API keys</strong> in the settings, lists every API agent with <strong>set</strong> or <strong>not
+set</strong> beside it (and, for one that is not, the environment variables it would
+look in), and offers <strong>Set…</strong> (<strong>Replace…</strong> once one is set) and, for a key
+Flockdeck stored, <strong>Clear</strong>.</p>
 <p>Keys are kept in <code>keys.json</code> in the state directory, readable only by you. A
 key reaches exactly one place: the environment of the chat process for the pane
 that needs it. It is never logged, never written into a saved layout and never
-shown — the interface will not read one back to you. An endpoint that needs no key at all, such
+shown, and the interface will not read one back to you. An endpoint that needs no key at all, such
 as a local server on loopback, counts as available without one.</p>
 <h2>Adding your own: agents.json</h2>
 <p>The picker is the built-in agents overlaid with your own file, <code>agents.json</code> in
-the state directory — <code>%AppData%\flockdeck</code> on Windows, <code>~/Library/Application Support/flockdeck</code> on macOS, <code>~/.config/flockdeck</code> on Linux.</p>
+the state directory: <code>%AppData%\flockdeck</code> on Windows, <code>~/Library/Application Support/flockdeck</code> on macOS, <code>~/.config/flockdeck</code> on Linux.</p>
 <pre><code class="language-json">{
   &quot;version&quot;: 1,
   &quot;defaults&quot;: { &quot;agent&quot;: &quot;claude&quot;, &quot;model&quot;: &quot;&quot; },
@@ -294,26 +303,27 @@ the state directory — <code>%AppData%\flockdeck</code> on Windows, <code>~/Lib
 <p>Entries are matched to the built-ins by <code>id</code> and merged field by field: the
 <code>claude</code> entry above changes its default model and leaves everything else
 alone. An <code>id</code> matching no built-in is an agent of your own. <code>&quot;hidden&quot;: true</code>
-takes one out of the picker without removing it. A model's <code>&quot;tier&quot;</code> —
-<code>&quot;small&quot;</code>, <code>&quot;mid&quot;</code> or <code>&quot;top&quot;</code> — is set or corrected the same way; anything else
+takes one out of the picker without removing it. A model's <code>&quot;tier&quot;</code>
+(<code>&quot;small&quot;</code>, <code>&quot;mid&quot;</code> or <code>&quot;top&quot;</code>) is set or corrected the same way; anything else
 is named in the notice and ignored.</p>
 <p>The file is read fresh every time the picker opens, so editing it by hand takes
 effect without a restart.</p>
 <h2>Routing</h2>
 <p>A fan-out multiplies whatever its model costs, and many of its tasks are
 mechanical: run the tests, rename a symbol, fix a typo. Routing pre-sets each
-row of a <a href="/app/fanout.html">fan-out</a> to a model suited to the work — a smaller one for
-mechanical work, a stronger one for hard work — and leaves every other row
-exactly as it was. It is <strong>off</strong> until you turn it on, in Settings › Agents ›
-Routing, for every project or for one.</p>
+row of a <a href="/app/fanout.html">fan-out</a> to a model suited to the work (a smaller one for
+mechanical work, a stronger one for hard work) and leaves every other row
+exactly as it was. It is <strong>off</strong> until you turn it on, in <strong>Settings ›
+Routing</strong>, for every project or for one.</p>
 <p>What it chooses is shown before anything starts. A routed row's model is
 pre-set in its select, with a <strong>↘ routed</strong> tag (↗ for a stronger model) whose
 tooltip says which rule chose it and, for an API agent, what the two models
-cost. Changing the select makes the row yours again, and <strong>Use the run's
-model for every task</strong>, beside the line saying how many rows were routed,
-does that for all of them. What was shown is what runs. A pane started on a
-routed model says so in its header — <code>claude · haiku ↘</code> — with the rule in
-its tooltip.</p>
+cost. Changing the select makes the row yours again, and <strong>Undo routing</strong>,
+beside the line saying how many rows were routed, puts every row back on the
+run's model. What was shown is what runs. A pane a rule routed says so in its
+header (<code>claude · haiku ↘</code>), with the rule, and the agent and model it would
+otherwise have used, in its tooltip. A pane <strong>Minimise cost</strong> routed with no
+rule runs the cheaper model without the arrow.</p>
 <p>Routing moves work between the models of the agent the run is on, and only
 between models whose tier it knows. It sends work to another agent only when
 you turn on <strong>Let a rule send work to another agent</strong>, in the same place, and
@@ -322,19 +332,21 @@ runs to a local model through an OpenAI-compatible endpoint, say. Even then,
 only a new fan-out row or helper moves, never a conversation already under
 way. The other agent has to be installed or keyed and trusted for the project,
 and, if it has an address of its own, something has to be answering there. The
-fan-out dialog shows the agent a row will run on, and the pane's header names
-the agent and model it would otherwise have used. Claude Code's
+fan-out dialog shows the agent a row will run on, and the pane header's
+tooltip names the agent and model it would otherwise have used. Claude Code's
 <strong>Default</strong> is whatever the CLI is set to, which might be its smallest model
 or its largest, so routing leaves work on it alone: choose a model for the run
 in the fan-out, or make one your default, for routing to choose from it.</p>
 <p><strong>Suggest</strong> and <strong>Automatic</strong> are the same for a fan-out, since the dialog asks
 before anything starts either way. <strong>Automatic</strong> also routes a helper an agent
-starts with <code>flockdeck spawn</code> without <code>--agent</code> or <code>--model</code>; with
-<strong>Suggest</strong> such a helper runs as asked, since there is nobody to show a
-suggestion to. <strong>Never go below</strong> keeps routing off the
+starts with <code>flockdeck spawn</code> without <code>-agent</code> or <code>-model</code>, and the first
+prompt you send a pane from the prompt bar, while it has no conversation yet:
+the pane restarts on the chosen model with that prompt, and never on another
+agent. With <strong>Suggest</strong> such a helper or prompt runs as asked, since there is
+nobody to show a suggestion to. <strong>Never go below</strong> keeps routing off the
 smaller tiers for a project where the work matters.</p>
 <p><strong>Strategy</strong> decides what happens to a task no rule matches. <strong>Cost-first,
-quality-aware</strong> — the default — leaves it exactly where it was, the same as
+quality-aware</strong> (the default) leaves it exactly where it was, the same as
 routing off would for that row. <strong>Minimise cost</strong> routes it too, to the
 cheapest model <strong>Never go below</strong> allows on the agent it was already going to
 run on, never to another agent. Either strategy, a rule that matches still
@@ -355,7 +367,7 @@ conversation's first prompt are not. If Jev is unsure, contradicts itself,
 is slow, is refused or is down, the row is routed exactly as it would be without
 it. The row's tooltip says what Jev rated it when it did decide.</p>
 <p>It is <strong>off</strong> by default and needs both this setting, for every project or for
-one, and a TypeSafe API key: the one set in <strong>Settings › Behaviour ›
+one, and a TypeSafe API key: the one set in <strong>Settings › Status detection ›
 TypeSafe API key</strong> (used first), or else <code>TYPESAFE_API_KEY</code> in the environment
 Flockdeck starts in. Saving a key on its own sends nothing.
 <strong>Turning it on sends the text of each such row to TypeSafe, a third party.</strong>
@@ -365,9 +377,10 @@ conversation, no path of your machine's that the text does not itself contain.
 Nothing is removed from the text first, so a task that contains a secret sends
 it; leave the setting off for work like that. Calls give up after 2 seconds,
 run at most 20 a minute, are remembered for an hour so an edited fan-out does
-not ask again, and pause for 30 seconds after a failure. Without the key the
+not ask again, and pause for 30 seconds after a failure, or 5 minutes after
+the key is refused. Without the key the
 setting does nothing and nothing is sent.</p>
-<p>The policy is kept in <code>agents.json</code> — and only there, never in a file inside a
+<p>The policy is kept in <code>agents.json</code>, and only there, never in a file inside a
 repository, so a repository you clone cannot change what your key spends:</p>
 <pre><code class="language-json">{
   &quot;routing&quot;: {
@@ -392,7 +405,7 @@ repository, so a repository you clone cannot change what your key spends:</p>
 <p>Rules are tried in order and the <strong>first that matches decides</strong>; a task no rule
 matches is left alone under <code>&quot;strategy&quot;: &quot;balanced&quot;</code> (the default, same as
 leaving <code>strategy</code> out), or routed to the cheapest model the floor allows
-under <code>&quot;strategy&quot;: &quot;cost&quot;</code> — or, with <code>&quot;jev&quot;: true</code> too, to the tier Jev rates
+under <code>&quot;strategy&quot;: &quot;cost&quot;</code>, or, with <code>&quot;jev&quot;: true</code> too, to the tier Jev rates
 it as needing, as above. Every condition in <code>when</code> must hold: <code>task</code> is a
 regular expression matched without regard to case; <code>minWords</code> and <code>maxWords</code>
 bound the task's length; <code>files</code> are globs matched against the paths the task
@@ -401,9 +414,9 @@ file's name anywhere); <code>kind</code> is <code>fanout</code>, <code>spawn</co
 agent's id. A rule asks for a <code>tier</code>, or for one agent's <code>model</code>. Leave
 <code>rules</code> out for the built-in ones, which Settings lists; <code>&quot;rules&quot;: []</code> means
 none. A project's own policy replaces the one for every project whole. A rule
-that cannot be used — a pattern that is not one, a tier that is not one — is
+that cannot be used (a pattern that is not one, a tier that is not one) is
 named in the notice and skipped, and the rest still apply.</p>
-<p>Saving a default from a Flockdeck that has no routing — 0.2.10 or older —
+<p>Saving a default from a Flockdeck that has no routing (0.2.10 or older)
 writes a project's entry back without its <code>routing</code>, so a project's policy is
 lost that way.</p>
 <p><strong>Routing makes no request</strong> unless you turn one of two things on. It decides
@@ -413,17 +426,18 @@ connection to that address, and closes it at once without sending anything, to
 check something is listening. With <strong>Ask Jev to rate unmatched work</strong> on, and a
 key set, it sends a fan-out row's text to TypeSafe as described above. The routed mark on a pane travels only as the
 rest of the pane's state does, to your own paired devices when remote access
-is on. What it chose, and whether you kept it, is kept
-in <code>routing.jsonl</code> in the state directory, for your own numbers: the rule's
-name and the models, never the task. A row decided with no rule is logged too,
-with what Jev rated it if it did. Settings lists each rule beside how often
-the log shows it overridden, once it has decided at least once — the evidence
+is on. What it chose for each fan-out row, and whether you kept it, is kept
+in <code>routing.jsonl</code> in the state directory, for your own numbers: when, the
+project, the pane, the agent, the rule's name and the models, never the task;
+the last 10,000 lines. A row decided with no rule is logged too, with what Jev
+rated it if it did. Helpers and first prompts are not logged. Settings lists each rule beside how often
+the log shows it overridden, once it has decided at least once. That is the evidence
 for deciding which rules are worth hand-editing. Below the rules,
 <strong>Unmatched work</strong> shows how often what Minimise cost chose was overridden with
 Jev's rating and without it, so you can see whether trusting it has been
 worth it; nothing changes on its own. Settings has <strong>Clear routing
 history</strong>, and to turn all of it off, set every project to <strong>Off</strong>. A file that does not parse is a notice in the
-interface and nothing worse — the built-in agents carry on, because a typo in a
+interface and nothing worse: the built-in agents carry on, because a typo in a
 settings file is not a reason to be unable to start work.</p>
 
   </article>

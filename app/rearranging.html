@@ -93,35 +93,35 @@
 turns out to be the one you are watching, and it is in the wrong corner.</p>
 <p>Nothing is started or stopped by moving it. A move relocates the pane in the
 layout tree, so the process, its conversation, its working directory and its
-scrollback all come along — and the new arrangement is saved, so it comes back
+scrollback all come along. The new arrangement is saved, so it comes back
 next time.</p>
 <h2>Dragging a pane</h2>
 <p>Drag a pane by its header. The pane under the pointer shows what would happen
 if you let go there:</p>
 <ul>
-<li>onto the <strong>left, right, top or bottom</strong> of another pane — it goes there,
+<li>onto the <strong>left, right, top or bottom</strong> of another pane: it goes there,
 joining that row or column rather than nesting a new split inside it;</li>
-<li>onto the <strong>middle</strong> of another pane — the two <strong>exchange places</strong>, and the
+<li>onto the <strong>middle</strong> of another pane: the two <strong>exchange places</strong>, and the
 layout keeps its shape and proportions exactly as they were;</li>
-<li>onto <strong>another tab</strong> in the tab bar — it moves into that tab;</li>
-<li>onto the <strong><code>+</code> button</strong> — it gets a tab of its own.</li>
+<li>onto <strong>another tab</strong> in the tab bar: it moves into that tab;</li>
+<li>onto the <strong><code>+</code> button</strong>: it gets a tab of its own.</li>
 </ul>
 <h2>Dragging a tab</h2>
 <p>Where along another tab it lands decides what happens:</p>
 <ul>
-<li>onto the <strong>left or right end</strong> — it is reordered to there;</li>
-<li>onto the <strong>middle</strong> — the two tabs are <strong>merged</strong>, and one tab is left
+<li>onto the <strong>left or right end</strong>: it is reordered to there;</li>
+<li>onto the <strong>middle</strong>: the two tabs are <strong>merged</strong>, and one tab is left
 holding every pane of both. Each keeps the arrangement it had, and the room
 is shared out a column at a time rather than half to each tab: fold five tabs
 in one after another and you get five even columns, not one half the width
 and the rest squeezed into slivers you cannot grab a divider in;</li>
-<li>onto the <strong><code>+</code> button</strong> — it goes to the end of the bar.</li>
+<li>onto the <strong><code>+</code> button</strong>: it goes to the end of the bar.</li>
 </ul>
 <p>A tab emptied by dragging its last pane away closes itself, and <strong>the pane is
 not closed with it</strong>. That is the difference between moving a pane out and
 closing it.</p>
 <h2>Putting a tab back in order</h2>
-<p>Every move here is relative — beside this pane, past that one — and enough of
+<p>Every move here is relative (beside this pane, past that one), and enough of
 them leaves a tab with panes too narrow to grab a divider in or drop anything
 into. <strong>Tile these panes evenly</strong> is the way back: it lays the tab's panes out in rows of
 even columns, in the order they are already in, the same arrangement a fan-out

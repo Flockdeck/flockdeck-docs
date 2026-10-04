@@ -110,17 +110,32 @@ made from the conversation the agent stores itself (for Claude Code, the file
 under <code>~/.claude/projects</code> that <strong>Resume a past conversation</strong> reads), by one
 piece of code. Turning recording on writes the conversation so far, from its
 first message, and then follows it; it does not begin at the moment you turned
-it on. Export is only from the machine Flockdeck runs on, not from a phone.</p>
+it on. Export is only from the machine Flockdeck runs on, not from a window
+reached through the relay.</p>
 <p><strong>Only agents that store their conversation in a form Flockdeck can read have
 anything to record or export.</strong> That is Claude Code today. For Codex, Gemini
 CLI, Aider, opencode, Cursor Agent and the built-in chat clients, Flockdeck says
-so, and nothing is exported; turning recording on for one is refused, saying so.</p>
+so, and nothing is exported; turning recording on for one is refused, saying so.
+A conversation is one file, so only one pane at a time can record it: turning
+recording on in a second pane showing the same conversation is refused.</p>
 <h2>What is recorded</h2>
 <p>One JSON object per line, in the order things happened. Every line has a
-timestamp (<code>time</code>), the conversation's id (<code>pane</code>, <code>conversation</code>), the
-<code>project</code> and the <code>agent</code>, and a <code>type</code>. A pane's name and model are not in the
-lines: they are the pane's, not the conversation's, and an export has to match a
-recording of the same conversation:</p>
+timestamp (<code>time</code>), the conversation's id (<code>pane</code>) and a <code>type</code>; <code>conversation</code>,
+<code>project</code> and <code>agent</code> are there whenever they are known, and left out when
+not. A pane's name is not in the
+lines, nor is the model it is set to now: they are the pane's, not the
+conversation's, and an export has to match a recording of the same conversation.
+The one model a line can have is the one that produced that turn, as the agent's
+stored conversation records it (<code>model</code> on <code>assistant_message</code> and <code>tool_call</code>
+lines, left out where the conversation records none). The same goes for a few
+more things the agent's stored conversation records, each left out where it does
+not: the tokens a reply used (<code>usage</code>) and why it ended (<code>stopReason</code>), once per
+reply (on its first line, as long as Claude Code repeats the same numbers on each
+entry of a reply, which it has in every conversation checked), and on every line
+the branch (<code>gitBranch</code>), the folder (<code>cwd</code>, a full path that usually has your account name in it, so look before you
+share a transcript) and the agent's version (<code>agentVersion</code>) of the entry it came
+from. Transcripts exported before these were added do not have them until they
+are exported again:</p>
 <table>
 <thead>
 <tr>
@@ -150,6 +165,14 @@ recording of the same conversation:</p>
 <td>What the tool printed (<code>output</code>), and <code>isError</code> or <code>interrupted</code> where it failed or you stopped it</td>
 </tr>
 <tr>
+<td><code>conversation_title</code></td>
+<td>The conversation's title (<code>title</code>), written when it appears and again when it changes</td>
+</tr>
+<tr>
+<td><code>conversation_compacted</code></td>
+<td>Where earlier history was summarised, with <code>trigger</code> and <code>tokensBefore</code> / <code>tokensAfter</code> where known. The summary itself is not recorded</td>
+</tr>
+<tr>
 <td><code>recording_truncated</code></td>
 <td>The file reached its size cap and ended there</td>
 </tr>
@@ -170,7 +193,11 @@ and nothing else:</p>
 lines.</strong> Claude Code's stored conversation does not record that a dialog was
 shown, how you answered it, or when the pane went idle or waiting. Earlier
 versions of Flockdeck wrote these lines from the agent's live events;
-recordings made then still have them, and the format still defines them.</li>
+recordings made then still have them, and the format still defines them.
+Those files are format 1 too: they are told apart by the text of their first
+and last lines (<code>turned on</code>, <code>resumed</code>, <code>turned off</code>, where a transcript made
+now says <code>start of the transcript</code> and <code>end of the transcript</code>), and in them
+<code>pane</code> is the pane's id, not the conversation's.</li>
 <li><strong>Only what you typed is a prompt.</strong> Entries Claude Code writes for itself
 (a slash command and its output, injected reminders, the note a conversation
 continued from a summary opens with) are left out, and so is a subagent's own
@@ -200,7 +227,8 @@ recording to if it is recording, otherwise its latest export, and a notice if it
 has neither. Like opening the folder it only works from the machine Flockdeck
 runs on, and only for a file in the recordings folder. <code>flockdeck recordings export -reveal</code> does it for the file it has just written.</p>
 <p><strong>Open recordings folder</strong> opens the folder. <code>flockdeck recordings</code> lists the
-recordings, newest first, and <code>flockdeck recordings -dir</code> prints the folder.
+recordings, newest first (not the exports), and <code>flockdeck recordings -dir</code>
+prints the folder.
 <code>flockdeck recordings export -o file</code> writes an export to a path of your
 choice, which must not exist and cannot be inside the project or any git
 repository. There is no replay view: the files are plain JSON lines, for <code>jq</code>
@@ -234,17 +262,19 @@ through a symlink or an ordinary-looking name. Treat a transcript as being as
 sensitive as the conversation itself, assume a secret may be in it even when no
 line is marked redacted, and delete the files you do not want kept. Transcripts
 are saved on this machine (user-only on Linux and macOS; on Windows, readable by
-you and a local administrator, like any file in your profile) — &quot;on this
+you and a local administrator, like any file in your profile), &quot;on this
 machine&quot;, not &quot;private to you&quot;.</p>
-<p>Nothing is sent anywhere: transcripts stay on this machine, and <code>Open recordings folder</code> only works from the machine Flockdeck runs on, not from a phone.</p>
+<p>Nothing is sent anywhere: transcripts stay on this machine, and <strong>Open
+recordings folder</strong> only works from the machine Flockdeck runs on, not from a
+window reached through the relay.</p>
 <h2>Starting a helper recorded</h2>
 <p>An agent can start a helper whose conversation is recorded from the first
 message:</p>
-<pre><code class="language-sh">flockdeck spawn --record &quot;refactor the parser&quot;
+<pre><code class="language-sh">flockdeck spawn -record &quot;refactor the parser&quot;
 </code></pre>
 <p>This only works once you have turned recording on yourself, in the window, and
 read what it keeps: an agent cannot be the first to switch it on. Without
-<code>--record</code> a helper is not recorded, even if its parent is.</p>
+<code>-record</code> a helper is not recorded, even if its parent is.</p>
 
   </article>
 </main>
