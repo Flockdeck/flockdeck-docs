@@ -98,39 +98,42 @@ directories come back, <strong>every project you had open is reopened</strong>, 
 starts the agent and model it had, and each one resumes the conversation it had
 rather than starting an empty one. The project you name on the command line is
 the one you land in; the rest are restored around it.</p>
-<p>A project whose folder is not there when Flockdeck starts — on a USB stick
-that is not plugged in, or a network drive not yet connected — is not opened,
+<p>What you set on a pane comes back with it too: its lock, whether it is
+recording, and its auto-review switch, along with a name you gave its tab and
+the terminal size it was last drawn at. A layout saved before auto-review was
+kept per pane brings its panes back with auto-review as <strong>Settings ›
+General › Start new panes with auto-review on</strong> says.</p>
+<p>A project whose folder is not there when Flockdeck starts (on a USB stick
+that is not plugged in, or a network drive not yet connected) is not opened,
 but it stays in the list for the next ten starts, so it comes back with its
 folder. Closing it, once it is back and open, takes it off the list.</p>
-<p>Started without one — from the Start menu, a shortcut, or a terminal in your
-home folder — Flockdeck opens the projects you had open last time and lands in
+<p>Started without one (from the Start menu, a shortcut, or a terminal in your
+home folder), Flockdeck opens the projects you had open last time and lands in
 the one you were in. Your home folder opens as a project only when there were
 none; to open it on purpose, run <code>flockdeck -C ~</code>.</p>
 <p>A layout is written when the window closes or reloads, when you detach,
 restart or quit, when a project is closed, and every half minute while
-Flockdeck runs — so if it is killed or crashes, it comes back as it was at
+Flockdeck runs. If it is killed or crashes, it comes back as it was at
 most half a minute before. Which projects were open is not on that timer: it
 is written when the window closes or reloads, when you detach, and when
 Flockdeck stops, so after a crash the next start reopens the projects that
 were open at the last of those.</p>
-<p>A saved file Flockdeck cannot read — a layout, the list of open projects, your
-preferences — is never written over. It is moved aside, beside the original,
+<p>A saved file Flockdeck cannot read (a layout, the list of open projects, your
+preferences) is never written over. It is moved aside, beside the original,
 with <code>.unread</code> on the end (or <code>.damaged</code>, when it could be read but made no
 sense, or is a layout saved by a newer version of Flockdeck), and that run goes
 on without it. The window says so, and where the file is kept, within half a
 minute of opening.</p>
 <p>That works because a pane is identified by a session id handed to the agent
 when the pane is created, and handed back when it is restored. Pane identity
-and conversation identity are the same thing, which is what makes restore
-meaningful rather than cosmetic.</p>
+and conversation identity are the same thing.</p>
 <p>Two things have to hold for a conversation to come back: the agent has to be
 able to reattach one by id, and it has to have written a transcript to
 reattach. So a pane opened and never prompted starts a fresh conversation
 rather than dying on restore, and a pane running an agent that cannot resume
 comes back in the right place, in the right directory, with an empty
 conversation. <a href="/app/agents.html">Agents and models</a> says which is which.</p>
-<p>A layout saved by a build that knew only about Claude is read without a
-murmur: its panes come back running Claude Code at whatever model the CLI is
+<p>A layout saved by a build that knew only about Claude is read as normal: its panes come back running Claude Code at whatever model the CLI is
 set to, and nobody is asked anything.</p>
 <h2>Detaching</h2>
 <p><strong>Detach</strong>, in the command palette, closes the window and leaves every agent
@@ -146,7 +149,7 @@ terminal a Flockdeck was started from quits an attached run the orderly way,
 saving the layout first; a detached one, started with <code>-detach</code> or detached
 from the palette, carries on.</p>
 <h2>Reloading the window</h2>
-<p>Each pane keeps a bounded ring buffer of recent output, so a window that
+<p>Each pane keeps its most recent 512 KB of output, so a window that
 reconnects or is reloaded replays it into a fresh terminal. Reloading the page
 costs you scrollback beyond that buffer, not the conversation.</p>
 

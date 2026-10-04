@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Settings | Flockdeck docs</title>
-<meta name="description" content="Ctrl&#43;,, or Settings at the foot of the rail, opens the settings: the sections on the left and the one you are in on the right. Every control changes its setting at once, and it is the same setting the command palette and the keys change, so whichever you use, the others show it.">
+<meta name="description" content="Ctrl&#43;,, or Settings at the foot of the rail, opens the settings: eleven sections in four groups on the left, and the one you are in on the right. Every control changes its setting at once, and it is the same setting the command palette and the keys change, so whichever you use, the others show it.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Settings | Flockdeck docs">
-<meta property="og:description" content="Ctrl&#43;,, or Settings at the foot of the rail, opens the settings: the sections on the left and the one you are in on the right. Every control changes its setting at once, and it is the same setting the command palette and the keys change, so whichever you use, the others show it.">
+<meta property="og:description" content="Ctrl&#43;,, or Settings at the foot of the rail, opens the settings: eleven sections in four groups on the left, and the one you are in on the right. Every control changes its setting at once, and it is the same setting the command palette and the keys change, so whichever you use, the others show it.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/app/settings.html">
 <meta name="twitter:card" content="summary">
@@ -90,145 +90,161 @@
     <p class="eyebrow">Using Flockdeck</p>
 <h1>Settings</h1>
 <p class="doc-lede"><kbd>Ctrl+,</kbd>, or <strong>Settings</strong> at the foot of the rail, opens the settings:
-the sections on the left and the one you are in on the right. Every control
-changes its setting at once, and it is the same setting the command palette and
-the keys change, so whichever you use, the others show it.</p>
+eleven sections in four groups on the left, and the one you are in on the
+right. Every control changes its setting at once, and it is the same setting
+the command palette and the keys change, so whichever you use, the others show
+it.</p>
+<h3>Window</h3>
 <ul>
-<li><strong>General</strong> — desktop notifications, and whether Flockdeck checks for new
-releases in the background, which is changed only at the desk; <strong>Check for
-updates now</strong> asks once on the spot, whatever that switch says. <strong>Show them
-again</strong> brings back every hint you sent away.</li>
-<li><strong>Appearance</strong> — <strong>Theme</strong>: <strong>Dark</strong>, the palette this window has always
+<li><strong>General</strong>: <strong>Desktop notifications</strong>. Under <strong>New panes</strong>, <strong>Start new
+panes with auto-review on</strong>: a pane opened by hand starts with this setting,
+and a pane started from another one (a fan-out row, or a helper started with
+<code>flockdeck spawn</code>) starts the way that pane is set. Either way the ✓ in a
+pane's header turns it on or off for that one pane; auto-review only ever
+lets through a command it is confident only reads, and never says &quot;deny&quot;.
+Then <strong>Fan out</strong>'s own default for its &quot;Put fanned-out agents in this tab,
+beside the agent that planned them&quot; checkbox, which can still be changed for
+one run from the dialog itself. Under <strong>Hints</strong>, <strong>Show them again</strong> brings
+back every hint you sent away.</li>
+<li><strong>Appearance</strong>: <strong>Theme</strong>: <strong>Dark</strong>, the palette this window has always
 drawn in; <strong>Light</strong>; or <strong>Follow system</strong>, which changes with this
 computer's own light-or-dark setting. <strong>Accent colour</strong> is a small fixed set
-of swatches, kept legible against either palette, not a free colour picker.
-Below them, <strong>Terminal</strong>: the font size, the font, how many lines each pane
-keeps to scroll back through, and the cursor's shape and whether it blinks,
-with a preview. The size is also <kbd>Ctrl+=</kbd>, <kbd>Ctrl+-</kbd> and
-<kbd>Ctrl+0</kbd>. <strong>Screen reader support</strong> lets a screen reader read what
-the agents write; it is off unless you turn it on, because it slows every
-terminal a little. The palette has <strong>Turn screen reader support on</strong> too.</li>
-<li><strong>Behaviour</strong> — <strong>Fan out</strong>'s own default for its &quot;Put them in this tab&quot;
-checkbox, which can still be changed for one run from the dialog itself. And
-<strong>Auto-review</strong>'s own default: whether a pane with no parent — one opened by
-hand, or a fresh row of a fan-out run from the window — starts with
-auto-review on. A pane's own switch still starts off unless this is on, and
-either way can be turned on or off for that one pane; auto-review only ever
-lets through a confidently read-only command, and never says &quot;deny&quot;. And
-<strong>Status detection</strong>: whether TypeSafe's Jev model may help read the status
-of a pane whose agent reports none. <strong>Off by default</strong>, and it sends
-terminal output to a third party — see <a href="/app/status.html">Knowing who needs you</a>.
-Above it, <strong>TypeSafe API key</strong> is where you paste, replace or clear the key
-that feature and <strong>Ask Jev to rate unmatched work</strong> need. The field is
-masked and never shows the key back, only whether one is set. Saving a key
-sends nothing: both features stay off until you turn them on. At the desk
-only.</li>
-<li><strong>Keybindings</strong> — every shortcut this window's own chrome offers, grouped as
+of swatches, kept legible against either palette, not a free colour picker.</li>
+<li><strong>Terminal</strong>: a preview at the top, then the font size (13 px unless changed, from 8 to
+28), the font, how many lines each pane keeps to scroll back through (10,000
+by default), and the cursor's shape and whether it blinks. The size is also
+<kbd>Ctrl+=</kbd>, <kbd>Ctrl+-</kbd> and <kbd>Ctrl+0</kbd>. <strong>Screen reader
+support</strong> lets a screen reader read what the agents write; it is off unless
+you turn it on, because it slows every terminal a little. The palette has
+<strong>Turn screen reader support on</strong> too.</li>
+<li><strong>Keyboard</strong>: every shortcut this window's own chrome offers, grouped as
 <a href="/app/shortcuts.html">Keyboard shortcuts</a> groups them, each with a button that
 records the next key you press as its new binding; <strong>Reset</strong> puts one back,
 and <strong>Reset every shortcut to its default</strong> puts all of them back. Two
 actions can never share a chord: giving one an action's binding takes it
 from whichever had it. This is a different thing from your terminal tool's
-own keybindings — Claude Code's <code>~/.claude/keybindings.json</code>, say — which
+own keybindings (Claude Code's <code>~/.claude/keybindings.json</code>, say), which
 remaps keystrokes inside a pane; this remaps the window around it, before a
 pane ever sees the keystroke.</li>
-<li><strong>Agents</strong> — the agent and model a pane starts when nobody chooses: for every
-project, and for the project on screen, which can go back to <strong>Same as every
-project</strong>.
+</ul>
+<h3>Agents</h3>
 <ul>
-<li><strong>Routing</strong> — whether a fan-out's rows come with a model chosen for the
+<li><strong>Agents &amp; models</strong>: the agent and model a pane starts when nobody
+chooses: for <strong>Every project</strong>, and for the project on screen, which can go
+back to <strong>Same as every project</strong>. And <strong>Claude Code's usage limits</strong>: which
+Claude panes read their five-hour and weekly limits for the pane header:
+<strong>Only where I have a status line</strong>, the default, <strong>Always</strong> or <strong>Never</strong>.
+It applies to a pane when it starts. <a href="/app/spend.html">Spend and limits</a> says what
+each one costs. Below them, links to <strong>Routing</strong> and <strong>API keys</strong>.</li>
+<li><strong>Routing</strong>: whether a fan-out's rows come with a model chosen for the
 work: <strong>Off</strong>, which it is until you change it, <strong>Suggest</strong> or
 <strong>Automatic</strong>, for every project and for this one. <strong>Never go below</strong> keeps
 it off the smaller tiers. <strong>Strategy</strong> is <strong>Cost-first, quality-aware</strong>,
 the default, or <strong>Minimise cost</strong>: quality-aware leaves work no rule
 recognises exactly where it was; minimise cost routes it too, to the
 cheapest model the floor allows. Either way a rule that matches still
-decides first. The rules in force are listed, each with how often the log
-shows it overridden where it has decided at least once, with where
-<code>agents.json</code> is, since that is where they are edited, and <strong>Clear routing
-history</strong> empties the record of what it chose. <a href="/app/agents.html">Agents and models</a>
-has the rest.</li>
-<li><strong>Claude Code's usage limits</strong> — which Claude panes read their five-hour
-and weekly limits for the pane header: <strong>Only where I have a status line</strong>,
-the default, <strong>Always</strong> or <strong>Never</strong>. It applies to a pane when it starts.
-<a href="/app/spend.html">Spend and limits</a> says what each one costs.</li>
-</ul>
-</li>
-<li><strong>API keys</strong> — set, replace or clear the key each API agent uses. A key is
+decides first. <strong>Let a rule send work to another agent</strong> and <strong>Ask Jev to
+rate unmatched work</strong> are off until you turn them on. The rules in force are
+listed, each with how often the log shows it overridden where it has decided
+at least once, with where <code>agents.json</code> is, since that is where they are
+edited, and <strong>Clear routing history</strong> empties the record of what it chose.
+<a href="/app/agents.html">Agents and models</a> has the rest.</li>
+<li><strong>API keys</strong>: set, replace or clear the key each API agent uses. A key is
 never shown once it is set. Keys are set and cleared only at the desk: a
 window reached through the relay shows which are set, and no more.</li>
-<li><strong>Remote access</strong> — turn it on or off, the relay it goes through, this
+<li><strong>Status detection</strong>: <strong>TypeSafe API key</strong>, where you paste, replace or
+clear the key that <strong>Let TypeSafe's Jev help read pane status</strong> and
+Routing's <strong>Ask Jev to rate unmatched work</strong> need. The field is masked and
+never shows the key back, only whether one is set, and it is set only at the
+desk. Saving a key sends nothing: both stay off until you turn them on.
+Below it, <strong>Let TypeSafe's Jev help read pane status</strong>: whether TypeSafe's
+Jev model may help read the status of a pane whose agent reports none. <strong>Off
+by default</strong>, and it sends terminal output to a third party. See <a href="/app/status.html">Knowing
+who needs you</a>. It is turned on only at the desk.</li>
+</ul>
+<h3>Connections</h3>
+<ul>
+<li><strong>Remote access</strong>: whether paired devices are notified when an agent has
+been waiting, after how long (30 seconds unless changed; 15 seconds to 10
+minutes), and whether the notification names the pane;
+then turning remote access on or off, the relay it goes through, this
 machine's name, and the paired devices. Turning it on or off, and the
 relay, are changed only at the desk.</li>
+<li><strong>GitHub</strong>: signing in to GitHub, for pull requests, issues and CI status
+inside Flockdeck; see <a href="/app/github.html">GitHub</a>.</li>
+</ul>
+<h3>Account</h3>
+<ul>
+<li><strong>Account &amp; plan</strong>: the Free plan, which is every part of the desktop app;
+where the relay reports one, the Remote access plan for reaching this
+machine through the shared relay, a free trial and then a subscription, with
+the days left or the date it is paid until, paid for from <strong>Devices</strong> on a
+paired phone or browser; and Enterprise, coming for companies to run the
+relay on their own infrastructure with SSO and support. Under <strong>Version</strong>,
+<strong>Check for updates</strong>: whether Flockdeck looks for new releases in the
+background, changed only at the desk; <strong>Check for updates now</strong> asks once
+on the spot, whatever that switch says; and <strong>Install a specific version…</strong>
+to roll back or reinstall (see <a href="/app/cli.html">The command line</a>). Then <strong>Sponsor
+Flockdeck</strong>, a link to <a href="https://github.com/sponsors/jmwri" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a>
+for anyone who wants to say thank you. Sponsoring buys nothing, and the app
+is the same either way. At its foot are the licence (PolyForm
+Noncommercial), the privacy policy and terms for the shared relay, and the
+licences.</li>
 </ul>
 <p>A window reached through the relay leaves a few things to the desk: <a href="/app/remote.html">Remote
 access</a> lists them.</p>
-<ul>
-<li><strong>GitHub</strong> — signing in to GitHub, for pull requests, issues and CI status
-inside Flockdeck; see <a href="/app/github.html">GitHub</a>.</li>
-<li><strong>Account &amp; plan</strong> — the Free plan, which is every part of the desktop app;
-the Remote access plan for reaching this machine through the shared relay, a
-free trial and then a subscription, with the days left or the date it is paid
-until, paid for from <strong>Devices</strong> on a paired phone or browser; and
-Enterprise, coming for companies to run the relay on their own
-infrastructure with SSO and support.
-At its foot are the privacy policy and terms for the shared relay, and the
-licences.
-<ul>
-<li><strong>Sponsor Flockdeck</strong> — a link to
-<a href="https://github.com/sponsors/jmwri" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a>, under the plans, for
-anyone who wants to say thank you. Sponsoring buys nothing, and the app is
-the same either way.</li>
-</ul>
-</li>
-</ul>
-<p>Type into <strong>Find a setting</strong> to narrow the sections to the ones that mention a
-word. On a narrow screen the sections go across the top.</p>
+<p>Type into <strong>Find a setting</strong>, at the top of the settings, to narrow the list to
+the sections that mention a word. In a narrow window the list and a section are
+two pages: pick a section to open it, and <strong>← All settings</strong> goes back.</p>
 <h2>Elsewhere in the window</h2>
 <ul>
-<li><strong>The agent and model a pane runs</strong> — <strong>Split right (choose agent)…</strong> or
+<li>The agent and model a pane runs: <strong>Split right (choose agent)…</strong> or
 <strong>New agent tab (choose agent)…</strong>. Kept with the layout.</li>
-<li><strong>Which agent and model a project starts</strong> — <strong>Agents</strong> in the settings, or
-<strong>Set as default for</strong> at the foot of the picker. Kept in
+<li>Which agent and model a project starts: <strong>Agents &amp; models</strong> in the
+settings, or <strong>Set as default for</strong> at the foot of the picker. Kept in
 <code>agents.json</code>.</li>
-<li><strong>Whether a fan-out's models are routed, and by which rules</strong> — <strong>Agents ›
-Routing</strong> in the settings for the mode, the floor and the strategy; the
-rules themselves are edited by hand. Kept in <code>agents.json</code>.</li>
-<li><strong>Whether Claude panes read their usage limits</strong> — <strong>Agents › Claude Code's
-usage limits</strong> in the settings. Kept in <code>prefs.json</code>.</li>
-<li><strong>An API agent's key</strong> — <strong>API keys</strong> in the settings, <strong>API keys…</strong>, or
+<li>Whether a fan-out's models are routed, and by which rules: <strong>Routing</strong>
+in the settings for the mode, the floor and the strategy; the rules
+themselves are edited by hand. Kept in <code>agents.json</code>.</li>
+<li>Whether Claude panes read their usage limits: <strong>Agents &amp; models ›
+Claude Code's usage limits</strong> in the settings. Kept in <code>prefs.json</code>.</li>
+<li>An API agent's key: <strong>API keys</strong> in the settings, <strong>API keys…</strong>, or
 <code>flockdeck keys set &lt;agent&gt;</code>. Kept in <code>keys.json</code>. At the desk only.</li>
-<li><strong>Where an API agent sends its prompts</strong> — its address, in the agent picker,
+<li>Where an API agent sends its prompts: its address, in the agent picker,
 or <code>flockdeck keys endpoint &lt;agent&gt; &lt;url&gt;</code>. Kept in <code>agents.json</code>. At the
 desk only.</li>
-<li><strong>A tab's name</strong> — double-click the tab, press F2 while the keyboard is on
+<li>A tab's name: double-click the tab, press F2 while the keyboard is on
 it, or <strong>Rename this tab…</strong> in the command palette. An empty name, or <strong>Use the automatic title</strong> there, goes
 back to the title the tab gives itself. Kept with the layout.</li>
-<li><strong>Which panes the prompt bar reaches</strong> — <kbd>Ctrl+Shift+B</kbd>, and the <code>⇉</code>
+<li>Which panes the prompt bar reaches: <kbd>Ctrl+Shift+B</kbd>, and the <code>⇉</code>
 button in each pane header; <a href="/app/broadcast.html">Broadcast and the prompt bar</a> has the
 rest. Kept until Flockdeck stops.</li>
-<li><strong>The terminal's font, size, scrollback and cursor</strong> — <strong>Appearance</strong> in the
+<li>The terminal's font, size, scrollback and cursor: <strong>Terminal</strong> in the
 settings, or the palette's entries for each. Kept in <code>prefs.json</code>.</li>
-<li><strong>A fan-out's own shortcut, or any other window shortcut</strong> — <strong>Keybindings</strong>
+<li>A fan-out's own shortcut, or any other window shortcut: <strong>Keyboard</strong>
 in the settings. Kept in <code>keybindings.json</code>.</li>
-<li><strong>This machine's name and paired devices</strong> — <strong>Remote access</strong> in the
+<li>A pane's auto-review, lock and recording: the ✓, padlock and record
+buttons in its header, or the command palette. Kept with the layout, so a
+pane comes back after a restart the way you left it.</li>
+<li>This machine's name and paired devices: <strong>Remote access</strong> in the
 settings, or <strong>Remote access…</strong>. Use <strong>Pair a device</strong>, <strong>Rename</strong> and
 <strong>Unpair</strong>. Kept on the relay; <a href="/app/remote.html">Remote access</a> has the rest.</li>
-<li><strong>Notifications on paired devices</strong> — <strong>Remote access</strong> in the settings:
+<li>Notifications on paired devices: <strong>Remote access</strong> in the settings:
 whether the relay tells the paired devices that asked for them when an agent
 has been waiting, after how long, and whether they name the pane. Kept in
 <code>prefs.json</code>; <a href="/app/remote.html">Remote access</a> has the rest.</li>
-<li><strong>Desktop notifications</strong> — <strong>General</strong> in the settings, or <strong>Turn desktop
+<li>Desktop notifications: <strong>General</strong> in the settings, or <strong>Turn desktop
 notifications off</strong> in the palette; kept in <code>prefs.json</code>. The browser also
 asks once whether this window may show them, and keeps the answer for that
 run only: each run has an address of its own.</li>
-<li><strong>Hints under the tab bar</strong> — their close button sends one away for good.
+<li>Hints under the tab bar: their close button sends one away for good.
 Kept in <code>prefs.json</code>.</li>
-<li><strong>Fan out's own default, and auto-review's own default</strong> — <strong>Behaviour</strong> in
-the settings. Kept in <code>prefs.json</code>.</li>
-<li><strong>Status detection with Jev</strong> — <strong>Behaviour</strong> in the settings. Kept in
-<code>prefs.json</code>; off unless you turn it on, and only from the machine itself.</li>
-<li><strong>TypeSafe API key</strong> — <strong>Behaviour</strong> in the settings. Kept in <code>keys.json</code>
+<li>Fan out's own default, and auto-review's own default: <strong>General ›
+New panes</strong> in the settings. Kept in <code>prefs.json</code>.</li>
+<li>Status detection with Jev: <strong>Status detection</strong> in the settings. Kept
+in <code>prefs.json</code>; off unless you turn it on, and only from the machine
+itself.</li>
+<li>TypeSafe API key: <strong>Status detection</strong> in the settings. Kept in <code>keys.json</code>
 with your agents' keys, never in <code>prefs.json</code>; set and cleared at the desk
 only, never shown back, and only ever sent to <code>api.typesafe.ai</code>.</li>
 </ul>
@@ -238,51 +254,55 @@ Windows, <code>~/Library/Application Support/flockdeck</code> on macOS, and
 <code>~/.config/flockdeck</code> on Linux (or <code>$XDG_CONFIG_HOME/flockdeck</code> where that is
 set).</p>
 <ul>
-<li><code>agents.json</code> — your own agents, changes to the built-in ones, the default
+<li><code>agents.json</code>: your own agents, changes to the built-in ones, the default
 agent and model, and the routing policy: for every project under <code>defaults</code>
 and <code>routing</code>, for one under <code>projects</code>. <a href="/app/agents.html">Agents and models</a>
 describes it. It is read again each time the picker opens, so editing it
 needs no restart.</li>
-<li><code>keys.json</code> — API keys set through Flockdeck, and the TypeSafe key. A key
+<li><code>keys.json</code>: API keys set through Flockdeck, and the TypeSafe key. A key
 exported in the environment is used first, except for the TypeSafe key, where
 the one set in Settings is.</li>
-<li><code>remote.json</code> — this machine's enrolment with the relay.
+<li><code>remote.json</code>: this machine's enrolment with the relay.
 <code>flockdeck remote disable</code> removes it.</li>
-<li><code>routing.jsonl</code> — what routing chose for each routed fan-out row, and
+<li><code>routing.jsonl</code>: what routing chose for each routed fan-out row, and
 whether you kept it: the rule's name and the models, never the task. It
 keeps the last 10,000 lines, and <strong>Clear routing history</strong> empties it.</li>
-<li><code>keybindings.json</code> — every shortcut you have remapped or cleared under
-<strong>Keybindings</strong>, by the action's own id; one absent from it is still its
+<li><code>keybindings.json</code>: every shortcut you have remapped or cleared under
+<strong>Keyboard</strong>, by the action's own id; one absent from it is still its
 built-in binding. Delete it, or <strong>Reset every shortcut to its default</strong>, to
 put every shortcut back at once.</li>
-<li><code>prefs.json</code> — the settings under General, Appearance and Behaviour,
-Claude Code's usage limits, whether the help has
-been opened, and which hints were dismissed. Delete it while Flockdeck is not
+<li><code>prefs.json</code>: the settings under General, Appearance and Terminal, the
+Jev switch under Status detection, Claude Code's usage limits, what paired
+devices are notified of, whether you have agreed to recording once, whether
+the help has been opened, and which hints were dismissed. Delete it while Flockdeck is not
 running to have the help open on the next start, every hint back, and every
 one of those settings as it first was.</li>
-<li><code>layout-….json</code> — one per project: its tabs, splits and panes.
+<li><code>layout-….json</code>: one per project: its tabs, splits and panes, with each
+pane's auto-review, lock and recording.
 <code>flockdeck -new</code> starts without it.</li>
-<li><code>projects.json</code> — the recent projects the picker offers.</li>
-<li><code>session.json</code> — which projects are reopened on the next start.</li>
-<li><code>error.log</code> — why Flockdeck failed to start, when it had no terminal to say
+<li><code>projects.json</code>: the recent projects the picker offers.</li>
+<li><code>session.json</code>: which projects are reopened on the next start.</li>
+<li><code>error.log</code>: why Flockdeck failed to start, when it had no terminal to say
 so in, and what went wrong as it stopped: a layout it could not save, an
 update it could not put in place, a restart that did not come back.</li>
-<li><code>instance.json</code> — the address of the Flockdeck that is running, so a second
+<li><code>instance.json</code>: the address of the Flockdeck that is running, so a second
 launch joins it.</li>
-<li><code>updates</code> — a downloaded release waiting to go in when Flockdeck next quits.</li>
-<li><code>sessions</code> — the settings file written for each pane whose agent reports its
+<li><code>updates</code>: a downloaded release waiting to go in when Flockdeck next quits.</li>
+<li><code>sessions</code>: the settings file written for each pane whose agent reports its
 status, which also carries the pane's status line where that goes through
 Flockdeck.</li>
-<li><code>chats</code> — the built-in chat client's conversations.</li>
-<li><code>groups.json</code> — the multi-repo projects' grouping.</li>
-<li><code>todos.json</code> — every project's saved todo checklists.</li>
-<li><code>worktree-procs.json</code> — processes recorded for worktrees, so they can be
+<li><code>chats</code>: the built-in chat client's conversations.</li>
+<li><code>groups.json</code>: the multi-repo projects' grouping.</li>
+<li><code>todos.json</code>: every project's saved todo checklists.</li>
+<li><code>worktree-procs.json</code>: processes recorded for worktrees, so they can be
 swept up.</li>
-<li><code>e2e_key.json</code> — this machine's end-to-end key for remote access terminals.
+<li><code>e2e_key.json</code>: this machine's end-to-end key for remote access terminals.
 It holds a secret; keep it private.</li>
-<li><code>uploads</code> — pictures attached from a phone, one folder per pane, removed
+<li><code>recordings</code>: the transcripts of recorded panes, and their exports; see
+<a href="/app/recording.html">Recording a pane</a>.</li>
+<li><code>uploads</code>: pictures attached from a phone, one folder per pane, removed
 after a week.</li>
-<li><code>window</code> — the browser profile the window used to run in; nothing writes to
+<li><code>window</code>: the browser profile the window used to run in; nothing writes to
 it now, and it can be deleted. On Windows it is
 <code>%LOCALAPPDATA%\flockdeck\window</code>.</li>
 </ul>
@@ -296,41 +316,42 @@ access off first if it is on, so the relay forgets the
 machine. Worktrees it made are ordinary git worktrees, and stay beside their
 repositories until you remove them.</p>
 <h2>In the environment</h2>
-<p>These are read when Flockdeck starts, so set one where it will be seen then —
-<code>setx NAME value</code> on Windows, or an <code>export</code> line in your shell's profile
-elsewhere — and start Flockdeck again.</p>
+<p>These are read when Flockdeck starts, so set one where it will be seen then
+(<code>setx NAME value</code> on Windows, or an <code>export</code> line in your shell's profile
+elsewhere) and start Flockdeck again.</p>
 <ul>
-<li><code>FLOCKDECK_UPDATE</code> — <code>off</code> stops Flockdeck checking for new releases at all,
+<li><code>FLOCKDECK_UPDATE</code>: <code>off</code> stops Flockdeck checking for new releases at all,
 whatever <strong>Check for updates</strong> or <strong>Check for updates now</strong> in the settings
 says: no checks, in the background or asked for on the spot, and nothing
 already downloaded is put in place. That is what keeps an older version you
 installed on purpose from updating itself to the latest.</li>
-<li><code>FLOCKDECK_RELAY</code> — which relay <code>flockdeck remote enable</code> uses.</li>
-<li><code>TYPESAFE_API_KEY</code> — a key for TypeSafe's Jev, used only when <strong>Status
-detection</strong> under <strong>Behaviour</strong>, or <strong>Ask Jev to rate unmatched work</strong>, is
-turned on; see <a href="/app/status.html">Knowing who needs you</a>. A key set in <strong>Settings ›
-Behaviour › TypeSafe API key</strong> is used first; this is the fallback when none
+<li><code>FLOCKDECK_RELAY</code>: which relay <code>flockdeck remote enable</code> uses.</li>
+<li><code>TYPESAFE_API_KEY</code>: a key for TypeSafe's Jev, used only when <strong>Let
+TypeSafe's Jev help read pane status</strong>, under <strong>Status detection</strong>, or <strong>Ask
+Jev to rate unmatched work</strong>, under <strong>Routing</strong>, is turned on; see <a href="/app/status.html">Knowing
+who needs you</a>. A key set in <strong>Settings › Status detection ›
+TypeSafe API key</strong> is used first; this is the fallback when none
 is set there. No other variable is ever tried. Without a key nothing is ever
 sent.</li>
 <li><code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code> and <code>GEMINI_API_KEY</code> (or
-<code>GOOGLE_API_KEY</code>) — keys for the API agents talking to those vendors' own
+<code>GOOGLE_API_KEY</code>): keys for the API agents talking to those vendors' own
 addresses, used before anything in <code>keys.json</code>. An agent given another
 address, such as a gateway's, is never sent them.</li>
-<li><code>FLOCKDECK_API_KEY</code> — a key for any API agent, used when neither its own
+<li><code>FLOCKDECK_API_KEY</code>: a key for any API agent, used when neither its own
 variables nor <code>keys.json</code> hold one.</li>
-<li><code>CLAUDE_CONFIG_DIR</code> — where Claude Code keeps its own files; Flockdeck follows
+<li><code>CLAUDE_CONFIG_DIR</code>: where Claude Code keeps its own files; Flockdeck follows
 it to find conversations and folder trust.</li>
-<li><code>NO_COLOR</code> — the built-in chat client draws without colour.</li>
-<li><code>FLOCKDECK_COLUMNS</code> — the width the built-in chat client wraps its answers
+<li><code>NO_COLOR</code>: the built-in chat client draws without colour.</li>
+<li><code>FLOCKDECK_COLUMNS</code>: the width the built-in chat client wraps its answers
 at. Without it the client follows the pane's width, falling back to
 <code>COLUMNS</code> and then 80.</li>
-<li><code>SHELL</code> — the shell a shell pane runs, as a login shell; <code>/bin/sh</code> if it is
+<li><code>SHELL</code>: the shell a shell pane runs, as a login shell; <code>/bin/sh</code> if it is
 unset or names a program that is not there. On Windows a shell pane runs
 <code>pwsh</code> if it is installed, then the shell <code>COMSPEC</code> names, then Windows
 PowerShell.</li>
 </ul>
-<p>The variables Flockdeck sets in each pane, and the flags that shape one run —
-<code>-agent</code>, <code>-new</code>, <code>-shell</code> — are on <a href="/app/cli.html">The command line</a>.</p>
+<p>The variables Flockdeck sets in each pane, and the flags that shape one run,
+<code>-agent</code>, <code>-new</code>, <code>-shell</code>, are on <a href="/app/cli.html">The command line</a>.</p>
 
   </article>
 </main>

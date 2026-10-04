@@ -93,7 +93,7 @@
 <h2>What the header shows</h2>
 <p>Two small figures sit after the tool name, before the processor and memory figure:</p>
 <ul>
-<li><strong>What it has spent.</strong> <code>~$1.24</code> is an estimate in US dollars. <code>84k tok</code> is tokens read and written, shown where there is no price to put on them, such as a local model. A <code>+</code> after the money, as in <code>~$0.40+</code>, means some of the tokens had no price, so the figure is a floor.</li>
+<li><strong>What it has spent.</strong> <code>~$1.24</code> is an estimate in US dollars. <code>84k tok</code> is tokens read and written, shown where there is no price to put on them, such as a local model. Amounts from $1 have two decimal places, from a cent three, and below a cent four (<code>~$0.0042</code>). A <code>+</code> after the money, as in <code>~$0.400+</code>, means some of the tokens had no price, so the figure is a floor.</li>
 <li><strong>The tightest limit.</strong> <code>5h 72%</code> means 72% of the five-hour window is used; <code>7d</code> is the weekly one. A bar under it fills as the window does. It turns amber at 80% and red at 95%.</li>
 </ul>
 <p>Hover over either one for the rest: every window and when it resets, the tokens in, cached and out, and where the money figure came from.</p>
@@ -111,7 +111,7 @@
 <h2>How Claude Code's limits are read</h2>
 <p>Claude Code hands its limits to one place only: the command that draws its status line, the line under its prompt. To read them, Flockdeck puts a small command of its own in that place for its panes. That command passes the figures to Flockdeck, then runs your own status line command with exactly the same input, and prints what yours prints. Your status line looks as it did.</p>
 <p>Where you have no status line of your own, doing this would cost you something: Claude Code hides most of the keyboard hints in its footer whenever any status line is set. So by default Flockdeck only does it where you already have a status line, and there it changes nothing you can see.</p>
-<p>To choose, open <strong>Settings › Agents › Claude Code's usage limits</strong>:</p>
+<p>To choose, open <strong>Settings › Agents &amp; models › Claude Code's usage limits</strong>:</p>
 <ul>
 <li><strong>Only where I have a status line</strong> is the default.</li>
 <li><strong>Always</strong> shows the limits in every Claude pane. Where you have no status line of your own, the line under Claude's prompt is left empty and the footer hints go.</li>

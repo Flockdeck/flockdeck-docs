@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Keyboard shortcuts | Flockdeck docs</title>
-<meta name="description" content="Everything not listed here goes to the focused agent, which needs the rest of the keyboard for itself. That is why almost every binding is on Ctrl&#43;Shift. The exceptions are the ones no terminal program claims: switching tabs, the font size, Ctrl&#43;, for the settings, F1 for this help, and F6 for the rest of the window. The one exception that does take a key from programs is Ctrl&#43;B for the rail, which a terminal program such as tmux or readline also uses; remap it under Settings › Keybindings if one needs it.">
+<meta name="description" content="Everything not listed here goes to the focused agent, which needs the rest of the keyboard for itself. That is why almost every binding is on Ctrl&#43;Shift. The exceptions are the ones no terminal program claims: switching tabs, the font size, Ctrl&#43;, for the settings, F1 for this help, and F6 for the rest of the window. The one exception that does take a key from programs is Ctrl&#43;B for the rail, which a terminal program such as tmux or readline also uses; remap it under Settings › Keyboard if one needs it.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Keyboard shortcuts | Flockdeck docs">
-<meta property="og:description" content="Everything not listed here goes to the focused agent, which needs the rest of the keyboard for itself. That is why almost every binding is on Ctrl&#43;Shift. The exceptions are the ones no terminal program claims: switching tabs, the font size, Ctrl&#43;, for the settings, F1 for this help, and F6 for the rest of the window. The one exception that does take a key from programs is Ctrl&#43;B for the rail, which a terminal program such as tmux or readline also uses; remap it under Settings › Keybindings if one needs it.">
+<meta property="og:description" content="Everything not listed here goes to the focused agent, which needs the rest of the keyboard for itself. That is why almost every binding is on Ctrl&#43;Shift. The exceptions are the ones no terminal program claims: switching tabs, the font size, Ctrl&#43;, for the settings, F1 for this help, and F6 for the rest of the window. The one exception that does take a key from programs is Ctrl&#43;B for the rail, which a terminal program such as tmux or readline also uses; remap it under Settings › Keyboard if one needs it.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/app/shortcuts.html">
 <meta name="twitter:card" content="summary">
@@ -96,9 +96,12 @@ switching tabs, the font size, <kbd>Ctrl+,</kbd> for the settings,
 <kbd>F1</kbd> for this help, and <kbd>F6</kbd> for the rest of the window.
 The one exception that does take a key from programs is <kbd>Ctrl+B</kbd> for
 the rail, which a terminal program such as tmux or readline also uses; remap it
-under Settings › Keybindings if one needs it.</p>
-<p>These are the defaults. Change or clear any of them under Settings ›
-Keybindings.</p>
+under Settings › Keyboard if one needs it.</p>
+<p>These are the defaults. Change or clear any of them under Settings › Keyboard,
+except picking a tab by number, which is a range rather than one key: press a
+binding's button and then the new key, <kbd>Backspace</kbd> or
+<kbd>Delete</kbd> to leave the action with no binding, or <kbd>Esc</kbd> to
+change nothing.</p>
 <p>Inside a terminal <kbd>Tab</kbd> belongs to the program running there, so
 <kbd>F6</kbd> is how the keyboard gets out: it moves between the rail, the
 top bar, the focused pane's buttons and its terminal, in that order, and
@@ -112,7 +115,10 @@ the program as usual, to interrupt it. <kbd>Ctrl+Shift+C</kbd> copies too, and
 with a letter goes to the program, except for <kbd>Ctrl+B</kbd>.</p>
 <p>Actions marked <em>Command palette</em> have no binding of their own: press
 <kbd>Ctrl+Shift+K</kbd>, or <strong>Commands</strong> at the right of the top bar, and search for
-them by name.</p>
+them by name. The palette also has <strong>Rename this tab…</strong>, <strong>Focus the next
+pane</strong> and <strong>Focus the previous pane</strong>, which are not in the table below. Type
+<code>&gt;</code> first in the palette, or choose <strong>Go to…</strong>, to list only the places to go
+to; <kbd>Backspace</kbd> in the empty field goes back to every command.</p>
 <p>On macOS the bindings are the same, with <kbd>Ctrl</kbd> rather than
 <kbd>Cmd</kbd>, except for picking a tab by number: that is
 <kbd>Cmd+1</kbd> … <kbd>Cmd+9</kbd> there. <kbd>Option</kbd> with a digit is
@@ -190,6 +196,10 @@ how most Mac layouts type characters such as <kbd>[</kbd>, <kbd>|</kbd> and
 <tr>
 <td>Command palette</td>
 <td>Reveal transcript</td>
+</tr>
+<tr>
+<td><kbd>Ctrl+Shift+Y</kbd></td>
+<td>Pane info</td>
 </tr>
 <tr>
 <td><kbd>Ctrl+Shift+W</kbd></td>
@@ -340,6 +350,10 @@ how most Mac layouts type characters such as <kbd>[</kbd>, <kbd>|</kbd> and
 <td>Find in terminal</td>
 </tr>
 <tr>
+<td><kbd>Ctrl+Shift+L</kbd></td>
+<td>Find pane</td>
+</tr>
+<tr>
 <td><kbd>Ctrl+Shift+R</kbd></td>
 <td>Resume a past conversation</td>
 </tr>
@@ -402,8 +416,10 @@ how most Mac layouts type characters such as <kbd>[</kbd>, <kbd>|</kbd> and
 </table>
 <p>Panes are focused by clicking, resized by dragging the divider between them,
 moved by dragging their header, and closed, restarted or zoomed from the
-buttons in their header. Double-click a tab to rename it; an empty name gives
-it back the title it gives itself.</p>
+buttons in their header; double-clicking the header, away from its buttons,
+zooms it too. Double-click a tab, or press <kbd>F2</kbd> while the keyboard is
+on it, to rename it; an empty name gives it back the title it gives itself.
+Middle-click a tab to close it.</p>
 <p>A divider can be resized from the keyboard too: reach it with <kbd>Tab</kbd>,
 then the arrow keys move it and <kbd>Home</kbd> shares the room equally. In the
 tab bar, <kbd>←</kbd> and <kbd>→</kbd> move between tabs, and <kbd>Home</kbd>
@@ -411,18 +427,21 @@ and <kbd>End</kbd> go to the first and the last.</p>
 <h2>Inside a dialog</h2>
 <ul>
 <li><kbd>Esc</kbd> closes any dialog, the command palette and the prompt bar, and
-the find bar while you are typing in it. <kbd>Tab</kbd> stays inside an open
+the find bar while the keyboard is in it. In a search field with something
+typed in it, the first <kbd>Esc</kbd> empties the field, and a dialog opened
+from another goes back to that one. <kbd>Tab</kbd> stays inside an open
 dialog.</li>
 <li>While a dialog is open, the other shortcuts wait until it closes, so nothing
 changes behind it unseen. The font size keys, <kbd>Ctrl+Shift+K</kbd> and
-<kbd>F1</kbd> still work.</li>
+<kbd>F1</kbd> still work, and the key that opened the dialog closes it.</li>
 <li>In the command palette, the agent picker and the help's contents,
 <kbd>↑</kbd> and <kbd>↓</kbd> move through the list and <kbd>Enter</kbd>
 takes the one selected.</li>
 <li>In the agent picker, <kbd>→</kbd> opens an agent's models and <kbd>←</kbd>
 closes them, while nothing has been typed to narrow the list.</li>
 <li>In the find bar, <kbd>Enter</kbd> goes to the next match and
-<kbd>Shift+Enter</kbd> to the one before.</li>
+<kbd>Shift+Enter</kbd> to the one before. While the find bar is open,
+<kbd>F3</kbd> and <kbd>Shift+F3</kbd> do the same from the terminal too.</li>
 </ul>
 
   </article>

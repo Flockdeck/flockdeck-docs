@@ -104,31 +104,31 @@ the one you are looking at.</p>
 <tbody>
 <tr>
 <td>Filled cyan circle, pulsing</td>
-<td><strong>Working</strong> — producing output or running a tool</td>
+<td><strong>Working</strong>: producing output or running a tool</td>
 </tr>
 <tr>
 <td>Amber triangle</td>
-<td><strong>Waiting on you</strong> — a permission prompt or a question</td>
+<td><strong>Waiting on you</strong>: a permission prompt or a question</td>
 </tr>
 <tr>
 <td>Amber triangle</td>
-<td><strong>Blocked</strong> — a tool call was refused outright and the turn ended there; nothing is being asked, but it needs a look</td>
+<td><strong>Blocked</strong>: a tool call was refused outright and the turn ended there. Nothing is being asked, but it needs a look</td>
 </tr>
 <tr>
 <td>Hollow grey circle</td>
-<td><strong>Idle</strong> — it finished its turn and is ready for a new prompt</td>
+<td><strong>Idle</strong>: it finished its turn and is ready for a new prompt</td>
 </tr>
 <tr>
 <td>Hollow grey circle, pulsing</td>
-<td><strong>Starting</strong> — launched, and not heard from yet</td>
+<td><strong>Starting</strong>: launched, and not heard from yet</td>
 </tr>
 <tr>
 <td>Red filled square</td>
-<td><strong>Failed</strong> — the process ended with an error, or was killed</td>
+<td><strong>Failed</strong>: the process ended with an error, or was killed</td>
 </tr>
 <tr>
 <td>Hollow square</td>
-<td><strong>Exited</strong> — the process is gone</td>
+<td><strong>Exited</strong>: the process is gone</td>
 </tr>
 </tbody>
 </table>
@@ -141,18 +141,50 @@ are &quot;in background&quot;. Its dot is the working dot all the same, and its 
 says it is working in the background. Such an agent is counted as working
 everywhere working agents are counted (below), though its own status stays
 idle.</p>
+<p>Hover the &quot;in background&quot; count to see what the work is, up to eight pieces:
+whether it is a shell command, a subagent, a monitor or something else, the
+description or command Claude Code gave for it, shortened, and how long ago
+Flockdeck first saw it. Text that looks like a secret (a token, a password
+given as a value) is hidden, with the same redaction the transcript recorder
+uses. A file path is shown as typed, though, even one to a secret file. The
+same text reaches the relay and phone views. A piece first seen only in the
+list Claude Code sends when a turn ends says &quot;seen since&quot;, because it was
+already running by then. Where Claude Code gave nothing
+but an id, the list says &quot;details unavailable (count only)&quot; rather than
+guessing. Flockdeck keeps the list in memory only and never saves it.</p>
+<p>While an agent is idle with background work counted, Flockdeck checks that
+work against the conversation Claude Code has stored for the pane: 45 seconds
+after it goes idle, then less often while nothing changes. The first check
+reads the last 8 MB of the conversation, and later checks read only what has
+been added since. A piece is dropped only on evidence of its end, written
+after Flockdeck first saw the piece and after the last sign it was running:
+Claude Code's notice that the task completed or was stopped, a subagent's
+hand-back, a successful stop of the task, a subagent's own transcript ending
+on its hand-back, or a monitor running past the timeout it was started with,
+when Claude Code stops it. An older end in the history is about an earlier task
+and is ignored. For a short while afterwards the tooltip lists what ended and
+what showed it, under &quot;Lately ended&quot;.</p>
+<p>A subagent whose transcript is still being written, or a command whose output
+file is still growing, counts as running. A piece with no sign of running for
+30 minutes (no start, no end-of-turn list naming it, nothing being written)
+stays counted but is marked unverified, and the badge says so
+(<code>◔ 1 in background, unverified</code>). An idle agent whose background work is all
+unverified no longer counts as working, so its dot and its tab go back to
+idle. It still isn't treated as finished. There is no way to clear the count
+by hand.</p>
 <p>While a tool is running the pane header names it, so <code>Read</code>, <code>Bash</code> or <code>Edit</code>
-tells you what the agent is actually doing rather than only that it is busy.</p>
+tells you what the agent is doing, not only that it is busy.</p>
 <h2>Where else it shows</h2>
 <ul>
 <li><strong>The tab</strong> holding a waiting agent is marked <code>▲</code>. A tab with an agent
-working, or idle between turns with background work still running, has a
-pulsing filled dot instead; the <code>▲</code> takes its place when an agent there is
-waiting.</li>
-<li><strong>The window title</strong> reports the count, so a waiting agent is visible in the
+working, or idle between turns with background work still running (not
+counting work that is all unverified), has a pulsing filled dot instead;
+the <code>▲</code> takes its place when an agent there is waiting.</li>
+<li><strong>The window title</strong> reports the count, <code>▲ 2 waiting</code> while any agent is
+waiting, otherwise <code>● 3 working</code>, so a waiting agent is visible in the
 taskbar with the window behind something else.</li>
 <li><strong>The top bar</strong> counts the agents waiting and working across every open
-project, the same count the window title carries; an
+project, the same counts the window title draws from; an
 idle agent whose background work is still running counts as working, here
 and in the window title and the tab icon. Click
 the count for the same list <kbd>Ctrl+Shift+A</kbd> opens.</li>
@@ -160,82 +192,89 @@ the count for the same list <kbd>Ctrl+Shift+A</kbd> opens.</li>
 and the tile says what that project's agents are doing, most urgent first: an
 amber badge where an agent is waiting on you, a pulsing cyan one where
 agents are working (one with background work still running counts) and
-none is waiting, and nothing where every pane is idle, exited or not yet
-heard from, or there are no panes. So one that
+none is waiting, and nothing where every pane is idle, exited, failed or not
+yet heard from, or there are no panes. So one that
 starts waiting in a project you are <em>not</em> looking at is seen from the one
-you are. Widen the rail and the count is written beside the name — <code>▲ 2</code>
-for two waiting, <code>● 3</code> for three working — and the tile's tooltip and
+you are. Widen the rail and the count is written beside the name: <code>▲ 2</code>
+for two waiting, <code>● 3</code> for three working. The tile's tooltip and
 screen-reader name say it in words. A window reached through the relay
 shows the same.</li>
 <li><strong>A desktop notification</strong> is raised when an agent blocks while the window is
-not in front. It is not raised when you are already looking at the window —
+not in front, unless <strong>Desktop notifications</strong> is off in <strong>Settings ›
+General</strong>. It is not raised when you are already looking at the window:
 the tab marker is enough, and a toast would be noise.</li>
-<li>Claude Code's own idle nudge — sent about a minute after a pane has simply
-gone quiet, waiting for a new prompt — never raises any of the above, for
+<li>Claude Code's own idle nudge (sent about a minute after a pane has simply
+gone quiet, waiting for a new prompt) never raises any of the above, for
 any pane: it says nothing more than that the pane is still there. A
 permission prompt or a real question always still reaches you, including
 for <strong>a helper another agent started</strong> for itself (see <kbd>Ctrl+Shift+X</kbd>).</li>
 <li><kbd>Ctrl+Shift+A</kbd> lists every pane in every open project with its status, and
 jumps to any of them.</li>
-<li><strong>Close finished panes</strong> clears out every pane that has gone idle or
-exited, in every open project, in one go — the tidying-up equivalent of
-closing finished browser tabs. It asks nothing first, on purpose: a pane
-still waiting on you or still working is never touched, and one whose last
-turn failed is left alone too, since a failure is worth a look before it
-disappears. A pane the user has locked is left open too, with a count of how
-many were skipped. An idle agent that still has background work going — a command
-it started with <code>run_in_background</code>, or a background subagent — is not
+<li><strong>Close finished panes</strong> clears out every agent pane that has gone idle
+and every pane that has exited cleanly, in every open project, in one go,
+like closing finished browser tabs. It asks nothing
+first, on purpose: a pane still waiting on you or still working is never
+touched, an idle shell is left alone, and one whose process failed (it never
+started, exited with an error, or was killed) is left alone too, since a
+failure is worth a look before it disappears. A pane locked with the padlock
+in its header (🔓, 🔒 once locked) or <strong>Lock pane</strong> in the command palette is
+left open too, with a count of how many were skipped; a locked pane cannot be
+closed any other way either until you unlock it, though it can still be
+restarted. An idle agent that still has background work going (a command
+it started with <code>run_in_background</code>, or a background subagent) is not
 finished either, since closing it would kill that work. Its header says
 <code>◔ 1 in background</code> while it has any, and so does its row in
 <kbd>Ctrl+Shift+A</kbd>. Flockdeck learns the work has ended when Claude Code tells
-the agent so, or says at the end of a turn what is still running. A Claude
+the agent so, says at the end of a turn what is still running, or has
+recorded the end in the stored conversation (see above). Work that is
+counted but unverified still keeps the pane open. A Claude
 Code too old to say either keeps it counted until the agent stops it, the
 conversation is cleared, or the pane is closed by hand (or with
-<code>flockdeck close --force</code>).</li>
+<code>flockdeck close -force</code>).</li>
 <li>A background subagent calling tools after its agent's turn has ended leaves
-the pane idle, with that count and the steady working dot, rather than
-flashing cyan for each call.
+the pane idle, with that count and the working dot, rather than
+flickering between states for each call.
 A question or permission prompt it puts to you still turns it amber.</li>
 </ul>
 <h2>Where it comes from</h2>
 <p>For an agent that can report its own lifecycle, this is not screen scraping.
 Claude Code is launched with a generated <code>--settings</code> file registering its
-lifecycle hooks — <code>UserPromptSubmit</code>, <code>PreToolUse</code>, <code>Notification</code>, <code>Stop</code> and
-the rest — and an API agent, which is Flockdeck's own chat client, reports the same
+lifecycle hooks (<code>UserPromptSubmit</code>, <code>PreToolUse</code>, <code>Notification</code>, <code>Stop</code> and
+the rest), and an API agent, which is Flockdeck's own chat client, reports the same
 events itself. For Claude Code each event re-invokes this same binary in a
 hidden mode; the chat client sends its own. Either way the report reaches the
 application over the loopback interface.</p>
-<p>Status therefore reflects what the agent is actually doing rather than what
+<p>Status therefore reflects what the agent is doing, not what
 its output happens to look like. Those settings are additive: your own
 settings, hooks and permissions still apply.</p>
 <h3>Auto-review approvals</h3>
-<p>A pane can turn on auto-review approvals, which spares a person the wait for
+<p>A pane can turn on auto-review approvals, which spares you the wait for
 some of what would otherwise stop and ask: the same hidden hook that reports
 a <code>PreToolUse</code> call can also carry a permission decision back, before Claude
 Code's own prompt ever opens, for a call auto-review is confident about. It
-works like Codex's <code>auto_review</code> -- a reviewer looking at the request in
-front of it -- but it never touches Claude Code's own permission settings and
+works like Codex's <code>auto_review</code>, a reviewer looking at the request in
+front of it, but it never touches Claude Code's own permission settings and
 it can only ever say &quot;let this one through,&quot; never &quot;deny&quot;: off, or for a call
 it is not sure of, a pane behaves exactly as it always would. Today that
 reviewer is a fixed policy: a <code>Bash</code> call is let through only when it is a
-single call to a command that only ever reads -- <code>git status</code>, <code>cat</code>, <code>grep</code>
-and the like -- inside the project, with nothing in it that could chain into
+single call to a command that only ever reads (<code>git status</code>, <code>cat</code>, <code>grep</code>
+and the like) inside the project, with nothing in it that could chain into
 something else or write anywhere; a call that changes a file, reads outside
 the project, or reads a secret file (a <code>.env</code>, a private key, a credentials
 file) is always left to ask. A <code>git</code> command is let through only when git
 itself, asked where the command will run, has nothing configured that would
-run a program or reach the network, and <code>git status</code> or <code>git diff</code> never in a
-repository with a submodule in it.</p>
-<p>These path checks read the command as text, not the filesystem -- auto-review
+run a program or reach the network, and <code>git status</code>, <code>git diff</code> or <code>git describe</code> never in a repository with a submodule in it. A command too long to
+be judged whole is always left to ask.</p>
+<p>These path checks read the command as text, not the filesystem. Auto-review
 is not a sandbox. A symlink inside the project that points outside it reads as
 an ordinary in-project name and is let through, and the secret-file check
 knows only conventional names. Both err towards reading, which is part of why
 auto-review is off unless you turn it on, and why you should turn it on only
 for a pane whose agent you trust.</p>
 <p>It is off for a pane unless you turn it on, with the ✓ in the pane's header,
-or for new panes with <strong>Settings › Behaviour › Start new panes with
-auto-review on</strong>; a pane started by another agent starts as that agent's
-pane is.
+or for new panes with <strong>Settings › General › Start new panes with
+auto-review on</strong>; a pane started from another one (a fan-out row or a
+<code>flockdeck spawn</code> helper) starts as that pane is.
 A pane keeps its setting across restarts, whichever way you left it.</p>
 <p>One answer is not reported by any event: a permission prompt answered from
 the keyboard. Enter turns the pane cyan, since allowing the tool starts it
@@ -246,7 +285,7 @@ draws, for ten seconds goes back to grey.</p>
 <p>Not every coding agent has a lifecycle to report, and Flockdeck runs those too. For
 their panes the status is read from the terminal instead: the bell an agent
 rings when it wants you, a quiet timer for when it has stopped producing
-output, and — where its entry in <code>agents.json</code> gives it <code>patterns</code> — the lines
+output, and, where its entry in <code>agents.json</code> gives it <code>patterns</code>, the lines
 it prints: the shape of a permission question, the shape of a prompt waiting
 to be typed at. Only the last few hundred bytes are looked at, with the
 escape sequences stripped, so a question two screens back does not
@@ -262,11 +301,12 @@ anything. <strong>This sends terminal output to a third party, TypeSafe</strong>
 nothing else in Flockdeck does with what your panes print, so it is <strong>off by
 default</strong> and needs both of these:</p>
 <ol>
-<li><strong>Settings › Behaviour › Status detection</strong> turned on. It can only be turned
+<li><strong>Settings › Status detection › Let TypeSafe's Jev help read pane status</strong>
+turned on. It can only be turned
 on from the machine itself, not from a window reached through the relay;
 turning it off works from anywhere.</li>
-<li>A TypeSafe API key: either the one you paste into <strong>Settings › Behaviour ›
-TypeSafe API key</strong> (kept on this machine with your other keys, never shown
+<li>A TypeSafe API key: either the one you paste into <strong>Settings › Status
+detection › TypeSafe API key</strong> (kept on this machine with your other keys, never shown
 back, only ever sent to <code>api.typesafe.ai</code>, and only set from the machine
 itself), or <code>TYPESAFE_API_KEY</code> in the environment Flockdeck starts in. The
 one in Settings is used first. Saving a key does not turn anything on.</li>
@@ -274,9 +314,9 @@ one in Settings is used first. Saving a key does not turn anything on.</li>
 <p>With either missing, nothing is ever sent, and no error is shown.</p>
 <p>What is sent, when a pane of an agent that reports nothing has been quiet for
 a few seconds and its status is still a guess: the <strong>last 30 lines of its
-output, at most 2,000 characters, with the escape sequences taken out</strong> — one
-request holding that text and the two questions asked of it. Not the
-scrollback, not the pane's name or folder. Secrets that happen to be on screen
+output, at most 2,000 bytes, with the escape sequences taken out</strong>. It goes in one
+request holding that text and the two questions asked of it. The
+scrollback and the pane's name and folder are not sent. Secrets that happen to be on screen
 in those lines are <strong>not</strong> removed. Shell panes, and agents that report their
 own status, are never sent.</p>
 <p>What it can change: a quiet pane called idle becomes waiting, or blocked, only
@@ -284,7 +324,9 @@ when Jev answers with high confidence. It never turns waiting or blocked into
 anything else, and if it errors, is slow, is rate limited, or is unsure, the
 pane shows what it would have shown without it. Asks are limited to one per
 pane every 15 seconds, twelve per pane an hour and ten a minute in all, and
-the same output is never asked about twice.</p>
+the same output is not asked about twice in a row. After an error or a rate
+limit nothing is asked for a minute, and after a refused key or request for
+15 minutes.</p>
 
   </article>
 </main>

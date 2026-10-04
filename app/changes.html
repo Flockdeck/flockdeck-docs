@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Review, commit and push | Flockdeck docs</title>
-<meta name="description" content="Ctrl&#43;Shift&#43;S, or Changes in the rail, shows what changed in the working tree the focused agent has been using. The Review button on each worktree opens the same panel for that checkout, which is usually how you get here: see which agent produced something, then look at what it did.">
+<meta name="description" content="Ctrl&#43;Shift&#43;S, or Changes in the rail, shows what changed in the working tree the focused agent has been using. Clicking the change counts in a pane&#39;s header opens it on that pane&#39;s checkout, and Review changes, in a worktree&#39;s ⋯ menu, on that worktree&#39;s, which is usually how you get here: see which agent produced something, then look at what it did.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Review, commit and push | Flockdeck docs">
-<meta property="og:description" content="Ctrl&#43;Shift&#43;S, or Changes in the rail, shows what changed in the working tree the focused agent has been using. The Review button on each worktree opens the same panel for that checkout, which is usually how you get here: see which agent produced something, then look at what it did.">
+<meta property="og:description" content="Ctrl&#43;Shift&#43;S, or Changes in the rail, shows what changed in the working tree the focused agent has been using. Clicking the change counts in a pane&#39;s header opens it on that pane&#39;s checkout, and Review changes, in a worktree&#39;s ⋯ menu, on that worktree&#39;s, which is usually how you get here: see which agent produced something, then look at what it did.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/app/changes.html">
 <meta name="twitter:card" content="summary">
@@ -90,44 +90,49 @@
     <p class="eyebrow">Using Flockdeck</p>
 <h1>Review, commit and push</h1>
 <p class="doc-lede"><kbd>Ctrl+Shift+S</kbd>, or <strong>Changes</strong> in the rail, shows what changed in the working
-tree the focused agent has been using. The <strong>Review</strong> button on each worktree opens the same panel for
-that checkout, which is usually how you get here: see which agent produced
-something, then look at what it did.</p>
+tree the focused agent has been using. Clicking the change counts in a pane's
+header opens it on that pane's checkout, and <strong>Review changes</strong>, in a
+worktree's <code>⋯</code> menu, on that worktree's, which is usually how you get here:
+see which agent produced something, then look at what it did.</p>
 <p>The panel always shows the whole repository the pane is in, even when the pane
 was started in a folder inside it, and a commit takes every file in its list.
 In a project <a href="/app/projects.html">grouping more than one directory</a>, a picker at the
-top chooses which repo the panel reviews — <a href="/app/worktrees.html">Git worktrees</a> has
+top chooses which repo the panel reviews. <a href="/app/worktrees.html">Git worktrees</a> has
 the same choice for creating a worktree.</p>
 <h2>What it shows</h2>
 <ul>
 <li>The branch and where it stands against its upstream.</li>
 <li>Every changed file, what happened to it, and how many lines moved.</li>
 <li>A coloured diff of whichever file you select. A diff longer than 3,000 lines
-draws the first 3,000, with <strong>Show them</strong> for the rest, and the list of files
-stops at 2,000.</li>
+draws the first 3,000, with <strong>Show them</strong> for the rest. The list of files
+stops at 2,000; a line under it counts the rest, which a commit still takes.</li>
 </ul>
 <h2>What you can do</h2>
 <ul>
-<li><strong>Commit</strong>, with the message you type in the box.</li>
+<li><strong>Commit</strong>, with the message you type in the box. The button counts the
+files, as in <strong>Commit 3 files</strong>, and <kbd>Ctrl</kbd>+<kbd>Enter</kbd> in the
+box does the same. A message is required.</li>
 <li><strong>Commit and push</strong> in one go.</li>
-<li><strong>Fetch</strong> and <strong>Push</strong> against the upstream.</li>
+<li><strong>Fetch</strong> and <strong>Push</strong> against the upstream; Push counts the commits it
+would send, as in <strong>Push 2</strong>.</li>
 <li><strong>Pull</strong>, which appears only when the upstream has commits this branch does
 not, and only ever fast-forwards: a branch that has gone its own way is left
 for you to merge or rebase in a shell, and is offered no Pull.</li>
+<li><strong>Refresh</strong> reads the working tree again.</li>
 </ul>
 <p>Everything that talks to a remote is there only when the checkout has one. The
 first push sets the upstream, so a branch a fan-out invented does not need a
 hand-typed command to leave the machine. A checkout with no branch checked out
-— a detached HEAD, or one in the middle of a rebase or a bisect — says so in
+(a detached HEAD, or one in the middle of a rebase or a bisect) says so in
 place of the branch, and offers no push.</p>
 <h2>What a commit takes</h2>
 <p>A commit takes the files the list showed you when the panel opened, or when
 you last pressed <strong>Refresh</strong>. The list keeps up with the agents by itself, and
 a file that joins it after you looked, or is written to again, is marked
 <strong>new</strong> or <strong>edited</strong> rather than quietly added to what you commit.</p>
-<p>If the working tree has moved since you looked — a file has appeared, one has
+<p>If the working tree has moved since you looked (a file has appeared, one has
 gone back to how it was committed, or one in the list has been written to
-again — nothing is committed. The list then shows the tree as it is, with what
+again), nothing is committed. The list then shows the tree as it is, with what
 moved marked; check it and commit again. Only the files that were checked are
 staged, so one written a moment after the check waits for the next commit.</p>
 <p>During a merge, a file still in conflict is refused: a text file until its
@@ -136,15 +141,15 @@ until you have chosen a side in a shell and added it.</p>
 <p>What this does not promise:</p>
 <ul>
 <li>A file written to again is noticed by its size and modification time, not by
-reading it. An edit that leaves both as they were — possible where the file
-system keeps times only to the second — goes through.</li>
+reading it. An edit that leaves both as they were (possible where the file
+system keeps times only to the second) goes through.</li>
 <li>When the list stops at 2,000 files, the ones it leaves out are held to their
 number, not their names.</li>
 <li>A listed file written to in the instant between that check and the commit
 itself goes in as it is then.</li>
 </ul>
 <p>Nothing here stages files selectively: a commit takes every file in the list,
-whole. Reviewing the diff first is the point of the panel — for anything
+whole. Reviewing the diff first is the point of the panel. For anything
 finer, a shell pane is a keystroke away.</p>
 
   </article>
