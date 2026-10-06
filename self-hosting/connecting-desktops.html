@@ -108,7 +108,7 @@ See <a href="admin-and-invites.html">Admin and invites</a>, where <code>flockdec
 <pre><code>flockdeck remote enable -relay https://relay.example.com -invite &lt;code&gt;
 </code></pre>
 <p>Everything else works as
-<a href="/app/remote.html">Remote access</a> describes for the shared relay, including
+<a href="/app/remote.html">Flockdeck Remote</a> describes for the shared relay, including
 pairing a phone with a QR code and notifications, but against your own
 infrastructure.</p>
 <h2 id="a-second-desktop-on-the-same-relay">A second desktop on the same relay</h2>
@@ -117,6 +117,16 @@ desktop on the same account, run <code>flockdeck remote pair -desktop</code> on 
 desktop already on the relay, and on the new one run <code>flockdeck remote enable -relay https://relay.example.com -join &lt;code&gt;</code>. Joining never needs an
 invite and works even with <code>-registration closed</code>; <code>-max-hosts</code> is per
 account, so a join fails once the account has that many desktops.</p>
+<h2 id="joining-by-email">Joining by email</h2>
+<p>On a relay run with <code>-require-verified-registration</code>, <code>flockdeck remote enable</code>
+asks for an email address and sends a link to it. The desktop prints a match
+code, and the page the link opens asks you to type it. If the address already
+has an account, the desktop joins it: same plan, same paired devices, no second
+account. The page says how many desktops the account has before you go back to
+the terminal. The account's paired phones and browsers are told a desktop joined,
+and the address is emailed the same, so a desktop that someone else enrolled
+does not go unnoticed. If you did not enrol anything, remove the desktop with
+<code>flockdeck remote remove</code> from another machine.</p>
 <h2 id="a-desktop-that-is-already-on-another-relay">A desktop that is already on another relay</h2>
 <pre><code>flockdeck remote move https://relay.example.com
 </code></pre>
@@ -129,14 +139,14 @@ it was made on.</p>
 <pre><code>flockdeck remote move https://remote.flockdeck.ai
 </code></pre>
 <p>or, step by step:</p>
-<pre><code>flockdeck remote disable
+<pre><code>flockdeck remote remove
 flockdeck remote enable
 </code></pre>
-<p><code>disable</code> removes the desktop from whichever relay it was registered with;
+<p><code>remove</code> takes the desktop off whichever relay it was registered with;
 running <code>enable</code> again with no <code>-relay</code> flag and no <code>FLOCKDECK_RELAY</code> set
 registers it with the shared one. Either way the devices pair again.</p>
 <h2 id="confirming-its-talking-to-the-right-relay">Confirming it's talking to the right relay</h2>
-<p>Settings → Remote access shows which relay a desktop is currently registered
+<p>Settings → Flockdeck Remote shows which relay a desktop is currently registered
 with. If a desktop that should be on your relay is showing up against the
 shared one instead, check that <code>FLOCKDECK_RELAY</code> is set in the
 environment Flockdeck is launched from. A value set in one shell profile

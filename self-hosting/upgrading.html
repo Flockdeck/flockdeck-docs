@@ -105,6 +105,20 @@ how many desktops are connected), so anything wrong afterwards is known to be
 new. The relay's repository has an upgrade guide, <code>docs/UPGRADING.md</code>, with the
 order of operations for the Helm chart and for rolling back; it comes with the
 kit a licensed company is given.</p>
+<h2 id="releases-that-change-what-is-kept">Releases that change what is kept</h2>
+<p>From the release that added <code>-account-retention</code> (v0.2.56 has it), an
+account is no longer deleted with its last desktop, and a quiet desktop is no
+longer removed after 30 days. The relay deletes an account once nothing on it
+has been used for <code>-account-retention</code>, 90 days by default. The first sweep
+comes ten minutes after the relay starts, so an account that has already been
+idle that long is deleted then. Take a backup first, and check <code>stats</code> before
+and after. A value above 0 and under 24 hours is refused at start, so check any
+<code>-account-retention</code> you pass before upgrading: the new process exits with an
+error that names the flag. <code>-account-retention=0</code> keeps accounts for good.</p>
+<p>On a relay with <code>-require-verified-registration</code>, joining an account by email
+applies to everyone the moment the new process starts. A desktop from before
+match codes can no longer enrol by email and is told to update. Release the
+desktop first and give it about a week.</p>
 <h2 id="binary-installs">Binary installs</h2>
 <p>Build the new version from a checkout of the relay's repository, as in <a href="deploying-the-relay.html#as-a-binary">Deploying
 the relay</a>, stop the old process, replace

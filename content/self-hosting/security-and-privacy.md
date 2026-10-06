@@ -30,7 +30,7 @@ into a dialog.
 End-to-end encryption defeats an honestly-run relay. It doesn't defend
 against a relay that's been actively compromised and tampered with to swap
 the keys it hands out at pairing. The Verify code beside each device in
-the desktop's Remote access dialog is the check for that: compare it with
+the desktop's Flockdeck Remote dialog is the check for that: compare it with
 the code the device shows on its own Devices page, and if they differ,
 unpair the device. Running your own relay narrows who mounting that attack
 would require compromising to your own infrastructure and the people who
@@ -68,10 +68,11 @@ The relay proxies a desktop's Flockdeck window (every pane, every agent
 conversation, any photo attached from a phone) to a paired device, and
 back. None of that is written to the relay's storage; [Storage and
 data](storage-and-data.html) lists what is kept, which is account and device
-records and never anything that passes between them. A desktop the relay has
-not heard from is removed by the relay itself, after 7 days if it never
-connected and after 30 days otherwise, with its devices and, for the last
-desktop, the account.
+records and never anything that passes between them. A desktop that registered
+and never connected is removed after 7 days, and only the desktop: its account
+stays. A desktop that did connect is never removed for being quiet. An account
+nothing has used for `-account-retention` (90 days by default) is deleted with
+its desktops and devices; see [How long accounts are kept](storage-and-data.html#how-long-accounts-are-kept).
 
 ## Push notifications are the exception
 

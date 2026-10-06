@@ -100,6 +100,33 @@ identity and email; with <code>-audit</code>, the audit log (emails and names, a
 addresses with <code>-audit-ip</code>); with verified registration, the verified email.
 There's no per-message or per-keystroke history to store: traffic is
 proxied through, not recorded, and nothing typed or shown is kept.</p>
+<p>Each account also has one stored time, when anything on it was last used. The
+relay uses it to decide when to delete an account nobody uses.</p>
+<h2 id="how-long-accounts-are-kept">How long accounts are kept</h2>
+<p>An account outlives its desktops. Removing the last desktop, with <code>flockdeck remote remove</code> or from a paired browser, leaves the account with its devices
+and verified email, and a desktop can join it again by enrolling with the same
+email address, or with a join code from a paired browser. Removing a desktop
+never deletes the account.</p>
+<p>The relay deletes an account, with its desktops, devices and codes, in three
+ways:</p>
+<ul>
+<li><strong>Retention.</strong> Once an hour, in the ten-minute sweep, on every relay, the
+relay deletes each account that has not been used for <code>-account-retention</code>.
+The default is 90 days. <code>0</code> keeps accounts for good, and a value above 0 and
+under 24 hours is refused when the relay starts. Use is a desktop connecting,
+a paired device making a request, a registration, a join, or a desktop being
+removed. An account with a subscription is not deleted. The relay logs how
+many accounts, desktops and devices it deleted, never an id or an address.
+With <code>-audit</code> it also records an <code>account.deleted</code> event for each.</li>
+<li><strong>Its owner.</strong> <code>flockdeck remote delete-account</code> on a desktop deletes the
+account, every machine in it and every paired device. The relay refuses while
+a subscription is running, because it does not cancel subscriptions.</li>
+<li><strong>You, by hand.</strong> <code>flockdeck-relay account delete</code>, described in <a href="admin-and-invites.html#deleting-accounts">Admin and
+invites</a>.</li>
+</ul>
+<p>A desktop that registered and never connected is removed after 7 days, and only
+the desktop. There is no sweep of quiet desktops: one that has connected is
+never removed for being quiet.</p>
 <h2 id="the-embedded-database">The embedded database</h2>
 <p>By default, pointing <code>-data</code> at a directory is all the storage configuration
 the relay needs. It keeps a single database file (<code>relay.db</code>) there, using an

@@ -27,7 +27,7 @@ flockdeck remote enable -relay https://relay.example.com -invite <code>
 ```
 
 Everything else works as
-[Remote access](/app/remote.html) describes for the shared relay, including
+[Flockdeck Remote](/app/remote.html) describes for the shared relay, including
 pairing a phone with a QR code and notifications, but against your own
 infrastructure.
 
@@ -39,6 +39,18 @@ desktop already on the relay, and on the new one run `flockdeck remote enable
 -relay https://relay.example.com -join <code>`. Joining never needs an
 invite and works even with `-registration closed`; `-max-hosts` is per
 account, so a join fails once the account has that many desktops.
+
+## Joining by email
+
+On a relay run with `-require-verified-registration`, `flockdeck remote enable`
+asks for an email address and sends a link to it. The desktop prints a match
+code, and the page the link opens asks you to type it. If the address already
+has an account, the desktop joins it: same plan, same paired devices, no second
+account. The page says how many desktops the account has before you go back to
+the terminal. The account's paired phones and browsers are told a desktop joined,
+and the address is emailed the same, so a desktop that someone else enrolled
+does not go unnoticed. If you did not enrol anything, remove the desktop with
+`flockdeck remote remove` from another machine.
 
 ## A desktop that is already on another relay
 
@@ -61,17 +73,17 @@ flockdeck remote move https://remote.flockdeck.ai
 or, step by step:
 
 ```
-flockdeck remote disable
+flockdeck remote remove
 flockdeck remote enable
 ```
 
-`disable` removes the desktop from whichever relay it was registered with;
+`remove` takes the desktop off whichever relay it was registered with;
 running `enable` again with no `-relay` flag and no `FLOCKDECK_RELAY` set
 registers it with the shared one. Either way the devices pair again.
 
 ## Confirming it's talking to the right relay
 
-Settings → Remote access shows which relay a desktop is currently registered
+Settings → Flockdeck Remote shows which relay a desktop is currently registered
 with. If a desktop that should be on your relay is showing up against the
 shared one instead, check that `FLOCKDECK_RELAY` is set in the
 environment Flockdeck is launched from. A value set in one shell profile
