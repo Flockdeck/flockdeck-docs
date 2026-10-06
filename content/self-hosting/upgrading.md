@@ -17,6 +17,23 @@ new. The relay's repository has an upgrade guide, `docs/UPGRADING.md`, with the
 order of operations for the Helm chart and for rolling back; it comes with the
 kit a licensed company is given.
 
+## Releases that change what is kept
+
+From the release that added `-account-retention` (v0.2.56 has it), an
+account is no longer deleted with its last desktop, and a quiet desktop is no
+longer removed after 30 days. The relay deletes an account once nothing on it
+has been used for `-account-retention`, 90 days by default. The first sweep
+comes ten minutes after the relay starts, so an account that has already been
+idle that long is deleted then. Take a backup first, and check `stats` before
+and after. A value above 0 and under 24 hours is refused at start, so check any
+`-account-retention` you pass before upgrading: the new process exits with an
+error that names the flag. `-account-retention=0` keeps accounts for good.
+
+On a relay with `-require-verified-registration`, joining an account by email
+applies to everyone the moment the new process starts. A desktop from before
+match codes can no longer enrol by email and is told to update. Release the
+desktop first and give it about a week.
+
 ## Binary installs
 
 Build the new version from a checkout of the relay's repository, as in [Deploying

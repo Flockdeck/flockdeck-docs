@@ -38,6 +38,7 @@ variable if both are set.
 | `-pairing-ttl` | 10m | How long a pairing or join code, in a link or QR code, stays valid. More than 0. |
 | `-session-ttl` | 720h (30 days) | How long a device stays paired without being used, before it has to pair again. More than 0. |
 | `-max-streams` | 256 | Connections open to one desktop at once. More than 0. |
+| `-account-retention` | 2160h (90 days) | How long an account may go unused before it is deleted with its desktops and devices, unless it has a subscription. On every relay. At least 24h: a value above 0 and under 24h is refused at start. 0 keeps accounts for good. See [Storage and data](storage-and-data.html#how-long-accounts-are-kept). |
 | `-register-per-hour` | 5 | Accounts made, and join codes that don't work, per client address per hour (0: no limit). |
 | `-pair-per-minute` | 10 | Pairing attempts per client address per minute (0: no limit). |
 | `-connects-per-minute` | 60 | Desktop tunnels opened with a token that doesn't work, per client address per minute (0: no limit). |
@@ -60,10 +61,20 @@ There is no flag for it, so it never appears in a process listing.
 `-require-verified-registration` refuses to start without both it and
 `-mail-from` set.
 
+With it on, one email address has one account. A desktop that enrols with an
+address that already has an account joins that account, with its plan and its
+other desktops, instead of making a second account. The desktop prints an
+8-character match code when it starts, and the page the emailed link opens asks
+for it, so only the person at that terminal can finish. Five wrong codes cancel
+the registration. A desktop from before match codes is refused at registration
+and has to be updated, or enrol with a join code instead. A `closed` relay joins nothing by
+email. The account's paired devices get a push notice when a desktop joins, and
+the address is emailed one.
+
 The desktop app's command-palette dialog can't yet wait on a verification
 link, so it fails immediately on a relay set up this way; `flockdeck remote
 enable` and `flockdeck remote move` from a terminal open the link and wait
-for it instead. See [Remote access](/app/remote.html).
+for it instead. See [Flockdeck Remote](/app/remote.html).
 
 ## Push notifications
 

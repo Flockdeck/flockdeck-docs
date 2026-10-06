@@ -1,4 +1,4 @@
-flockdeck-relay — reach the agents on your desktop from anywhere.
+flockdeck-relay: the relay for Flockdeck Remote, which lets you use your own Flockdeck from a paired phone, tablet or browser.
 
 Usage:
   flockdeck-relay [serve] -public-url URL [flags]   run the relay (serve -h for the flags)
@@ -7,11 +7,18 @@ Usage:
   flockdeck-relay vapid-keys                         make a key pair for push notifications
   flockdeck-relay plan [-data DIR] ACCOUNT [PLAN]    an account's plan, or put it on another
   flockdeck-relay user revoke [-data DIR] EMAIL      revoke every device a person paired, at once
+  flockdeck-relay account duplicates [-data DIR]     list the emails that have more than one account
+  flockdeck-relay account dedupe [-data DIR] [-apply -export FILE]
+                                                     delete the unpaid duplicates (a dry run without -apply)
+  flockdeck-relay account delete [-data DIR] (-email EMAIL | ACCOUNT) [-apply -export FILE] [-force]
+                                                     delete one account on request (a dry run without -apply)
   flockdeck-relay audit export [-data DIR] [-format csv|json] [-since TIME] [-until TIME] [-o FILE]
                                                      write out the audit log
   flockdeck-relay version
 
 Flags for serve:
+  -account-retention duration
+    	how long an account may go unused before it is deleted, with its desktops and devices, unless it has a subscription or one that lapsed within -grace-length; use is a desktop connecting, a paired device making a request, a registration, a join or a desktop being removed; at least 24h, since a shorter time is refused (0: keep accounts for good) (default 2160h0m0s)
   -acme-domain domain
     	get a certificate from Let's Encrypt for this domain, and for any other names the relay answers to listed after it, comma-separated
   -acme-email address
@@ -43,9 +50,9 @@ Flags for serve:
   -desk-domain string
     	give every desktop's tunnel its own origin, https://<hostId>.<domain>/, instead of a path under -public-url; needs a wildcard DNS record and certificate for it, arranged outside the relay (or FLOCKDECK_RELAY_DESK_DOMAIN)
   -enforce-plans
-    	ask every account for a subscription after a free trial, refusing remote access to one that has neither; on by default once -billing-url is set (or FLOCKDECK_RELAY_ENFORCE_PLANS=true or =false, either way)
+    	ask every account for a subscription after a free trial, refusing Flockdeck Remote to one that has neither; on by default once -billing-url is set (or FLOCKDECK_RELAY_ENFORCE_PLANS=true or =false, either way)
   -grace-length duration
-    	how long an account whose trial or subscription has run out is kept before it is deleted, with -enforce-plans (default 2160h0m0s)
+    	how long an account whose trial or subscription has run out is kept as it was, with -enforce-plans; after that it is deleted if it is not in use (see -account-retention) (default 2160h0m0s)
   -http-addr address
     	with -acme-domain, the address answering ACME challenges and redirecting to https (default ":80")
   -log-level string

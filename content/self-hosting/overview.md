@@ -1,6 +1,6 @@
 # Self-hosting the Flockdeck relay
 
-Remote access normally goes through the shared relay at `remote.flockdeck.ai`:
+Flockdeck Remote normally goes through the shared relay at `remote.flockdeck.ai`:
 your desktop dials out to it, and your phone or laptop reaches your desktop
 through it. Flockdeck operates that relay. Only terminal traffic is
 end-to-end encrypted through it; everything else, the state of your panes

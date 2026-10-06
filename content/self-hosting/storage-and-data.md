@@ -10,6 +10,38 @@ addresses with `-audit-ip`); with verified registration, the verified email.
 There's no per-message or per-keystroke history to store: traffic is
 proxied through, not recorded, and nothing typed or shown is kept.
 
+Each account also has one stored time, when anything on it was last used. The
+relay uses it to decide when to delete an account nobody uses.
+
+## How long accounts are kept
+
+An account outlives its desktops. Removing the last desktop, with `flockdeck
+remote remove` or from a paired browser, leaves the account with its devices
+and verified email, and a desktop can join it again by enrolling with the same
+email address, or with a join code from a paired browser. Removing a desktop
+never deletes the account.
+
+The relay deletes an account, with its desktops, devices and codes, in three
+ways:
+
+- **Retention.** Once an hour, in the ten-minute sweep, on every relay, the
+  relay deletes each account that has not been used for `-account-retention`.
+  The default is 90 days. `0` keeps accounts for good, and a value above 0 and
+  under 24 hours is refused when the relay starts. Use is a desktop connecting,
+  a paired device making a request, a registration, a join, or a desktop being
+  removed. An account with a subscription is not deleted. The relay logs how
+  many accounts, desktops and devices it deleted, never an id or an address.
+  With `-audit` it also records an `account.deleted` event for each.
+- **Its owner.** `flockdeck remote delete-account` on a desktop deletes the
+  account, every machine in it and every paired device. The relay refuses while
+  a subscription is running, because it does not cancel subscriptions.
+- **You, by hand.** `flockdeck-relay account delete`, described in [Admin and
+  invites](admin-and-invites.html#deleting-accounts).
+
+A desktop that registered and never connected is removed after 7 days, and only
+the desktop. There is no sweep of quiet desktops: one that has connected is
+never removed for being quiet.
+
 ## The embedded database
 
 By default, pointing `-data` at a directory is all the storage configuration
