@@ -102,7 +102,7 @@ reverse proxy. The relay warns if it is listening beyond loopback.</p>
 <p>It's authenticated with a token the relay writes to <code>admin.json</code> in the
 data directory (<code>-data</code>). The relay writes a fresh token on every start and
 removes the file when it stops, so run the admin commands (<code>invite</code>,
-<code>stats</code>, <code>plan</code>, <code>user revoke</code> and <code>audit export</code>) where they can read
+<code>stats</code>, <code>plan</code>, <code>user revoke</code>, <code>account</code> and <code>audit export</code>) where they can read
 <code>-data</code>, for example <code>docker exec &lt;container&gt; /flockdeck-relay invite -data /data</code>. Keep that file as tightly held as you would a root credential:
 anyone with it has full admin access.</p>
 <h2 id="inviting-a-desktop">Inviting a desktop</h2>
@@ -129,9 +129,36 @@ show headroom against them.</p>
 relay run with <code>-oidc-issuer</code>, which is how a device is recorded against an
 email; disable them at the identity provider too, or they could pair a
 device again.</p>
-<p>To remove a desktop, turn off remote access from its own Settings, or run
-<code>flockdeck remote disable</code> there; that removes it from the relay it was
-registered with.</p>
+<p>To take a desktop off its account, run <code>flockdeck remote remove</code> on it, or
+remove it from a paired browser. That removes only the desktop, the last one
+included: the account keeps its devices and verified email, and can have no
+desktops. <code>flockdeck remote disable</code> only turns Flockdeck Remote off on that
+desktop, which stays enrolled and shows as offline.</p>
+<h2 id="deleting-accounts">Deleting accounts</h2>
+<p>Nothing deletes an account when its last desktop goes. The relay deletes one
+once nothing on it has been used for <code>-account-retention</code> (see <a href="storage-and-data.html#how-long-accounts-are-kept">Storage and
+data</a>). To delete one
+yourself:</p>
+<pre><code>flockdeck-relay account delete -data /data -email sam@example.com
+flockdeck-relay account delete -data /data -email sam@example.com -apply -export sam.json
+</code></pre>
+<p>Without <code>-apply</code> it is a dry run that says what would go. <code>-apply</code> needs
+<code>-export</code>, which writes the account's rows out first; the account is deleted only
+after that. A subscribed account is refused unless you give <code>-force</code>, since
+deleting does not cancel a subscription.</p>
+<p><code>account duplicates</code> lists the emails that have more than one account, and
+<code>account dedupe</code> (a dry run without <code>-apply</code>) deletes the unpaid duplicates, with
+the same <code>-export</code> rule. Both are permanent and the export is the only copy, so
+take a database snapshot first.</p>
+<p>When the command runs inside a container with <code>docker exec</code> or <code>kubectl exec</code>,
+a file named with <code>-export FILE</code> is written inside the container, where you
+cannot easily copy it out and where a restart loses it. Give <code>-export - -confirm-exported</code> instead, which writes the export to standard output, and
+redirect that to a file on your own machine:</p>
+<pre><code>kubectl exec deploy/relay -- /flockdeck-relay account dedupe -data /data -apply -export - -confirm-exported &gt; rows.json
+</code></pre>
+<p>Standard output is not synced, so check that <code>rows.json</code> is not empty and parses
+as JSON before you rely on it.</p>
+<h2 id="exporting-the-audit-log">Exporting the audit log</h2>
 <p>To export the audit log, run <code>flockdeck-relay audit export -data /data -format csv -o audit.csv</code>. <code>-format</code> is <code>csv</code> (the default) or <code>json</code>; <code>-since</code>
 and <code>-until</code> bound it by a date (<code>2026-09-01</code>) or a time
 (<code>2026-09-01T09:00:00Z</code>); without <code>-o</code> it writes to the standard output. The
