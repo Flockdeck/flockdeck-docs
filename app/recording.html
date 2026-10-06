@@ -55,10 +55,12 @@
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/baton.html">Handing work to another agent</a></li>
+      <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html" aria-current="page">Recording a pane</a></li>
       <li><a href="/app/projects.html">Projects</a></li>
       <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
-      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/remote.html">Flockdeck Remote</a></li>
       <li><a href="/app/settings.html">Settings</a></li>
       <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="/app/cli.html">The command line</a></li>
@@ -120,22 +122,22 @@ A conversation is one file, so only one pane at a time can record it: turning
 recording on in a second pane showing the same conversation is refused.</p>
 <h2>What is recorded</h2>
 <p>One JSON object per line, in the order things happened. Every line has a
-timestamp (<code>time</code>), the conversation's id (<code>pane</code>) and a <code>type</code>; <code>conversation</code>,
-<code>project</code> and <code>agent</code> are there whenever they are known, and left out when
-not. A pane's name is not in the
-lines, nor is the model it is set to now: they are the pane's, not the
-conversation's, and an export has to match a recording of the same conversation.
+timestamp (<code>time</code>), the conversation's id (<code>conversation</code>), the <code>agent</code> and a
+<code>type</code>; <code>project</code> is there unless the stored conversation records no folder. A
+pane's name is not in the lines, nor is the model it is set to now: they are the
+pane's, not the conversation's, and an export has to match a recording of the
+same conversation.
 The one model a line can have is the one that produced that turn, as the agent's
 stored conversation records it (<code>model</code> on <code>assistant_message</code> and <code>tool_call</code>
 lines, left out where the conversation records none). The same goes for a few
-more things the agent's stored conversation records, each left out where it does
-not: the tokens a reply used (<code>usage</code>) and why it ended (<code>stopReason</code>), once per
+more things the agent's stored conversation records, each left out only where it
+does not: the tokens a reply used (<code>usage</code>) and why it ended (<code>stopReason</code>), once per
 reply (on its first line, as long as Claude Code repeats the same numbers on each
 entry of a reply, which it has in every conversation checked), and on every line
 the branch (<code>gitBranch</code>), the folder (<code>cwd</code>, a full path that usually has your account name in it, so look before you
 share a transcript) and the agent's version (<code>agentVersion</code>) of the entry it came
-from. Transcripts exported before these were added do not have them until they
-are exported again:</p>
+from. Exporting a conversation again replaces its earlier export, which is how
+an export made by an older Flockdeck gets whatever a newer one writes:</p>
 <table>
 <thead>
 <tr>
@@ -162,7 +164,7 @@ are exported again:</p>
 </tr>
 <tr>
 <td><code>tool_result</code></td>
-<td>What the tool printed (<code>output</code>), and <code>isError</code> or <code>interrupted</code> where it failed or you stopped it</td>
+<td>What the tool printed (<code>output</code>), and <code>isError</code> and <code>interrupted</code>, always, true when it failed or you stopped it</td>
 </tr>
 <tr>
 <td><code>conversation_title</code></td>
@@ -181,7 +183,7 @@ are exported again:</p>
 <p><code>time</code> is when the thing happened, as the agent's own record has it. Every line
 also has a <code>seq</code> number, counted from 1 in its file, and a line with anything
 removed from it says so with <code>redacted</code> or <code>clipped</code>. The format has a version,
-<code>v</code>, which goes up if a field ever changes meaning.</p>
+<code>v</code> (2 now), which goes up if a field is ever removed, renamed or changes meaning.</p>
 <p>The complete field reference, a JSON Schema, ordering and crash behaviour, and
 <code>jq</code> examples are in
 <a href="https://github.com/Flockdeck/flockdeck/blob/main/docs/recording-format.md" target="_blank" rel="noopener noreferrer">the transcript format reference</a> (<code>docs/recording-format.md</code> in
@@ -191,13 +193,7 @@ and nothing else:</p>
 <ul>
 <li><strong>No permission prompts or their answers, no status changes, no session
 lines.</strong> Claude Code's stored conversation does not record that a dialog was
-shown, how you answered it, or when the pane went idle or waiting. Earlier
-versions of Flockdeck wrote these lines from the agent's live events;
-recordings made then still have them, and the format still defines them.
-Those files are format 1 too: they are told apart by the text of their first
-and last lines (<code>turned on</code>, <code>resumed</code>, <code>turned off</code>, where a transcript made
-now says <code>start of the transcript</code> and <code>end of the transcript</code>), and in them
-<code>pane</code> is the pane's id, not the conversation's.</li>
+shown, how you answered it, or when the pane went idle or waiting.</li>
 <li><strong>Only what you typed is a prompt.</strong> Entries Claude Code writes for itself
 (a slash command and its output, injected reminders, the note a conversation
 continued from a summary opens with) are left out, and so is a subagent's own
@@ -221,11 +217,12 @@ been cut or changed so that it does not, the earlier file is kept, Flockdeck say
 so, and <code>flockdeck recordings export</code> exits with an error. Delete the file to have
 a fresh one. The files are readable by you only, and the setting moves with the
 pane when you drag it to another tab.</p>
-<p><strong>Reveal transcript</strong>, from the command palette or the pane header, opens
-your file manager with that pane's transcript file selected: the file it is
-recording to if it is recording, otherwise its latest export, and a notice if it
-has neither. Like opening the folder it only works from the machine Flockdeck
-runs on, and only for a file in the recordings folder. <code>flockdeck recordings export -reveal</code> does it for the file it has just written.</p>
+<p><strong>Reveal transcript</strong>, from the command palette, or <strong>Show in folder</strong> in
+<kbd>Ctrl+Shift+Y</kbd>, opens your file manager with that pane's transcript file
+selected: the file it is recording to if it is recording, otherwise its latest
+export, and a notice if it has neither. Like opening the folder it only works
+from the machine Flockdeck runs on, and only for a file in the recordings
+folder. <code>flockdeck recordings export -reveal</code> does it for the file it has just written.</p>
 <p><strong>Open recordings folder</strong> opens the folder. <code>flockdeck recordings</code> lists the
 recordings, newest first (not the exports), and <code>flockdeck recordings -dir</code>
 prints the folder.

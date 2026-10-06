@@ -55,10 +55,12 @@
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/baton.html">Handing work to another agent</a></li>
+      <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html">Recording a pane</a></li>
       <li><a href="/app/projects.html">Projects</a></li>
       <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
-      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/remote.html">Flockdeck Remote</a></li>
       <li><a href="/app/settings.html">Settings</a></li>
       <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="/app/cli.html">The command line</a></li>
@@ -157,16 +159,18 @@ on it with the middle button, closes every pane in it.</li>
 </ul>
 <p>The buttons in a pane header, in order: fan out (<code>⑂</code>), save the plan as a
 todo (<code>☑</code>), include in broadcast (<code>⇉</code>), auto-review (<code>✓</code>), restart, zoom,
-export transcript, reveal transcript, record, pane info (<code>ⓘ</code>), lock, close. Auto-review is off
+export transcript, record, pane info (<code>ⓘ</code>), lock, close. Auto-review is off
 until you turn it on, pane by pane (the ✓'s tooltip counts the commands it has
 let through unasked so far), and the pane keeps the setting across a
 restart of Flockdeck: see <a href="/app/status.html">Knowing who needs you</a>. Record is off
-until you turn it on too; export, reveal and record are not shown on a shell
-pane, which has no conversation, and reveal works only in a window on the
-machine Flockdeck runs on: see <a href="/app/recording.html">Recording a pane</a>.</p>
+until you turn it on too; export and record are not shown on a shell pane,
+which has no conversation. Showing the transcript file in your file manager is
+in <kbd>Ctrl+Shift+Y</kbd> and the command palette rather than the header, and works
+only in a window on the machine Flockdeck runs on: see
+<a href="/app/recording.html">Recording a pane</a>.</p>
 <h2>One pane, several windows</h2>
 <p>A pane has one terminal however many windows show it (a second window, a
-phone over <a href="/app/remote.html">remote access</a>), and that terminal is the size of the
+phone over <a href="/app/remote.html">Flockdeck Remote</a>), and that terminal is the size of the
 window last used on it: the one you focus or type in. Every other window draws
 it at that same size, so what the agent prints lands where it should. Where
 that is larger than the pane's room in a window, the window shows the part of
@@ -191,7 +195,8 @@ the conversation the agent stores under <code>~/.claude/projects</code>.</li>
 <li>The process id, the peer name set by <code>flockdeck peer-name</code>, and the pane's
 status.</li>
 <li>Whether the pane is recording, the path of its transcript file (the one it is
-recording to, or its latest export) and the path of the conversation file the
+recording to, or its latest export, with a <strong>Show in folder</strong> button that
+selects it in your file manager) and the path of the conversation file the
 agent stores itself. That last path is shown for panes that run Claude Code
 (including a second Claude account) and for Flockdeck's own API agents, once
 the agent has written the file. Until then, and for every other agent, it says
@@ -202,7 +207,7 @@ agent's transcript path always says &quot;not set&quot;.</li>
 Nothing secret is listed: no keys, tokens or environment. A path can name your
 own folders, so look at <strong>Copy all</strong> before pasting it somewhere public. The
 list is read on the machine Flockdeck runs on and is not sent anywhere else, so
-a window reached through <a href="/app/remote.html">remote access</a> cannot open it.</p>
+a window reached through <a href="/app/remote.html">Flockdeck Remote</a> cannot open it.</p>
 <h2>Finding a pane</h2>
 <p><kbd>Ctrl+Shift+L</kbd>, in the command palette, searches every pane in every open
 project. Type part of a pane's name, project, tab, agent, model, directory,

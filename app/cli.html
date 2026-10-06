@@ -55,10 +55,12 @@
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/baton.html">Handing work to another agent</a></li>
+      <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html">Recording a pane</a></li>
       <li><a href="/app/projects.html">Projects</a></li>
       <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
-      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/remote.html">Flockdeck Remote</a></li>
       <li><a href="/app/settings.html">Settings</a></li>
       <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="/app/cli.html" aria-current="page">The command line</a></li>
@@ -148,6 +150,10 @@ switched from inside the window. These are what is left.</p>
 <td>Write an agent's stored conversation as a transcript, whether or not the pane was recorded; <code>-o</code> chooses the file, <code>-reveal</code> shows it in your file manager</td>
 </tr>
 <tr>
+<td><code>flockdeck baton</code></td>
+<td>List the handoffs agents have made (<code>list</code>), or print one (<code>show &lt;baton-id&gt;</code>; <code>-path</code> prints the file instead)</td>
+</tr>
+<tr>
 <td><code>flockdeck agents</code></td>
 <td>List the agents and models that <code>-agent</code> and <code>spawn</code> accept, and which are installed here</td>
 </tr>
@@ -159,7 +165,7 @@ switched from inside the window. These are what is left.</p>
 </table>
 <p><code>-no-window</code> needs no browser on the machine it runs on, so it suits
 a server you own. See <strong>Running it headless on a server</strong> in
-<a href="/app/remote.html">Remote access</a> for running Flockdeck headless and reaching it from
+<a href="/app/remote.html">Flockdeck Remote</a> for running Flockdeck headless and reaching it from
 a paired phone or laptop.</p>
 <p>Running the binary again does <strong>not</strong> start a second set of agents. It finds
 the instance already going, hands it the directory you asked for, and opens a
@@ -174,7 +180,7 @@ opens only its own projects.</p>
 <h2>spawn</h2>
 <p>Run from inside a pane, this starts another agent:</p>
 <pre><code class="language-sh">flockdeck spawn [-worktree &lt;branch&gt;] [-split] [-shell] [-record]
-                [-agent &lt;id&gt;] [-model &lt;model&gt;] &lt;task&gt;
+                [-agent &lt;id&gt;] [-model &lt;model&gt;] [-baton &lt;ref&gt;] [-baton-send-elsewhere] &lt;task&gt;
 </code></pre>
 <p><code>-record</code> starts the helper with its agent interaction recorded as a
 transcript, the same as the record button in its header; see
@@ -186,6 +192,17 @@ combined with <code>-shell</code>, which has no conversation to record.</p>
 whatever the project runs by default. <code>flockdeck agents</code> lists the names both
 of them take, and a name neither the catalog nor the agent has is answered here
 rather than becoming a pane that never starts.</p>
+<p><code>-baton</code> starts the helper from a handoff instead of a blank conversation: <code>self</code>
+makes one from your own conversation, or give the id of a pane in your own project, a baton id (<code>flockdeck baton list</code> shows them) or the path of a notes file inside your project or checkout.
+The task is then optional.
+Nothing reviews a baton an agent asks for, so command arguments are dropped from
+it. A baton is sent to the agent the helper runs, so one that would go to a
+different company than the baton came from, or to an agent whose company
+Flockdeck does not know, is refused unless you add <code>-baton-send-elsewhere</code>. With
+it the agent only asks: your window shows a notice with a <strong>Send it</strong> button, and
+the baton is not sent until you press it (or at all, after 45 seconds). That stops a
+mistake and a request nobody saw; it is not a boundary against a program running as
+you, which can press the button itself. See <a href="/app/baton.html">Handing work to another agent</a>.</p>
 <p>The address and token come from the environment the pane was started with
 (<code>FLOCKDECK_API</code> and <code>FLOCKDECK_TOKEN</code> below), so only processes running inside a pane
 can use it, and running it anywhere else says so rather than failing
@@ -228,9 +245,9 @@ Ctrl+Shift+W.</p>
 <pre><code class="language-sh">flockdeck recordings [-dir] [-json]
 </code></pre>
 <p>Lists the transcripts panes have recorded, newest first: when it started, the
-project, the pane's name (only a recording made before v0.3.48 has one; a newer
-one shows <code>-</code>), its size and the file. Exports are not listed: they are in each
-project folder's <code>exports</code> folder. <code>-dir</code> prints the folder they are kept
+project, the conversation's id (its first eight characters), its size and the
+file. Exports are not listed: they are in each project folder's <code>exports</code>
+folder. <code>-dir</code> prints the folder they are kept
 in and nothing else, and <code>-json</code> prints one JSON object per recording for a
 script. It reads the state directory, so it works with no Flockdeck running, and
 from any terminal. Nothing is recorded unless you turn recording on for a pane,
@@ -253,7 +270,9 @@ permissions), never into the project or a git repository. <code>-reveal</code> s
 manager, selected, when it has been written.</p>
 <p>It prints how many lines it wrote, whether the conversation was cut at the 16
 MiB cap, and how many entries it could not read (one over 8 MiB is left out).
-If an earlier export of the same conversation has events this one would lack,
+Exporting a conversation again replaces its earlier export, written beside it and
+moved into place so that a failure never loses the earlier one, and the command
+says it replaced one. If the earlier export has events the new one would lack,
 because the stored conversation was cut or changed, that file is kept, nothing
 new is written, and the command exits with an error; delete the file to have a
 fresh one. For
@@ -338,16 +357,24 @@ only while the agent talks to that vendor's own address.</p>
 </tr>
 <tr>
 <td><code>flockdeck remote disable</code></td>
-<td>Remove this machine from the relay; <code>-force</code> if it cannot be reached</td>
+<td>Turn Flockdeck Remote off here and keep this machine enrolled: nothing is deleted, the machine shows as offline, and <code>enable</code> turns it back on to the same account</td>
+</tr>
+<tr>
+<td><code>flockdeck remote remove</code></td>
+<td>Take this machine off the account. The relay deletes only this machine: the account, its plan and its paired devices stay, even if this was the last machine. It asks first; <code>-yes</code> skips the question, and <code>-force</code> forgets the enrolment here if the relay cannot be reached</td>
 </tr>
 <tr>
 <td><code>flockdeck remote move &lt;relay&gt;</code></td>
 <td>Enrol with another relay, then leave this one once it answers; takes <code>-invite</code>, <code>-join</code>, <code>-name</code>, and <code>-yes</code> to skip the question. Every paired device has to pair again</td>
 </tr>
+<tr>
+<td><code>flockdeck remote delete-account</code></td>
+<td>Erase the whole account on the relay: every machine in it, every paired device and the plan. It shows what goes and asks you to type <code>delete my account</code>; a script gives <code>-yes -confirm &quot;delete my account&quot;</code>. An account with a subscription is refused until the subscription has ended</td>
+</tr>
 </tbody>
 </table>
-<p>A running instance is told when <code>enable</code>, <code>disable</code> or <code>move</code> changes
-anything, and connects, disconnects or switches relay on the spot. <a href="/app/remote.html">Remote access</a> has the rest.</p>
+<p>A running instance is told when <code>enable</code>, <code>disable</code>, <code>remove</code>, <code>delete-account</code> or <code>move</code> changes
+anything, and connects, disconnects or switches relay on the spot. <a href="/app/remote.html">Flockdeck Remote</a> has the rest.</p>
 <h2>chat</h2>
 <pre><code class="language-sh">flockdeck chat
 </code></pre>
@@ -429,6 +456,88 @@ no sense in which it is behind one.</p>
 <p>Set <code>FLOCKDECK_UPDATE=off</code> to stop the window checking on its own, and to stop
 an update it has already downloaded being put in place when Flockdeck exits.
 The subcommand still works; it is the background updating that goes.</p>
+<h2>helpers</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flockdeck helpers list</code></td>
+<td>Lists the helper apps, what is installed and whether it runs</td>
+</tr>
+<tr>
+<td><code>flockdeck helpers list -check</code></td>
+<td>Also looks for a newer version of each</td>
+</tr>
+<tr>
+<td><code>flockdeck helpers install lens</code></td>
+<td>Downloads, checks and installs a helper, after asking</td>
+</tr>
+<tr>
+<td><code>flockdeck helpers install -version=0.4.0 lens</code></td>
+<td>Installs that version, forward or back</td>
+</tr>
+<tr>
+<td><code>flockdeck helpers start lens</code></td>
+<td>Starts it, in the running Flockdeck</td>
+</tr>
+<tr>
+<td><code>flockdeck helpers open lens</code></td>
+<td>Opens its page in your browser</td>
+</tr>
+<tr>
+<td><code>flockdeck helpers stop lens</code></td>
+<td>Stops it</td>
+</tr>
+<tr>
+<td><code>flockdeck helpers uninstall lens</code></td>
+<td>Removes it and keeps its data folder</td>
+</tr>
+<tr>
+<td><code>flockdeck helpers uninstall -purge-data lens</code></td>
+<td>Removes it and deletes the data folder too</td>
+</tr>
+</tbody>
+</table>
+<p>A helper app is a small program that Flockdeck downloads, installs in its own
+folder, starts and stops for you. The first one is lens, which reads agent
+session transcripts. A helper is not part of Flockdeck: it runs as you, listens
+on 127.0.0.1 only, gets none of Flockdeck's tokens or API keys in its
+environment, and is not sandboxed. Any program running as you can read and
+write its files, and any account on the computer can reach it on 127.0.0.1
+with no sign-in, because it has none. Its environment is built from a short
+list of names, and that list includes <code>HTTP_PROXY</code>, <code>HTTPS_PROXY</code> and
+<code>NO_PROXY</code>, passed on as they are on purpose so that it can reach the network
+the way you do; a proxy address can carry a username and password.</p>
+<p><code>install</code> shows the name, version, source address, signature and what the helper
+may do, and asks first; <code>-yes</code> skips the question. The release's manifest is
+checked against Flockdeck's release key, and the archive against the SHA-256 and size in
+them, before anything is unpacked. Every lens release must be signed: a release
+that is not signed is refused, with that reason, and so is one whose signature
+is wrong. Nothing overrides either, and there is no flag for it. Nothing
+older than the newest version installed before is offered unless you name it
+with <code>-version</code>.</p>
+<p>Flockdeck keeps the newest version it has installed in <code>trust.json</code> in the
+helper's folder under its state folder (<code>apps/lens/trust.json</code>). If an install
+says it cannot write that file or that it is damaged, or you want older versions to be accepted again,
+delete it;
+<code>flockdeck helpers uninstall -purge-data lens</code> also removes it, together with the
+data, even when nothing is installed. If a helper's program was changed after it
+was installed, a start is refused. <code>flockdeck helpers install lens</code> puts a
+checked copy back when the installed version is also the latest; otherwise run
+<code>flockdeck helpers install -version=&lt;installed version&gt; lens</code>.</p>
+<p><code>list</code>, <code>install</code> and <code>uninstall</code> work without Flockdeck open. <code>start</code>, <code>stop</code>
+and <code>open</code> are done by the running Flockdeck, which watches the helper, restarts
+it if it crashes (three times in five minutes, then it stays stopped) and stops
+it when Flockdeck quits.</p>
+<p>The same actions are in the window: <strong>Helper apps…</strong> in the command palette
+lists each helper with its status, written as a word as well as a symbol, and a
+button for what can be done next. Installing there shows the same details as the
+command line and asks before it downloads anything.</p>
 <h2>Environment</h2>
 <table>
 <thead>

@@ -55,10 +55,12 @@
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/baton.html">Handing work to another agent</a></li>
+      <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html">Recording a pane</a></li>
       <li><a href="/app/projects.html">Projects</a></li>
       <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
-      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/remote.html">Flockdeck Remote</a></li>
       <li><a href="/app/settings.html">Settings</a></li>
       <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="/app/cli.html">The command line</a></li>
@@ -120,7 +122,7 @@
 <p>The choice applies to a pane when it starts. Use <strong>Restart pane</strong> from the command palette for one that is already running. Your own status line is looked up the way Claude Code looks for it: in the project's <code>.claude/settings.local.json</code>, then <code>.claude/settings.json</code>, then your own <code>settings.json</code> in Claude Code's folder. If you change it, restart the pane so the new command is used.</p>
 <p>The windows only appear for Pro and Max subscribers, and only after the first answer in a session. On an API key, a Claude pane shows its session cost instead.</p>
 <h2>What stays on your machine</h2>
-<p>Everything here is worked out on this computer, from what the agents themselves report. Flockdeck sends nothing about your spending anywhere, and makes no network request to find it out: no usage API, no price feed. If remote access is on, the figures travel with the rest of your panes' state to your own devices, through the relay, as the pane headers do.</p>
+<p>Everything here is worked out on this computer, from what the agents themselves report. Flockdeck sends nothing about your spending anywhere, and makes no network request to find it out: no usage API, no price feed. If Flockdeck Remote is on, the figures travel with the rest of your panes' state to your own devices, through the relay, as the pane headers do.</p>
 <p>The figures are kept in memory only for now. They start again when a conversation does, with <code>/clear</code> or a new session, and when Flockdeck restarts.</p>
 
   </article>
