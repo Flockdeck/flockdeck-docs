@@ -55,10 +55,12 @@
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/baton.html">Handing work to another agent</a></li>
+      <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html">Recording a pane</a></li>
       <li><a href="/app/projects.html">Projects</a></li>
       <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
-      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/remote.html">Flockdeck Remote</a></li>
       <li><a href="/app/settings.html">Settings</a></li>
       <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="/app/cli.html">The command line</a></li>
@@ -133,7 +135,8 @@ went, not only the latest.</p>
 <p>Closing the pane a step's agent ran in reads its outcome the same way a
 settled <a href="/app/fanout.html">fan-out</a> job does (done, needs input, or failed), and the
 step's row shows it beside how many attempts it has had. An outcome of done
-ticks the step. An outcome never unticks one, so a step you ticked by hand
+ticks the step, including one you unticked before running another attempt.
+An outcome never unticks one, so a step you ticked by hand
 stays ticked whatever its agent's pane said on the way out, and a tick you
 think is wrong is yours to take off.</p>
 <h2>Why not just fan out again</h2>

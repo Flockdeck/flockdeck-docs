@@ -1,0 +1,401 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baton details | Flockdeck docs</title>
+<meta name="description" content="This page holds the detail behind Handing work to another agent: what the scrubber takes and leaves, when it looks again, how an agent&#39;s company is decided, and how stored batons are kept and removed.">
+<link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="Baton details | Flockdeck docs">
+<meta property="og:description" content="This page holds the detail behind Handing work to another agent: what the scrubber takes and leaves, when it looks again, how an agent&#39;s company is decided, and how stored batons are kept and removed.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/baton-details.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/baton-details.html">
+<link rel="preload" href="/fonts/ibm-plex-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><circle fill="#93A1A9" cx="9" cy="5.5" r="3.3"/><circle fill="#93A1A9" cx="16" cy="10.75" r="3.3"/><circle fill="#93A1A9" cx="16" cy="21.25" r="3.3"/><circle fill="#93A1A9" cx="9" cy="26.5" r="3.3"/><circle fill="#4FD1DB" cx="23" cy="16" r="3.3"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/Flockdeck/flockdeck-docs">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/fanout.html">Fan out</a></li>
+      <li><a href="/app/todo.html">Todo</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/github.html">GitHub</a></li>
+      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/baton.html">Handing work to another agent</a></li>
+      <li><a href="/app/baton-details.html" aria-current="page">Baton details</a></li>
+      <li><a href="/app/recording.html">Recording a pane</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Flockdeck Remote</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>Baton details</h1>
+<p class="doc-lede">This page holds the detail behind <a href="/app/baton.html">Handing work to another agent</a>: what the
+scrubber takes and leaves, when it looks again, how an agent's company is decided, and
+how stored batons are kept and removed.</p>
+<h2>What the scrubber takes</h2>
+<p>It takes values from the pane's environment and the checkout's <code>.env</code> files, the shapes
+of common keys and tokens, long random-looking strings, and what is typed on a command
+line or in a config file: <code>Authorization</code> credentials, database passwords after <code>-p</code>,
+<code>htpasswd -b</code>, <code>sshpass</code>, <code>curl -u</code>, <code>export NAME value</code> and <code>setx name value</code>, cookie
+values, npm tokens, JSON and Go literals and YAML blocks under a secret-looking name, and
+<code>name: value</code> lines. It also takes <code>vault login TOKEN</code>,
+<code>az login -p</code>, <code>doctl -t</code>, <code>unzip -P</code> and <code>zip -P</code>, <code>gpg --passphrase</code>, <code>7z -pPASSWORD</code>,
+the value in <code>aws configure set aws_secret_access_key</code>, the password of <code>http -a</code>
+(httpie), and the secret that <code>echo</code> or <code>printf</code> pipes into <code>docker login --password-stdin</code> (or is given as <code>&lt;&lt;&lt;</code>). A name that ends in <code>pass</code>, <code>passwd</code>, <code>pwd</code>,
+<code>pw</code> or <code>key</code> (<code>db_pass</code>, <code>DBPW</code>, <code>signing_key</code>, and a bare <code>pw</code> or <code>key</code>) takes a value
+that looks chosen: letters of both cases, a digit, or letters with a symbol in them
+(<code>ABCD.EFGH.IJKL</code>), 8 characters or more, and 12 or more under <code>key</code>. Nothing under these
+names is left alone for looking like code: <code>Hunter2(2024)Abc</code>, <code>{Winter2024!}</code>,
+<code>Winter.Spring.Summer</code> and <code>Qwerty.AsdfGhjk</code> are taken. What is left alone is a call that
+reads an environment variable by name and has nothing after it (<code>os.getenv(&quot;X&quot;)</code>,
+<code>env.get(&quot;X&quot;)</code>), a call or slice of plain names (<code>bytes.Clone(key)</code>,
+<code>append(k, other[:16]...)</code>, <code>keyMaterial[:n]</code>), and a comment after either that has no
+word in it that looks chosen. <code>public_key</code>, <code>cache_key</code>, <code>primary_key</code>, <code>sort_key</code> and a
+few like them are never taken. Invisible and full-width characters do not hide a secret.
+Paths and branch names are kept.</p>
+<p>When in doubt it redacts. A value under a secret's name is left only when it is plainly
+not one:</p>
+<ul>
+<li><code>none</code>, <code>null</code>, <code>true</code>, <code>false</code>, <code>required</code> and type names.</li>
+<li>Placeholders: <code>$TOKEN</code>, <code>${TOKEN}</code>, <code>&lt;token&gt;</code>, <code>{{ .Values.x }}</code>, <code>your-token-here</code>.</li>
+<li>A mask of eight or more of one of <code>*</code>, <code>•</code> or <code>#</code>. An <code>x</code> is not a mask:
+<code>password=xxxxxxxx</code> is redacted, and so is <code>password=****</code>.</li>
+<li>A call that reads the environment, when it is the whole value and holds only a name:
+<code>os.Getenv(&quot;X&quot;)</code>, <code>ENV['X']</code>, <code>process.env.X</code>, <code>&lt;%= ENV['X'] %&gt;</code>. A call with more
+after it (<code>os.Getenv(&quot;X&quot;) + &quot;hunter2&quot;</code>, <code>ENV.fetch(&quot;X&quot;, &quot;default&quot;)</code>, or an ERB tag
+that holds a literal) is redacted to the end of the line, because the rest may be the
+secret.</li>
+<li>Dates under <code>*_at</code>, <code>*_expires</code>, <code>*_date</code> and <code>*_time</code> names, and a time as a number
+of 9 to 13 digits. Under a name that has a secret word in it (pass, password, secret,
+token, key, auth, credential) the number is kept only by a table in the code: the
+secret word has to be <code>token</code> or a <code>key_id</code>, the name has to say what the time is of
+(<code>expires</code>, <code>expiry</code>, <code>issued</code>, <code>created</code>, <code>updated</code>), and the number has to be 10 digits
+starting with 1 (seconds) or 13 starting with 1 (milliseconds). So
+<code>token_expires_at=1700000000</code> is kept, and <code>token_at=1712345678</code>,
+<code>password_expires=1712345678</code>, <code>api_key_expires=4412345678</code> and <code>password_at=987654321</code>
+are redacted. A number of fewer than 10 digits under a name with <code>expires</code> in it is
+taken for an amount (<code>token_expires=3600</code>).</li>
+<li>Numbers under names that say an amount (<code>max_tokens</code>, <code>TOKEN_BUCKET_SIZE</code>), and counts
+of model tokens (<code>input_tokens</code>), including several on one line
+(<code>input_tokens=1200 output_tokens=340</code>).</li>
+<li>A place, when the name says it is one (<code>*_file</code>, <code>*_path</code>, <code>*_dir</code>, <code>*_url</code>,
+<code>ssh_key</code>) and the value starts like one, or a file under <code>/run/secrets</code>. A path to a
+key file is still replaced, by its file name (<code>id_rsa</code>, <code>*.pem</code>, <code>*.key</code>), whatever the
+name says: <code>ssh_key: ~/.ssh/id_rsa</code> becomes <code>ssh_key: [REDACTED: key-file-path]</code>.
+A random value under <code>ssh_key</code> is a secret.</li>
+<li>A variable handed on with its key's name (<code>Token: token,</code>).</li>
+</ul>
+<p><code>password</code>, <code>changeme</code> and <code>admin</code> as a value are redacted, and so is anything with a
+slash, colon or dot in it under a name that does not say it is a place. A URL's password
+goes and its scheme, user and host stay, whatever the user is called
+(<code>x-access-token</code>).</p>
+<h2>Hidden characters</h2>
+<p>Every baton is cleaned of terminal escape sequences and control characters. It is also
+cleaned of characters that draw nothing and can carry text a person does not see: the
+Unicode tag characters (U+E0000 to U+E007F) and the variation selector supplement
+(U+E0100 to U+E01EF), zero width spaces, bidi controls, the word joiner and the
+invisible operators, soft hyphens, and the Hangul and Khmer fillers. A zero width joiner
+or non-joiner, or a variation selector, next to an ASCII character is removed too. Between
+non-ASCII characters they stay, because emoji, Persian and Hindi are written with them.
+A run of them is cut to two, but each gap between non-ASCII characters can still carry up to two.
+The <code>&lt;baton&gt;</code> fence is escaped in its ASCII form and in forms that look like it: with
+no-break or ideographic spaces inside, or in full-width letters.</p>
+<h2>What it misses or takes wrongly</h2>
+<ul>
+<li>Bare 32 and 40 character hex strings, UUIDs, and hex of 41 to 63 characters are kept,
+because commit ids and checksums fill a baton. A provider key that looks like that, or
+a hex session id in a <code>Cookie</code>, is not caught without a known prefix or a name like
+<code>api_key</code>. Hex of 64 characters or more is removed.</li>
+<li>Secrets that are short, ordinary words, or not named as one, and secrets in a request
+body or literal under a name it does not know.</li>
+<li><code>mysql -p word</code> is read as a database name unless the word looks like a password (eight
+characters or more, with a digit or both cases); <code>-pPASSWORD</code> is always taken. <code>7z x -p word</code> is the same with an archive name, and is not taken; <code>7z a -pPASSWORD</code> is.</li>
+<li><code>NAME=value&amp;other=1</code> on its own line: the value runs to the end of the line, so
+<code>&amp;other=1</code> goes with it. In a URL's query only the value goes.</li>
+<li><code>export name value</code> with a lower case name is taken only when the value is one word that
+looks chosen (8 characters or more with a digit or both cases); <code>setx name value</code> is
+taken whatever the value is.</li>
+<li>A passphrase with <code>(</code>, <code>*</code> or <code>//</code> in it in a <code>name: value</code> line, which looks like code.</li>
+<li>Shell syntax past quotes, <code>$'...'</code> and line continuations, such as a heredoc body.</li>
+<li><code>passwd value</code> and <code>user passphrase</code> in prose, with no <code>=</code> or <code>:</code>, are not taken.</li>
+<li>A key wrapped over lines is marked on every line of a run of one width. A run of three
+lines or more is taken when one line has a provider's prefix or looks like a key by
+itself, or the joined run is 40 characters or more with several kinds of characters. A
+run of two lines is taken when the first is at least 16 characters and the second at
+least 6 with a digit or both cases, and the two look random, and can still keep a line (about one in a hundred
+in the tests). Columns of hex ids of one length, UUIDs and names with a hex tail
+(<code>user-3f9a...</code>) are lists, and are not read as a wrapped key.</li>
+<li>A short value under a name that ends in <code>key</code> (under 12 characters, <code>ssh_key=a.b.c</code>,
+<code>key = x[0]x</code>) is not taken: names like that hold identifiers and indexes in code too
+often. Under <code>pass</code>, <code>pwd</code> and <code>pw</code> names the least is 8.</li>
+<li>Some lines of source code that mention <code>key</code>, <code>pass</code>, <code>pw</code> or <code>pwd</code> are marked though
+they are code. Counted against every line, per line, the scrubber changes 0.3% (405 of
+163,613) of the non-test Go source of net and crypto in the Go 1.27 standard library and
+0.9% (134 of 15,243) of this repository's <code>internal/webui/assets/app.js</code>; some of those are
+other things it takes, such as long random-looking identifiers. The larger figures that
+follow are a different measure: the share of lines that contain the letters <code>key</code>, <code>pass</code>, <code>pw</code>
+or <code>pwd</code> anywhere in the line, in any case (a substring match, so <code>monkey</code>, <code>passport</code> and
+<code>power</code> count) that Flockdeck changes: 2.6% (157 of 5958) of the lines of the non-test Go
+source of net and crypto in the Go 1.27 standard library, and 14.2% (119 of 839) of this
+repository's <code>internal/webui/assets/app.js</code>. Counting only lines where one of the four is a
+word of its own (not next to another letter) it is 5.6% (110 of 1954) and 34.9% (117 of
+335). That is deliberate: a password with brackets
+or dots in it looks like code, and under the names <code>key</code>, <code>pass</code>, <code>pw</code> and <code>pwd</code> nothing is
+left alone for that. What is kept is an environment read by name, a call or a slice of
+plain names, and a value too short to be chosen.</li>
+<li>Text taken that is not a secret: random-looking identifiers and base64 in paths,
+<code>const tokenKey = &quot;auth-token&quot;</code>, <code>password_field_label = &quot;Password&quot;</code>, and a literal
+<code>[REDACTED: x]</code> of a kind Flockdeck does not make, which becomes a <code>secret-value</code> mark.</li>
+</ul>
+<h2>When it looks again</h2>
+<p>Scrubbing again, up to four passes, happens when the first pass changed something and a
+mark has something but white space next to it, a command that reads its words by position
+(<code>htpasswd</code>, <code>curl</code>, <code>mysql</code>, <code>sshpass</code>, <code>docker</code>) or a key file name is in the text, or
+a marked line names a secret. That is for a text up to 64 KB. Above that only a mark with
+a word or an odd space stuck to it, or <code>htpasswd</code> or a key file name, gets another look,
+so a very large text costs one pass and a second look is not promised. A word with a
+digit next to a no-break space can be taken with a token.</p>
+<h2>Deciding an agent's company</h2>
+<p>The company of the agent a helper will run decides whether a baton needs approval. A CLI
+counts as unknown when a setting that applies to it sends it elsewhere:</p>
+<ul>
+<li>Claude Code: <code>ANTHROPIC_BASE_URL</code>, <code>ANTHROPIC_BEDROCK_BASE_URL</code>,
+<code>ANTHROPIC_VERTEX_BASE_URL</code>, <code>ANTHROPIC_FOUNDRY_BASE_URL</code>, <code>ANTHROPIC_FOUNDRY_RESOURCE</code>,
+<code>CLAUDE_CODE_USE_BEDROCK</code>, <code>CLAUDE_CODE_USE_VERTEX</code> and <code>CLAUDE_CODE_USE_FOUNDRY</code>.</li>
+<li>Codex: <code>OPENAI_BASE_URL</code>, <code>OPENAI_API_BASE</code>, <code>AZURE_OPENAI_ENDPOINT</code>, and <code>config.toml</code>
+(in <code>$CODEX_HOME</code> when that is set, else <code>~/.codex</code>). The file is parsed as TOML (tables,
+arrays of tables, dotted and quoted keys, all four kinds of string, arrays over several
+lines, inline tables, comments, CRLF, a byte order mark). The settings that count are the
+top-level ones with the profile that <code>profile</code> selects on top. A <code>model_provider</code> that is
+not <code>openai</code>, any <code>oss_provider</code>, an <code>openai_base_url</code> whose host is not api.openai.com,
+and the <code>base_url</code> of the active provider's table (<code>[model_providers.&lt;id&gt;]</code>) whose host is
+not OpenAI's make the company another one. A <code>base_url</code> in any other table, an MCP
+server's for one, and text inside a multi-line string, do not count. A file that cannot
+be parsed, is over 1 MB, or is there and cannot be read, makes the company unknown.
+What a command line gives Codex (<code>-c</code>, <code>--profile</code>, <code>--oss</code>) is not read, and neither
+are <code>chatgpt_base_url</code>, a <code>.codex/config.toml</code> in a project, <code>~/.codex/.env</code> and a
+system-wide Codex config. How Codex itself reads its config was not checked against
+Codex.</li>
+<li>Gemini: <code>GOOGLE_GEMINI_BASE_URL</code>, <code>GEMINI_API_BASE_URL</code>, <code>GOOGLE_VERTEX_BASE_URL</code> and
+<code>GOOGLE_GENAI_USE_VERTEXAI</code>.</li>
+</ul>
+<p>They are read from the agent's own env block, Flockdeck's environment and, for Claude
+Code, the <code>env</code> of the user's <code>settings.json</code>, of the managed settings file, and of
+<code>settings.json</code> and <code>settings.local.json</code> in the project folder and its parents up to the
+git root (only the folder itself when it is in no git repository). The managed file is
+<code>C:\Program Files\ClaudeCode\managed-settings.json</code> on Windows, <code>/Library/Application Support/ClaudeCode/managed-settings.json</code> on macOS and <code>/etc/claude-code/managed-settings.json</code>
+on Linux; those paths are from Claude Code's documentation and were not checked on a
+managed machine. The <code>.claude/settings.json</code> and <code>.claude/settings.local.json</code> that
+the worktree will hold are read from the object store: the branch's own when the branch
+exists, and for a new branch the HEAD of the checkout it is cut from. Only what a commit
+contains is in a worktree, so a <code>settings.local.json</code> is there only if the repository
+committed it. Names are matched in any case (<code>.Claude/Settings.json</code>), every spelling that
+is found is read, and a <code>.claude</code> committed as a link to a folder of the same commit is
+followed through folders of the commit only. The target is read exactly as written: one with
+a <code>.</code> or <code>..</code> part (so <code>./cfg</code> too), an empty part, a space at either end, a control
+character, a backslash, a colon, or an absolute path, one that goes through another link, or
+that is not a folder of the commit, makes the company unknown; so does a <code>.claude</code> that is a
+submodule. The checkout's working copy, with its own <code>settings.local.json</code>, is read
+as well, and if either says another company, or cannot be read, it asks. A link, a pipe or a device where a settings file should be is
+refused without being opened; a link to a regular file is followed. A file with nothing in
+it, or only white space, has no settings; a file in UTF-16 is decoded; an <code>env</code> that is not
+an object sets nothing; names in <code>managed-settings.d</code> that start with a dot or end in <code>~</code>,
+<code>.swp</code> or <code>.tmp</code> are not read. Numbers and booleans count. A byte order mark, comments and trailing commas are
+allowed. This fails closed: a settings file that is there and cannot be opened (a
+permission refused, a folder in its place), is over 1 MB (it is not read), or cannot be
+read as JSON makes the company unknown, and the notice names the file by its whole path,
+so that the user's, the project's and the managed one can be told apart. A settings file
+committed in the branch that git cannot give, that is over the limit, or that is a link in the
+commit, does the same. The <code>env</code> key is read by its exact spelling: <code>ENV</code> or <code>Env</code> beside it,
+or <code>env</code> twice, makes the file unreadable, and variable names are matched in any case. A file that is not
+there, or a <code>.claude</code> that is a file, has no settings. The folder <code>managed-settings.d</code>
+beside the managed file is read for its <code>.json</code> files and fails the same way if it cannot
+be listed; that this folder exists is from Claude Code's documentation and was not
+checked on a managed machine. Settings a macOS configuration profile (MDM) delivers are
+not read. A planned worktree that is not made yet is read as itself and the checkout it is
+cut from, the same as when it has been made.</p>
+<p>Empty, <code>0</code>, <code>false</code> and the vendor's own host (a trailing dot too) are not overrides, and
+one vendor's setting does not touch another's CLI. An agent is taken for a vendor by its
+program or, for a wrapper, its id. An empty entry in an agent's own env does not hide the
+same setting in the environment. The notice says why a company is not known (&quot;through a
+gateway or proxy (host)&quot;), with the host only.</p>
+<p>The company is worked out again where the helper really runs, once its worktree exists,
+because the files there can differ from what was read to decide. If you were asked, it
+has to be the company you saw. If nobody was asked, it has to be the company the baton
+came from: settings that the new folder holds, or that a branch commits, which would send
+the helper elsewhere stop it, and nothing starts. The same agent going to a different
+company only because of where it works counts as a change and asks. A worktree and branch
+that this request made are removed when the start fails, but only if the worktree holds
+nothing beyond the files git checked out and no file git is told not to look at
+(any <code>--assume-unchanged</code> file, and any <code>--skip-worktree</code> file unless the repository uses a
+sparse checkout): no changed or untracked file, no ignored file
+(<code>.env</code>, <code>node_modules</code>, an IDE folder, build output, anything a hook wrote), no empty
+folder. git status leaves ignored files out and a plain removal deletes them, so Flockdeck
+also walks the folder against <code>git ls-files</code>, and keeps the worktree if anything is extra,
+naming up to five. An empty folder for a submodule does not count. The branch is deleted
+only if this request made it and it is still at the commit it was made at, and git is told
+that commit when it deletes, so a branch that moves in between is left. A branch that
+existed before is never deleted.</p>
+<h2>The approval record</h2>
+<p>A damaged <code>sources.json</code> is kept as <code>sources.json.bad</code> (a damaged overflow record as
+<code>overflow.json.bad</code>); one that cannot be read is left alone and the failure goes to
+<code>error.log</code>. The notice goes only to a connection that opened with an Origin, each window
+gets its own one-use token, and an endpoint is only ever shown, and sent to the window, as
+its host. A window that is the only one open and is remote-only cannot approve. The
+command waits 45 seconds for the approval as well as its usual minute. Linux refuses NFS,
+SMB, CIFS, AFS, Ceph, Coda and 9P for a notes file; FUSE and virtiofs are not checked.</p>
+<h2>Keeping and removing batons</h2>
+<p>What a baton is built from is cut to its own maximum before it is scrubbed, a text over 1 MB
+has its middle clipped, and the whole build has 5 seconds: what is not scrubbed by then is
+replaced by <code>[REDACTED: too-large-to-scrub]</code> and never passed on. A hostile or very large
+conversation is therefore bounded, and loses text, not secrets, for what a build reads. A baton that is
+stored or edited is scrubbed again when it is saved or sent, up to 1 MB as one text (so a key
+wrapped over lines is not cut in two); over 1 MB the middle is replaced by a <code>[clipped]</code>
+line. Scrubbing 1 MB of text that is made to be slow takes from 1 to 9 seconds, and the
+5-second budget is looked at between texts, not inside one. Plainly, three limits of this:
+the header of a baton (id, title, folder, branch, pane, agent, model) is cut to 4 KB before
+it is scrubbed, so a secret that starts in the last few bytes of such a field keeps up to
+about six characters of it, which is below what any pattern recognises, and a value that is
+legitimately longer is cut; scrubbing a text of up to 1 MB as one is more than linear (worst
+cases measured: 1.4 s for 256 KB, 4.0 s for 512 KB, 9.8 s for 1 MB) and cannot be cancelled
+once a text has begun, so it runs off the workspace goroutine, in goroutines that hold no
+global lock; and a stored baton is scrubbed twice when it is started from (once when it is
+read and once on the text that is sent).</p>
+<p>Batons are kept in Flockdeck's state directory, on this machine. When the next baton is
+saved, batons not made, shown or used for 30 days are removed, with their overflow files:
+one at a time when there are fewer than four, else at most half, the oldest first. A gap
+of weeks between saves is not a fault, so a machine that saves rarely still prunes.</p>
+<p>Nothing is removed when:</p>
+<ul>
+<li>the clock is earlier than at the last run, or was set while Flockdeck ran (one prune is
+skipped after a long sleep too, since the two clocks then disagree);</li>
+<li>a baton is dated in the future;</li>
+<li>the newest file in the state folder is more than a year behind;</li>
+<li>the state folder cannot be listed (said in the log once a day);</li>
+<li>a saved layout cannot be read, for up to 30 days from the first time it was seen
+unreadable. After that pruning goes on. Each unreadable file is tried by another route
+(shared access on Windows), and if that reads it, what it names is protected. If it
+cannot be read that way either, every baton that only that layout names becomes
+prunable: half of the batons a run, the oldest first.</li>
+</ul>
+<p>A baton that a layout names is never counted as old and never removed, however old it
+looks. A baton that no layout names and that looks more than five years old is never
+removed either (that is the safe side), whatever the clock says; it is skipped one by one
+and said in the log once a day. When half of them or more look that old the run is not
+written down, since the clock is the likelier fault. Runs that stop for the clock write
+nothing down, and a recorded time that is a day ahead is ignored. The record of what
+pruning has seen (<code>prune.json</code>) keeps its other entries when one is written; one that is
+empty or damaged is kept as <code>prune.json.bad</code>, started again with the current time, and
+pruning goes on from the next run, except when the newest file in the state folder is
+more than a year old, which stops the run as a wrong clock does. A record that exists and
+cannot be read at all (a folder in its place, a permission refused) is not damage and is
+not moved: pruning stops while it is so, said once a day in the log, and after 30 days of it
+pruning goes on with that record taken as empty. A baton used while it was unreadable is
+not forgotten: a use is also written on the baton's own file time, which the age rule reads
+first, so it is kept for 30 days from that use. A baton younger than the retention window,
+named by a saved layout or in use is not removed either. Each record's own time of being
+unreadable is forgotten as soon as that record reads fine, whatever the others do. Any other record that is
+there and cannot be read (<code>used.json</code>, <code>overflow.json</code>, <code>sources.json</code>, the retries
+record) is kept aside as <code>&lt;name&gt;.bad</code> (<code>.bad.1</code> up to <code>.bad.99</code>; none is written over, and
+with all 100 taken no more are kept, which is said once)
+and started again empty, and nothing is pruned in that run or for 24 hours after, since
+batons used a moment ago may look unused. A record that is empty or cut short is read from
+the newest complete copy a write left beside it, and that copy is not swept while it is
+the only one. A baton stays if any saved layout names it, in any project, or a pane was
+started from it in the last hour.</p>
+<p>Overflow files are removed afterwards in the background, one cleanup at a time, and given
+up on after five failed tries. A record is renamed into place; where Windows refuses that
+because another process has the file open, it is tried five times and then written in
+place, up to three tries; if they fail the record is put back as it was, and the whole new
+copy stays beside it if even that fails. A record that cannot be read or parsed is waited
+for 50 ms before it is read, with no lock held, before it is called damaged, since another
+process may be writing it in place. The mark that says a pane was started from a
+baton is made again once if its folder was removed between the two steps, and a failure
+to make it is logged once for each state folder. Two Flockdeck processes writing a record at the same instant
+keep the later write.
+Stale temporary files are swept after an hour.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free, with its source available for noncommercial use.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/Flockdeck/flockdeck-docs">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

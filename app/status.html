@@ -55,10 +55,12 @@
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/baton.html">Handing work to another agent</a></li>
+      <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html">Recording a pane</a></li>
       <li><a href="/app/projects.html">Projects</a></li>
       <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
-      <li><a href="/app/remote.html">Remote access</a></li>
+      <li><a href="/app/remote.html">Flockdeck Remote</a></li>
       <li><a href="/app/settings.html">Settings</a></li>
       <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="/app/cli.html">The command line</a></li>
@@ -265,6 +267,37 @@ file) is always left to ask. A <code>git</code> command is let through only when
 itself, asked where the command will run, has nothing configured that would
 run a program or reach the network, and <code>git status</code>, <code>git diff</code> or <code>git describe</code> never in a repository with a submodule in it. A command too long to
 be judged whole is always left to ask.</p>
+<p>The details of that policy:</p>
+<ul>
+<li>The commands let through are a short list of ones that only read (<code>git status</code>,
+<code>git log</code>, <code>cat</code>, <code>grep</code> and the like). A flag that makes one of them write or
+run something, such as <code>git diff --output</code>, sends the call back to ask.</li>
+<li>No <code>go</code> command is let through, because <code>go env</code> writes and any <code>go</code> command
+may download the toolchain <code>go.mod</code> names.</li>
+<li>A command over 4 KiB is asked about whatever it says, so it is never judged by
+its beginning alone.</li>
+<li>No argument may name a path outside the project: an absolute path, one under
+<code>~</code>, or one that climbs out with <code>..</code>. Claude Code would have asked before
+reading there. The shell rewrites quotes, backslashes and globs before a command
+sees them, so a command holding any of those is asked about too.</li>
+<li>No argument may name a file whose contents are a secret in their own right: a
+<code>.env</code> file, a private key, an <code>.npmrc</code>, <code>.netrc</code> or <code>.pgpass</code> file, or a
+credentials file. A read of one would otherwise reach the transcript unseen. The
+public half of a key pair (<code>id_rsa.pub</code>) is left alone.</li>
+<li>A <code>git</code> command is let through only once git itself, asked in the directory the
+command will run in, reports nothing configured that would run a program or
+reach the network: no <code>core.fsmonitor</code> command, external diff, textconv or
+filter driver (Git LFS's own is excepted), gpg program, trace2 target or
+partial-clone remote. That holds whether the setting comes from the repository,
+a file it includes, or your own global configuration.</li>
+<li><code>git status</code>, <code>git diff</code> and <code>git describe</code> are asked about in any repository
+with a submodule in it, since each runs git again inside the submodule under
+that submodule's own configuration, which two ordinary files an agent writes
+into the project are enough to supply.</li>
+<li>Anything that changes a file (<code>Edit</code>, <code>Write</code>, <code>MultiEdit</code>) is left to ask every
+time, on purpose. That is the kind of call a person is meant to see before it
+happens.</li>
+</ul>
 <p>These path checks read the command as text, not the filesystem. Auto-review
 is not a sandbox. A symlink inside the project that points outside it reads as
 an ordinary in-project name and is let through, and the secret-file check
@@ -304,7 +337,7 @@ default</strong> and needs both of these:</p>
 <li><strong>Settings › Status detection › Let TypeSafe's Jev help read pane status</strong>
 turned on. It can only be turned
 on from the machine itself, not from a window reached through the relay;
-turning it off works from anywhere.</li>
+turning it off works from a window reached through the relay too.</li>
 <li>A TypeSafe API key: either the one you paste into <strong>Settings › Status
 detection › TypeSafe API key</strong> (kept on this machine with your other keys, never shown
 back, only ever sent to <code>api.typesafe.ai</code>, and only set from the machine
