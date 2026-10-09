@@ -151,6 +151,8 @@ listing or installing a specific version;</li>
 recordings folder, since all three name a path on this machine;</li>
 <li>setting, reading or clearing the TypeSafe API key, and turning <strong>on</strong> status
 detection with Jev;</li>
+<li>turning the viewing of recordings on or off, allowing a device to view them,
+and stopping all viewing (see <strong>Viewing recordings from a device</strong>);</li>
 <li>detaching from the agents.</li>
 </ul>
 <p>Batons and the conflict radar are not on that list. A paired phone or other relay window can
@@ -162,7 +164,30 @@ start waits for the approval notice in a window on this machine.</p>
 <p>These keep a phone in a pocket from doing any of them by accident. They are
 not a security boundary: a remote window can open a shell pane, and from a
 shell it can do anything you can at this machine, <code>flockdeck remote remove</code>
-included. A paired device has everything your user account here has.</p>
+included. A paired device has everything your user account here has, unless
+you make it a viewer (next section).</p>
+<h2>Devices that can only view</h2>
+<p>Every paired device is a <strong>full</strong> device until you say otherwise. In the dialog,
+the button beside a device's name steps it through three settings:</p>
+<ul>
+<li><strong>Full access</strong>: what a paired device has always had.</li>
+<li><strong>View artifacts only</strong>: for the artifacts viewer a later version adds. Until
+then the device is shut out: it is sent no panes, tabs, projects, paths or
+preferences, gets no push notifications, cannot open a terminal, and Flockdeck
+refuses every command it sends.</li>
+<li><strong>View artifacts and watch panes</strong>: the same, and it also sees the panes, their
+chat and their terminal output, and gets push notifications about waiting
+agents. It still cannot type, resize or run anything.</li>
+</ul>
+<p>The setting is kept on this machine and checked here, on every command and every
+keystroke, not in the device's window, so a modified page does not get round it.
+Changing it ends the device's open windows at once; they reconnect with the new
+setting. A device the setting has never been changed for stays full, and so does
+a device paired later. If the file that holds the settings cannot be read, every
+device is treated as a viewer until you restart, so a damaged file does not
+quietly give anyone more.</p>
+<p>Only the desk changes it. A window reached through the relay, whatever its own
+setting, is refused.</p>
 <h2>Turning it on</h2>
 <p><strong>Flockdeck Remote…</strong> in the command palette opens a dialog that turns it on: leave
 the relay empty for <code>https://remote.flockdeck.ai</code>, or name another, give this
@@ -376,6 +401,34 @@ phone (see the limit on that in <strong>What the relay can see</strong>). They s
 was sent, and when; every notification is the same size, however long the names
 in it. A relay that does not send notifications, or an account whose plan does
 not include them, is said under the switch in the relay's own words.</p>
+<h2>Viewing recordings from a device</h2>
+<p>A paired device can read the recordings made on this machine (see
+<a href="/app/recording.html">Recording a pane</a>), read-only, in a <strong>Desk recordings</strong> window.
+It is off, and nothing about it can be changed from a remote window. Turning it
+on, and allowing a device, is done at this machine, after you have compared the
+code of the device's key with the one the device shows and marked it verified;
+a device whose key has changed is refused until you do that again. The controls
+for it are not in the window yet.</p>
+<p>The recordings are sent over their own connection, which is end-to-end encrypted
+or not made at all; unlike the terminal it never falls back to plain. This
+machine reads each recording line by line, redacts it again, cuts it down to the
+fields the format defines and sends pages of that. The device is never sent a
+file, a path or the raw bytes, and it can ask for a recording only by an
+identifier this machine gave it a moment before. Only recordings in this
+machine's own recordings folder are listed. The window says <strong>Read-only from</strong>
+this machine's name and the device's, has no way to save or open what it shows,
+and drops it when you close it, when its tab has been hidden for two minutes and
+when the connection ends.</p>
+<p>What this does not do. Redaction looks for patterns, and a secret that does not
+look like one gets through. The device can keep, copy or photograph what it
+shows. A relay that alters the page or the keys it serves could read what the
+page shows, which the code comparison does not catch. And a device that is
+allowed here can already open a shell on this machine, so this is not a limit on
+that device. Every connection, refusal and recording opened is added to
+<code>remote-artifacts.log</code> in the state directory, with a name and a size and never
+what was shown.</p>
+<p><code>flockdeck remote artifacts off</code> turns all of it off and ends every connection
+at once. It needs no window.</p>
 <h2>Renaming</h2>
 <p>A machine is listed on every device under the name it was enrolled with (its
 host name, unless you gave another) and a device under whatever its browser
@@ -389,8 +442,8 @@ can rename any of them from its <strong>Devices</strong> page.</p>
 the relay and this machine. On top of that, a <strong>terminal</strong> (what you type into
 it and what it prints) is end-to-end encrypted between this machine and the
 paired browser, with keys the relay hands out but never holds. Only the
-terminal is: when either side has no registered key, the terminal is served
-unencrypted. Everything else passes through the relay decrypted, so it is
+terminal and the recordings viewer are: when either side has no registered key,
+the terminal is served unencrypted, and the recordings viewer is not served. Everything else passes through the relay decrypted, so it is
 <strong>trusted</strong>, and whoever runs it could read it: the chat view of a pane and
 what you type into it, the state and latest replies of every pane, pictures you
 attach, diffs, commit, push and pull request data, and anything typed into a
@@ -400,8 +453,24 @@ pane's included, passes through it; what it holds for this machine is a
 credential of its own, kept here in <code>remote.json</code> in the state directory and
 readable only by you.</p>
 <p>A relay could hand out the wrong key for a device. To check, press <strong>Verify</strong>
-beside a device in the dialog and compare the code with the one the device
-shows on its own <strong>Devices</strong> page; if they differ, unpair it.</p>
+beside a device in the dialog. A device has two keys, one for the Flockdeck
+Remote app and one for the full interface it opens from this machine, and
+each has its own code. Compare each code with the one the device shows (the
+app's <strong>Devices</strong> page, or the <strong>Remote</strong> dialog in the full interface, which
+shows the code for the window you are in); if they differ, unpair it. When they
+match, press <strong>Mark verified</strong>. Only this machine can do that, never a window
+reached through the relay, and the mark is tied to the device, the key and this
+machine's own key: if any of them changes, the device shows as not verified
+again and the codes need comparing again. Unpairing a device removes its mark,
+whether you do it here or from the device's own page (the mark is dropped the
+next time the list is read). A device that pairs again has to be compared again.</p>
+<p>Verifying matters because the relay is what hands out the keys. It stops a relay
+that swapped a key, but not one that alters the page it serves (see below).</p>
+<p>The marks are kept in <code>remote_verified.json</code> in the state directory, protected
+like <code>remote.json</code>: readable and writable by you only. A program running as you
+can change that file, or ask the local server to add a mark, so a mark says
+what you compared and does not defend against software on this machine that
+already acts as you.</p>
 <p>What the relay cannot read, it cannot read as long as it only reads or stores
 what passes through it, unless it actively tampers with the client it serves:
 the web client's JavaScript, and the desktop pages it serves on a desk origin.

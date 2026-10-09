@@ -216,6 +216,26 @@ and &quot;This link isn't valid&quot; are answered the same way.</p>
 the relay. A request arriving through it is let in without the token, because
 the relay has already checked that the device asking is paired. <a href="/app/remote.html">Flockdeck
 Remote</a> has the rest.</p>
+<h2>A page says Flockdeck did not answer, naming the Host header</h2>
+<p>The local server answers only to requests addressed to <code>127.0.0.1</code> or
+<code>localhost</code>, on any port, and to the names listed in <code>FLOCKDECK_ALLOWED_HOSTS</code>.
+A request addressed any other way gets a 403 page that names the variable. That
+is what you see if you reach the server by <code>[::1]</code>, by a LAN address, by a
+hostname, through a Kubernetes Service, an Ingress, a NodePort or LoadBalancer
+address, or through a reverse proxy that passes the original Host header on.</p>
+<p>The variable is a comma-separated list. A bare name allows every port
+(<code>flockdeck.example.com</code>); <code>name:port</code> allows that one port. Names are matched
+without regard to case or a trailing dot. IPv6 addresses go in brackets, and
+there are no wildcards. Set it in the environment of the process that runs
+Flockdeck and restart it:</p>
+<pre><code class="language-sh">FLOCKDECK_ALLOWED_HOSTS=flockdeck.example.com,192.168.1.20 flockdeck -no-window
+</code></pre>
+<p>The Helm chart sets it to the Service's names and has an <code>allowedHosts</code> value
+for an Ingress hostname or a NodePort or LoadBalancer address. A
+<code>kubectl port-forward</code> or an <code>ssh -L</code> to any local port is fine if you browse
+to <code>127.0.0.1</code> or <code>localhost</code> on that port. A value that is not a plain host or
+host:port stops Flockdeck from starting, and the message names the entry.</p>
+<p>A window reached through Flockdeck Remote is not affected.</p>
 <h2>Desktop notifications never appear</h2>
 <p>Check <strong>Settings › General › Desktop notifications</strong> first: off, nothing is
 raised. The browser asks for permission on your first interaction with the window. If

@@ -515,21 +515,22 @@ list of names, and that list includes <code>HTTP_PROXY</code>, <code>HTTPS_PROXY
 the way you do; a proxy address can carry a username and password.</p>
 <p><code>install</code> shows the name, version, source address, signature and what the helper
 may do, and asks first; <code>-yes</code> skips the question. The release's manifest is
-checked against Flockdeck's release key, and the archive against the SHA-256 and size in
-them, before anything is unpacked. Every lens release must be signed: a release
-that is not signed is refused, with that reason, and so is one whose signature
-is wrong. Nothing overrides either, and there is no flag for it. Nothing
-older than the newest version installed before is offered unless you name it
-with <code>-version</code>.</p>
+checked against Flockdeck's release key, and the archive against the SHA-256
+and size in them, before anything is unpacked. Every lens release must be
+signed: a release that is not signed is refused, with that reason, and so is
+one whose signature is wrong. Nothing overrides either, and there is no flag
+for it. Nothing older than the newest version installed before is offered
+unless you name it with <code>-version</code>.</p>
 <p>Flockdeck keeps the newest version it has installed in <code>trust.json</code> in the
 helper's folder under its state folder (<code>apps/lens/trust.json</code>). If an install
-says it cannot write that file or that it is damaged, or you want older versions to be accepted again,
-delete it;
-<code>flockdeck helpers uninstall -purge-data lens</code> also removes it, together with the
-data, even when nothing is installed. If a helper's program was changed after it
-was installed, a start is refused. <code>flockdeck helpers install lens</code> puts a
-checked copy back when the installed version is also the latest; otherwise run
-<code>flockdeck helpers install -version=&lt;installed version&gt; lens</code>.</p>
+says that file is damaged or cannot be written, or you want older versions to
+be accepted again, delete it. If it says the file could not be read just now,
+another program may have it open or a folder may be in its place, so try again.
+<code>flockdeck helpers uninstall -purge-data lens</code> also removes it, together with
+the data, even when nothing is installed. If a helper's program was changed
+after it was installed, a start is refused. <code>flockdeck helpers install lens</code>
+puts a checked copy back when the installed version is also the latest;
+otherwise run <code>flockdeck helpers install -version=&lt;installed version&gt; lens</code>.</p>
 <p><code>list</code>, <code>install</code> and <code>uninstall</code> work without Flockdeck open. <code>start</code>, <code>stop</code>
 and <code>open</code> are done by the running Flockdeck, which watches the helper, restarts
 it if it crashes (three times in five minutes, then it stays stopped) and stops
