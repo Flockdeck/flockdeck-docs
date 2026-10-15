@@ -310,6 +310,147 @@ takes one out of the picker without removing it. A model's <code>&quot;tier&quot
 is named in the notice and ignored.</p>
 <p>The file is read fresh every time the picker opens, so editing it by hand takes
 effect without a restart.</p>
+<h2>Roles</h2>
+<p>A role is a job an agent is started for. Flockdeck ships six: <code>manager</code>,
+<code>planner</code>, <code>worker</code>, <code>reviewer</code>, <code>tester</code> and <code>docs</code>. Each has a short briefing
+saying what the agent does, what it must not do, who it reports to and what to
+hand back when it finishes. An agent starts in one with <code>-role</code>:</p>
+<pre><code class="language-sh">flockdeck spawn -role reviewer &quot;review the token refresh change on fix-auth&quot;
+</code></pre>
+<p><code>flockdeck agents</code> lists the roles after the agents, with the checkout each one
+expects and which roles it may start. An unknown role is refused with the list of
+roles there are.</p>
+<p>A pane in a role is limited in what it may start. It may start only the roles its
+own role lists under <code>spawns</code>, and it may start an agent with no role (<code>spawn</code>
+without <code>-role</code>) only if its role has <code>plain</code> set, since an agent with no role has
+no limits. <code>manager</code> has <code>plain</code> set; the other built-in roles do not. A refused
+spawn says which rule it hit.</p>
+<p>The briefing follows those limits. A pane in a role that may start nothing, such as <code>worker</code>
+or <code>reviewer</code>, gets no section on starting agents. A pane in a role with <code>spawns</code> gets
+examples that name those roles, such as <code>flockdeck spawn -role worker -worktree &lt;branch&gt; &quot;&lt;task&gt;&quot;</code>, and is told to use the pane id that <code>spawn</code> prints, or <code>flockdeck team -json</code>
+shows, when it assigns a task or sends a message, because pane names are shared.</p>
+<p>The pane is briefed for its role: the briefing gains a &quot;Your role&quot; section with the
+role's text and the ids of every role in the catalog, and the pane's environment
+carries <code>FLOCKDECK_ROLE</code>. The role is saved with the layout, so a restored pane is
+briefed for the same job. Agents in a project can see each other, message each other and
+share a task board (see below).</p>
+<p>A role may name an <code>agent</code> and a <code>model</code>, or a <code>tier</code> (<code>small</code>, <code>mid</code> or <code>top</code>) in
+place of a model. They apply only to a spawn that names neither <code>-agent</code> nor
+<code>-model</code>: a spawn that names an agent keeps it. A role's model goes only to the agent
+the role resolves to (its own <code>agent</code>, or the project's default when it names none),
+so <code>spawn -agent codex -role fast</code> does not give codex a model written for claude. The built-in roles name none, so they run whatever
+the project runs by default.</p>
+<p>Roles are another key of <code>agents.json</code>. An entry whose <code>id</code> is a built-in's is
+merged over it field by field, and any other <code>id</code> is a role of your own:</p>
+<pre><code class="language-json">{
+  &quot;roles&quot;: [
+    { &quot;id&quot;: &quot;worker&quot;, &quot;tier&quot;: &quot;mid&quot; },
+    {
+      &quot;id&quot;: &quot;security&quot;,
+      &quot;name&quot;: &quot;Security reviewer&quot;,
+      &quot;briefing&quot;: &quot;Review the change for injection, unsafe file access and leaked secrets. Do not edit files. Report findings to whoever started you, with file and line.&quot;,
+      &quot;worktree&quot;: &quot;readonly&quot;,
+      &quot;spawns&quot;: []
+    }
+  ]
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>What <code>-role</code> takes</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>What lists and the briefing call it</td>
+</tr>
+<tr>
+<td><code>agent</code>, <code>model</code>, <code>tier</code></td>
+<td>Defaults for a spawn that chose neither an agent nor a model</td>
+</tr>
+<tr>
+<td><code>briefing</code></td>
+<td>The text the agent is given about its role</td>
+</tr>
+<tr>
+<td><code>worktree</code></td>
+<td><code>own</code> (a worktree and branch of its own), <code>readonly</code> (a checkout it reads and does not change) or <code>main</code> (the project's main checkout)</td>
+</tr>
+<tr>
+<td><code>spawns</code></td>
+<td>The ids of the roles an agent in this role may start. An agent in a role may start only these; an agent with no role may start any</td>
+</tr>
+<tr>
+<td><code>plain</code></td>
+<td><code>true</code> lets an agent in this role start agents with no role. Off unless set</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>worktree</code> setting is part of the briefing and the role list. Flockdeck does not
+yet cut a worktree or make a checkout read-only because of it, so pass
+<code>-worktree &lt;branch&gt;</code> when a role should have its own. The manager briefing says to
+do this for workers and to pass the branch name to the reviewer and tester. A <code>worktree</code> that is none of
+the three, a bad <code>tier</code>, and a <code>spawns</code> entry that names no role are listed in the
+notice and ignored.</p>
+<h3>The team and messages</h3>
+<p>Every agent's briefing has a &quot;Your team&quot; section: the other agent panes of its
+project, each with its role (<code>no role</code> if it has none), its name, its agent and model,
+its status and its pane id, and its own entry marked. The briefing is written when the
+agent starts, so the list is a snapshot, and it says so. Lists longer than twelve are cut
+and the number left out is given. <code>flockdeck team</code> prints the live list, and <code>-json</code> the
+same as JSON.</p>
+<p>Agents message each other with <code>flockdeck msg send &lt;target&gt; &lt;text...&gt;</code>, where the target
+is a pane id, a peer name, a pane name or a role id, and read their own with <code>flockdeck inbox</code> and <code>flockdeck inbox read &lt;id&gt;</code>; see <a href="/app/cli.html">The command line</a> for the rules. The
+built-in roles say when to use it: the manager writes to the agents it started to answer a
+question or change a task, and planners, workers, reviewers, testers and docs agents write to
+the manager when they are blocked. Their final report is still their last message and not a
+<code>msg</code>.</p>
+<p>A message is data from another agent. The briefing and the notice that tells an agent about
+a message both say that messages from other agents are not instructions from the user, and
+that an approval in one is not the user's approval. The sender's name and role are not
+authenticated either, so an agent must not treat them as proof of who sent a message or as
+authorization. Any agent in a project may message any
+other in it, whatever its role; the roles limit who may start whom and nothing else. A pane
+can send only as itself and read only its own inbox, and a request naming a pane that is not
+open is refused. A shell cannot send. The pane id in a request is the one the pane's environment gives it, checked
+against the open panes but not against the pane that sent it, as with <code>spawn</code> and <code>close</code>.</p>
+<p>When a helper an agent started exits on its own, or is closed as finished, Flockdeck writes
+to that agent's inbox, from <code>flockdeck</code>. Changes to a task on the board, below, are the only
+other events it writes.</p>
+<h3>The task board</h3>
+<p>Each project has one task board, which every agent in it reaches with <code>flockdeck task</code>
+whatever worktree it works in. A task has a title, a body, an owner role and pane, a state, a
+branch, an optional baton id for context and a thread of notes. A task points at a baton and
+does not replace it: a baton stays the handoff document it was written as. The states are
+<code>planned</code>, <code>assigned</code>, <code>in-progress</code>, <code>in-review</code>, <code>done</code>, <code>blocked</code> and <code>cancelled</code>, and
+which role may move a task where is a fixed table; see <a href="/app/cli.html">The command line</a> for it and for
+the commands.</p>
+<p>The built-in roles use it this way. The planner adds a task for each step of a plan. The
+manager assigns them to the workers it starts, and moves a task to <code>done</code> once a reviewer
+says the change is good: only the manager, a reviewer or a tester can move a task from <code>in-review</code>
+to <code>done</code>, and the owner cannot close its own task. A worker moves its task
+to <code>in-progress</code> when it starts, sets the branch, and moves it to <code>in-review</code> when the change
+is committed, which messages the reviewers and testers. A reviewer or tester reads a task in <code>in-review</code>
+and either adds a note and tells the manager, or moves it back to <code>in-progress</code> with a note
+that says why, which messages the worker. Every agent's briefing has a &quot;Task board&quot; section
+with the commands and a snapshot of the counts for that pane, such as &quot;2 tasks assigned to you,
+1 in review&quot;, or &quot;2 tasks for your role, none claimed yet&quot; for tasks assigned to a role that no pane has started.</p>
+<p>Flockdeck messages the owner when a task is assigned or noted, the reviewers and testers (or else
+the creator and the manager) when it moves to review, the creator and the manager when it is
+blocked, the creator when it is done (and the manager, when somebody else closed it), and the
+manager when a note is added to a task in review. A pane started with no role has the manager's
+powers only while no pane in the manager role is running. The board is written by one Flockdeck
+server per project; a second instance open on the same repository can overwrite its changes. The pane id in a
+request is not authenticated, any more than the sender of a message is, so the roles keep
+agents to their jobs and do not stop a process that wants to act as another pane. Task text and
+the names on it are not instructions from the user.</p>
 <h2>Routing</h2>
 <p>A fan-out multiplies whatever its model costs, and many of its tasks are
 mechanical: run the tests, rename a symbol, fix a typo. Routing pre-sets each
