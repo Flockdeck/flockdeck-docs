@@ -45,13 +45,12 @@
       <li><a href="/app/getting-started.html" aria-current="page">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
-      <li><a href="/app/fanout.html">Fan out</a></li>
-      <li><a href="/app/todo.html">Todo</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
@@ -132,9 +131,9 @@ commit and push it without leaving the window.</li>
 <h2>When one agent is not enough</h2>
 <p>Two agents editing the same files will fight. Give each its own checkout
 instead: <kbd>Ctrl+Shift+G</kbd> opens the worktrees, where you can create them, and
-<kbd>Ctrl+Shift+X</kbd> fans out: it turns one agent's plan into a set of agents that
-each take a task in a worktree of their own. <a href="/app/worktrees.html">Git worktrees</a> and
-<a href="/app/fanout.html">Fan out</a> cover both.</p>
+<strong>Start a team</strong> starts a manager agent that starts the rest, each in a
+worktree of its own. <a href="/app/worktrees.html">Git worktrees</a> and <a href="/app/agents.html">Agents and models</a>
+cover both.</p>
 <h2>Which agent, which model</h2>
 <p>A pane's header names what is in it, such as <code>claude · sonnet</code> or <code>codex · gpt-5.6-sol</code>,
 beside its branch. <a href="/app/agents.html">Agents and models</a> explains the picker, what changes when
@@ -146,7 +145,7 @@ is; <a href="/app/spend.html">Spend and limits</a> says how, and when Claude Cod
 <p>The rail down the left of the window has a tile for each open project (one
 with an amber triangle badge has an agent waiting on you, and one with a cyan badge
 has agents at work), and under them the tools: Agents, Team, Broadcast,
-Changes, Resume, Worktrees, Fan-out history and Todos, then, below a rule,
+Changes, Resume and Worktrees, then, below a rule,
 Help and Settings. GitHub, API keys and Flockdeck Remote are in the command
 palette and in the settings. Rest the
 pointer on one, or reach it with the keyboard, and it says what it is and the

@@ -45,13 +45,12 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
-      <li><a href="/app/fanout.html">Fan out</a></li>
-      <li><a href="/app/todo.html">Todo</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
@@ -101,13 +100,11 @@ it.</p>
 <ul>
 <li><strong>General</strong>: <strong>Desktop notifications</strong>. Under <strong>New panes</strong>, <strong>Auto-approve
 read-only in new panes</strong>: a pane opened by hand starts with this setting,
-and a pane started from another one (a fan-out row, or a helper started with
+and a pane started from another one (a helper started with
 <code>flockdeck spawn</code>) starts the way that pane is set. Either way the ✓ in a
 pane's header turns it on or off for that one pane; auto-approve read-only only ever
 lets through a command it is confident only reads, and never says &quot;deny&quot;.
-Then <strong>Fan out</strong>'s own default for its &quot;Put fanned-out agents in this tab,
-beside the agent that planned them&quot; checkbox, which can still be changed for
-one run from the dialog itself. Under <strong>Conflict radar</strong>, the switch that
+Under <strong>Conflict radar</strong>, the switch that
 marks a pane whose work git predicts would conflict with another pane's; it is
 off until you turn it on, and <a href="/app/worktrees.html">Git worktrees</a> says what it does and
 costs, including that a checkout git is too slow for is skipped for a while and
@@ -144,27 +141,26 @@ Claude panes read their five-hour and weekly limits for the pane header:
 <strong>Only where I have a status line</strong>, the default, <strong>Always</strong> or <strong>Never</strong>.
 It applies to a pane when it starts. <a href="/app/spend.html">Spend and limits</a> says what
 each one costs. Below them, links to <strong>Routing</strong> and <strong>API keys</strong>.</li>
-<li><strong>Routing</strong>: whether a fan-out's rows come with a model chosen for the
-work: <strong>Off</strong>, which it is until you change it, <strong>Suggest</strong> or
+<li><strong>Routing</strong>: whether a helper or first prompt comes with a model chosen for the
+work: <strong>Off</strong>, which it is until you change it, or
 <strong>Automatic</strong>, for every project and for this one. <strong>Never go below</strong> keeps
 it off the smaller tiers. <strong>Strategy</strong> is <strong>Cost-first, quality-aware</strong>,
 the default, or <strong>Minimise cost</strong>: quality-aware leaves work no rule
 recognises exactly where it was; minimise cost routes it too, to the
 cheapest model the floor allows. Either way a rule that matches still
-decides first. <strong>Let a rule send work to another agent</strong> and <strong>Ask Jev to
-rate unmatched work</strong> are off until you turn them on. The rules in force are
-listed, each with how often the log shows it overridden where it has decided
-at least once, with where <code>agents.json</code> is, since that is where they are
-edited, and <strong>Clear routing history</strong> empties the record of what it chose.
+decides first. <strong>Let a rule send work to another agent</strong> is off until you
+turn it on. The rules in force are listed, each with how often an older
+version's log shows it overridden where it has decided at least once, with
+where <code>agents.json</code> is, since that is where they are edited, and <strong>Clear
+routing history</strong> empties that log, which nothing adds to now.
 <a href="/app/agents.html">Agents and models</a> has the rest.</li>
 <li><strong>API keys</strong>: set, replace or clear the key each API agent uses. A key is
 never shown once it is set. Keys are set and cleared only at the desk: a
 window reached through the relay shows which are set, and no more. Below the
 agents, <strong>TypeSafe API key</strong> is where you paste, replace or clear the key
-that <strong>Let TypeSafe's Jev help read pane status</strong> and Routing's <strong>Ask Jev to
-rate unmatched work</strong> need. The field is masked and never shows the key
-back, only whether one is set. Saving a key sends nothing: both stay off
-until you turn them on.</li>
+that <strong>Let TypeSafe's Jev help read pane status</strong> needs. The field is masked
+and never shows the key back, only whether one is set. Saving a key sends
+nothing: the setting stays off until you turn it on.</li>
 <li><strong>Status detection</strong>: <strong>TypeSafe API key</strong> says whether that key is set and
 links to API keys, where it is edited. Below it, <strong>Let TypeSafe's Jev help
 read pane status</strong>: whether TypeSafe's Jev model may help read the status of a pane whose agent reports none. <strong>Off
@@ -219,7 +215,7 @@ two pages: pick a section to open it, and <strong>← All settings</strong> goes
 <li>Which agent and model a project starts: <strong>Agents &amp; models</strong> in the
 settings, or <strong>Set as default for</strong> at the foot of the picker. Kept in
 <code>agents.json</code>.</li>
-<li>Whether a fan-out's models are routed, and by which rules: <strong>Routing</strong>
+<li>Whether a helper's model is routed, and by which rules: <strong>Routing</strong>
 in the settings for the mode, the floor and the strategy; the rules
 themselves are edited by hand. Kept in <code>agents.json</code>.</li>
 <li>Whether Claude panes read their usage limits: <strong>Agents &amp; models ›
@@ -237,7 +233,7 @@ button in each pane header; <a href="/app/broadcast.html">Broadcast and the prom
 rest. Kept until Flockdeck stops.</li>
 <li>The terminal's font, size, scrollback and cursor: <strong>Terminal</strong> in the
 settings, or the palette's entries for each. Kept in <code>prefs.json</code>.</li>
-<li>A fan-out's own shortcut, or any other window shortcut: <strong>Keyboard</strong>
+<li>Any window shortcut: <strong>Keyboard</strong>
 in the settings. Kept in <code>keybindings.json</code>.</li>
 <li>A pane's auto-approve read-only, lock and recording: the ✓, padlock and record
 buttons in its header, or the command palette. Kept with the layout, so a
@@ -255,7 +251,7 @@ asks once whether this window may show them, and keeps the answer for that
 run only: each run has an address of its own.</li>
 <li>Hints under the tab bar: their close button sends one away for good.
 Kept in <code>prefs.json</code>.</li>
-<li>Fan out's own default, and auto-approve read-only's own default: <strong>General ›
+<li>Auto-approve read-only's own default: <strong>General ›
 New panes</strong> in the settings. Kept in <code>prefs.json</code>.</li>
 <li>Status detection with Jev: <strong>Status detection</strong> in the settings. Kept
 in <code>prefs.json</code>; off unless you turn it on, and only from the machine
@@ -281,8 +277,8 @@ the one set in Settings is.</li>
 <li><code>remote.json</code>: this machine's enrolment with the relay.
 <code>flockdeck remote disable</code> keeps it and marks it off; <code>flockdeck remote remove</code>
 removes it.</li>
-<li><code>routing.jsonl</code>: what routing chose for each routed fan-out row, and
-whether you kept it: the rule's name and the models, never the task. It
+<li><code>routing.jsonl</code>: what an older version's routing chose for each routed fan-out row,
+and whether you kept it. Nothing writes to it now. It holds the rule's name and the models, never the task. It
 keeps the last 10,000 lines, and <strong>Clear routing history</strong> empties it.</li>
 <li><code>keybindings.json</code>: every shortcut you have remapped or cleared under
 <strong>Keyboard</strong>, by the action's own id; one absent from it is still its
@@ -310,7 +306,7 @@ status, which also carries the pane's status line where that goes through
 Flockdeck.</li>
 <li><code>chats</code>: the built-in chat client's conversations.</li>
 <li><code>groups.json</code>: the multi-repo projects' grouping.</li>
-<li><code>todos.json</code>: every project's saved todo checklists.</li>
+<li><code>todos.json</code>: the saved todo checklists of an older version. Nothing reads it now; it is left alone.</li>
 <li><code>worktree-procs.json</code>: processes recorded for worktrees, so they can be
 swept up.</li>
 <li><code>e2e_key.json</code>: this machine's end-to-end key for Flockdeck Remote terminals.
@@ -344,9 +340,8 @@ already downloaded is put in place. That is what keeps an older version you
 installed on purpose from updating itself to the latest.</li>
 <li><code>FLOCKDECK_RELAY</code>: which relay <code>flockdeck remote enable</code> uses.</li>
 <li><code>TYPESAFE_API_KEY</code>: a key for TypeSafe's Jev, used only when <strong>Let
-TypeSafe's Jev help read pane status</strong>, under <strong>Status detection</strong>, or <strong>Ask
-Jev to rate unmatched work</strong>, under <strong>Routing</strong>, is turned on; see <a href="/app/status.html">Knowing
-who needs you</a>. A key set in <strong>Settings › API keys ›
+TypeSafe's Jev help read pane status</strong>, under <strong>Status detection</strong>, is
+turned on; see <a href="/app/status.html">Knowing who needs you</a>. A key set in <strong>Settings › API keys ›
 TypeSafe API key</strong> is used first; this is the fallback when none
 is set there. No other variable is ever tried. Without a key nothing is ever
 sent.</li>
