@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Settings | Flockdeck docs</title>
-<meta name="description" content="Ctrl&#43;,, or Settings at the foot of the rail, opens the settings: eleven sections in four groups on the left, and the one you are in on the right. Every control changes its setting at once, and it is the same setting the command palette and the keys change, so whichever you use, the others show it.">
+<meta name="description" content="Ctrl&#43;,, or Settings at the foot of the rail, opens the settings: twelve sections in five groups on the left, and the one you are in on the right. Every control changes its setting at once, and it is the same setting the command palette and the keys change, so whichever you use, the others show it.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Settings | Flockdeck docs">
-<meta property="og:description" content="Ctrl&#43;,, or Settings at the foot of the rail, opens the settings: eleven sections in four groups on the left, and the one you are in on the right. Every control changes its setting at once, and it is the same setting the command palette and the keys change, so whichever you use, the others show it.">
+<meta property="og:description" content="Ctrl&#43;,, or Settings at the foot of the rail, opens the settings: twelve sections in five groups on the left, and the one you are in on the right. Every control changes its setting at once, and it is the same setting the command palette and the keys change, so whichever you use, the others show it.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/app/settings.html">
 <meta name="twitter:card" content="summary">
@@ -46,6 +46,7 @@
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
@@ -54,7 +55,7 @@
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
-      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
       <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html">Recording a pane</a></li>
@@ -92,17 +93,17 @@
     <p class="eyebrow">Using Flockdeck</p>
 <h1>Settings</h1>
 <p class="doc-lede"><kbd>Ctrl+,</kbd>, or <strong>Settings</strong> at the foot of the rail, opens the settings:
-eleven sections in four groups on the left, and the one you are in on the
+twelve sections in five groups on the left, and the one you are in on the
 right. Every control changes its setting at once, and it is the same setting
 the command palette and the keys change, so whichever you use, the others show
 it.</p>
 <h3>Window</h3>
 <ul>
-<li><strong>General</strong>: <strong>Desktop notifications</strong>. Under <strong>New panes</strong>, <strong>Start new
-panes with auto-review on</strong>: a pane opened by hand starts with this setting,
+<li><strong>General</strong>: <strong>Desktop notifications</strong>. Under <strong>New panes</strong>, <strong>Auto-approve
+read-only in new panes</strong>: a pane opened by hand starts with this setting,
 and a pane started from another one (a fan-out row, or a helper started with
 <code>flockdeck spawn</code>) starts the way that pane is set. Either way the ✓ in a
-pane's header turns it on or off for that one pane; auto-review only ever
+pane's header turns it on or off for that one pane; auto-approve read-only only ever
 lets through a command it is confident only reads, and never says &quot;deny&quot;.
 Then <strong>Fan out</strong>'s own default for its &quot;Put fanned-out agents in this tab,
 beside the agent that planned them&quot; checkbox, which can still be changed for
@@ -158,16 +159,20 @@ edited, and <strong>Clear routing history</strong> empties the record of what it
 <a href="/app/agents.html">Agents and models</a> has the rest.</li>
 <li><strong>API keys</strong>: set, replace or clear the key each API agent uses. A key is
 never shown once it is set. Keys are set and cleared only at the desk: a
-window reached through the relay shows which are set, and no more.</li>
-<li><strong>Status detection</strong>: <strong>TypeSafe API key</strong>, where you paste, replace or
-clear the key that <strong>Let TypeSafe's Jev help read pane status</strong> and
-Routing's <strong>Ask Jev to rate unmatched work</strong> need. The field is masked and
-never shows the key back, only whether one is set, and it is set only at the
-desk. Saving a key sends nothing: both stay off until you turn them on.
-Below it, <strong>Let TypeSafe's Jev help read pane status</strong>: whether TypeSafe's
-Jev model may help read the status of a pane whose agent reports none. <strong>Off
-by default</strong>, and it sends terminal output to a third party. See <a href="/app/status.html">Knowing
-who needs you</a>. It is turned on only at the desk.</li>
+window reached through the relay shows which are set, and no more. Below the
+agents, <strong>TypeSafe API key</strong> is where you paste, replace or clear the key
+that <strong>Let TypeSafe's Jev help read pane status</strong> and Routing's <strong>Ask Jev to
+rate unmatched work</strong> need. The field is masked and never shows the key
+back, only whether one is set. Saving a key sends nothing: both stay off
+until you turn them on.</li>
+<li><strong>Status detection</strong>: <strong>TypeSafe API key</strong> says whether that key is set and
+links to API keys, where it is edited. Below it, <strong>Let TypeSafe's Jev help
+read pane status</strong>: whether TypeSafe's Jev model may help read the status of a pane whose agent reports none. <strong>Off
+by default</strong>, and it sends the last 30 lines (at most 2,000 bytes) of the
+pane's terminal output to a third party, with API keys, tokens, password
+values and secret file paths redacted. Redaction is by pattern and misses
+secrets with no recognisable shape. See <a href="/app/status.html">Knowing who needs you</a>. It
+is turned on only at the desk.</li>
 </ul>
 <h3>Connections</h3>
 <ul>
@@ -187,7 +192,11 @@ where the relay reports one, the Flockdeck Remote plan for reaching this
 machine through the shared relay, a free trial and then a subscription, with
 the days left or the date it is paid until, paid for from <strong>Devices</strong> on a
 paired phone or browser; and Enterprise, coming for companies to run the
-relay on their own infrastructure with SSO and support. Under <strong>Version</strong>,
+relay on their own infrastructure with SSO and support.</li>
+</ul>
+<h3>About</h3>
+<ul>
+<li><strong>About &amp; updates</strong>: under <strong>Version</strong>,
 <strong>Check for updates</strong>: whether Flockdeck looks for new releases in the
 background, changed only at the desk; <strong>Check for updates now</strong> asks once
 on the spot, whatever that switch says; and <strong>Install a specific version…</strong>
@@ -230,7 +239,7 @@ rest. Kept until Flockdeck stops.</li>
 settings, or the palette's entries for each. Kept in <code>prefs.json</code>.</li>
 <li>A fan-out's own shortcut, or any other window shortcut: <strong>Keyboard</strong>
 in the settings. Kept in <code>keybindings.json</code>.</li>
-<li>A pane's auto-review, lock and recording: the ✓, padlock and record
+<li>A pane's auto-approve read-only, lock and recording: the ✓, padlock and record
 buttons in its header, or the command palette. Kept with the layout, so a
 pane comes back after a restart the way you left it.</li>
 <li>This machine's name and paired devices: <strong>Flockdeck Remote</strong> in the
@@ -246,12 +255,12 @@ asks once whether this window may show them, and keeps the answer for that
 run only: each run has an address of its own.</li>
 <li>Hints under the tab bar: their close button sends one away for good.
 Kept in <code>prefs.json</code>.</li>
-<li>Fan out's own default, and auto-review's own default: <strong>General ›
+<li>Fan out's own default, and auto-approve read-only's own default: <strong>General ›
 New panes</strong> in the settings. Kept in <code>prefs.json</code>.</li>
 <li>Status detection with Jev: <strong>Status detection</strong> in the settings. Kept
 in <code>prefs.json</code>; off unless you turn it on, and only from the machine
 itself.</li>
-<li>TypeSafe API key: <strong>Status detection</strong> in the settings. Kept in <code>keys.json</code>
+<li>TypeSafe API key: <strong>API keys</strong> in the settings. Kept in <code>keys.json</code>
 with your agents' keys, never in <code>prefs.json</code>; set and cleared at the desk
 only, never shown back, and only ever sent to <code>api.typesafe.ai</code>.</li>
 </ul>
@@ -286,7 +295,7 @@ the help has been opened, and which hints were dismissed. Delete it while Flockd
 running to have the help open on the next start, every hint back, and every
 one of those settings as it first was.</li>
 <li><code>layout-….json</code>: one per project: its tabs, splits and panes, with each
-pane's auto-review, lock and recording.
+pane's auto-approve read-only, lock and recording.
 <code>flockdeck -new</code> starts without it.</li>
 <li><code>projects.json</code>: the recent projects the picker offers.</li>
 <li><code>session.json</code>: which projects are reopened on the next start.</li>
@@ -337,7 +346,7 @@ installed on purpose from updating itself to the latest.</li>
 <li><code>TYPESAFE_API_KEY</code>: a key for TypeSafe's Jev, used only when <strong>Let
 TypeSafe's Jev help read pane status</strong>, under <strong>Status detection</strong>, or <strong>Ask
 Jev to rate unmatched work</strong>, under <strong>Routing</strong>, is turned on; see <a href="/app/status.html">Knowing
-who needs you</a>. A key set in <strong>Settings › Status detection ›
+who needs you</a>. A key set in <strong>Settings › API keys ›
 TypeSafe API key</strong> is used first; this is the fallback when none
 is set there. No other variable is ever tried. Without a key nothing is ever
 sent.</li>

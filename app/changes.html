@@ -46,6 +46,7 @@
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
@@ -54,7 +55,7 @@
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html" aria-current="page">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
-      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
       <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html">Recording a pane</a></li>
@@ -258,7 +259,7 @@ listed.</li>
 <li>Partial and promisor clones fetch a missing file from the remote when a
 background diff or object read needs it, which can run a credential helper or
 an ssh command. Only the radar's snapshot turns that off.</li>
-<li>Auto-review asks git a few read-only questions (its configuration, the index)
+<li>Auto-approve read-only asks git a few read-only questions (its configuration, the index)
 with the repository's hooks as they are. None of those commands runs a hook.</li>
 <li><code>git gc --auto</code>, which git starts itself after a commit, fetch or push, and
 <code>receive.autogc</code> on a remote that is a folder on this machine. <code>pre-auto-gc</code> is
@@ -295,7 +296,7 @@ scans is 200 submodules; a repository with 200 of them, made the way git makes
 them, takes about 0.4 seconds and under 4,000 calls to the file system. Above
 200, the extra ones are listed as not looked at.</li>
 </ul>
-<p>An agent's own git commands are for <a href="/app/status.html">auto-review</a> and the agent's
+<p>An agent's own git commands are for <a href="/app/auto-approve.html">auto-approve read-only</a> and the agent's
 permissions. Flockdeck never runs <code>git mergetool</code>, so <code>merge.tool</code> and
 <code>mergetool.*</code> are not read, and <code>merge.&lt;name&gt;.recursive</code> only names another
 driver.</p>

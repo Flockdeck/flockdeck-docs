@@ -46,6 +46,7 @@
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
@@ -54,7 +55,7 @@
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
-      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
       <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html">Recording a pane</a></li>
@@ -245,9 +246,12 @@ account, how many desktops it has now and its plan, and that devices already
 paired with it reach this machine too. A relay that does not do this makes a new
 account, as before.</p>
 <h2>Pairing a device</h2>
-<p><strong>Flockdeck Remote…</strong> in the command palette, or the <strong>Remote</strong> button in the rail
-(which is there whether or not Flockdeck Remote is on), opens a dialog saying
-whether the relay is reachable and how many windows are open through it. <strong>Pair
+<p><strong>Flockdeck Remote…</strong> in the command palette, or <strong>Settings › Flockdeck Remote</strong>
+(there whether or not Flockdeck Remote is on), opens a dialog saying
+whether the relay is reachable and how many windows are open through it. The
+<strong>Settings</strong> button in the rail shows where it stands: a filled mark while it is connected,
+a hollow one while it connects and an amber triangle when it needs you. Its tooltip has the
+words, and how many windows are open through it. <strong>Pair
 a device</strong> asks the relay for a link and shows it as a QR code: scan it with the
 device you want to pair, or open the link on it.</p>
 <p>A link works once and expires after ten minutes by default; a relay can be set

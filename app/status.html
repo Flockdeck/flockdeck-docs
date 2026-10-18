@@ -46,6 +46,7 @@
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
       <li><a href="/app/status.html" aria-current="page">Knowing who needs you</a></li>
+      <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
@@ -54,7 +55,7 @@
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
-      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
       <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html">Recording a pane</a></li>
@@ -218,8 +219,8 @@ like closing finished browser tabs. It asks nothing
 first, on purpose: a pane still waiting on you or still working is never
 touched, an idle shell is left alone, and one whose process failed (it never
 started, exited with an error, or was killed) is left alone too, since a
-failure is worth a look before it disappears. A pane locked with the padlock
-in its header (🔓, 🔒 once locked) or <strong>Lock pane</strong> in the command palette is
+failure is worth a look before it disappears. A pane locked with the padlock icon
+in its header, shut once locked, or <strong>Lock pane</strong> in the command palette is
 left open too, with a count of how many were skipped; a locked pane cannot be
 closed any other way either until you unlock it, though it can still be
 restarted. An idle agent that still has background work going (a command
@@ -249,66 +250,12 @@ application over the loopback interface.</p>
 <p>Status therefore reflects what the agent is doing, not what
 its output happens to look like. Those settings are additive: your own
 settings, hooks and permissions still apply.</p>
-<h3>Auto-review approvals</h3>
-<p>A pane can turn on auto-review approvals, which spares you the wait for
-some of what would otherwise stop and ask: the same hidden hook that reports
-a <code>PreToolUse</code> call can also carry a permission decision back, before Claude
-Code's own prompt ever opens, for a call auto-review is confident about. It
-works like Codex's <code>auto_review</code>, a reviewer looking at the request in
-front of it, but it never touches Claude Code's own permission settings and
-it can only ever say &quot;let this one through,&quot; never &quot;deny&quot;: off, or for a call
-it is not sure of, a pane behaves exactly as it always would. Today that
-reviewer is a fixed policy: a <code>Bash</code> call is let through only when it is a
-single call to a command that only ever reads (<code>git status</code>, <code>cat</code>, <code>grep</code>
-and the like) inside the project, with nothing in it that could chain into
-something else or write anywhere; a call that changes a file, reads outside
-the project, or reads a secret file (a <code>.env</code>, a private key, a credentials
-file) is always left to ask. A <code>git</code> command is let through only when git
-itself, asked where the command will run, has nothing configured that would
-run a program or reach the network, and <code>git status</code>, <code>git diff</code> or <code>git describe</code> never in a repository with a submodule in it. A command too long to
-be judged whole is always left to ask.</p>
-<p>The details of that policy:</p>
-<ul>
-<li>The commands let through are a short list of ones that only read (<code>git status</code>,
-<code>git log</code>, <code>cat</code>, <code>grep</code> and the like). A flag that makes one of them write or
-run something, such as <code>git diff --output</code>, sends the call back to ask.</li>
-<li>No <code>go</code> command is let through, because <code>go env</code> writes and any <code>go</code> command
-may download the toolchain <code>go.mod</code> names.</li>
-<li>A command over 4 KiB is asked about whatever it says, so it is never judged by
-its beginning alone.</li>
-<li>No argument may name a path outside the project: an absolute path, one under
-<code>~</code>, or one that climbs out with <code>..</code>. Claude Code would have asked before
-reading there. The shell rewrites quotes, backslashes and globs before a command
-sees them, so a command holding any of those is asked about too.</li>
-<li>No argument may name a file whose contents are a secret in their own right: a
-<code>.env</code> file, a private key, an <code>.npmrc</code>, <code>.netrc</code> or <code>.pgpass</code> file, or a
-credentials file. A read of one would otherwise reach the transcript unseen. The
-public half of a key pair (<code>id_rsa.pub</code>) is left alone.</li>
-<li>A <code>git</code> command is let through only once git itself, asked in the directory the
-command will run in, reports nothing configured that would run a program or
-reach the network: no <code>core.fsmonitor</code> command, external diff, textconv or
-filter driver (Git LFS's own is excepted), gpg program, trace2 target or
-partial-clone remote. That holds whether the setting comes from the repository,
-a file it includes, or your own global configuration.</li>
-<li><code>git status</code>, <code>git diff</code> and <code>git describe</code> are asked about in any repository
-with a submodule in it, since each runs git again inside the submodule under
-that submodule's own configuration, which two ordinary files an agent writes
-into the project are enough to supply.</li>
-<li>Anything that changes a file (<code>Edit</code>, <code>Write</code>, <code>MultiEdit</code>) is left to ask every
-time, on purpose. That is the kind of call a person is meant to see before it
-happens.</li>
-</ul>
-<p>These path checks read the command as text, not the filesystem. Auto-review
-is not a sandbox. A symlink inside the project that points outside it reads as
-an ordinary in-project name and is let through, and the secret-file check
-knows only conventional names. Both err towards reading, which is part of why
-auto-review is off unless you turn it on, and why you should turn it on only
-for a pane whose agent you trust.</p>
-<p>It is off for a pane unless you turn it on, with the ✓ in the pane's header,
-or for new panes with <strong>Settings › General › Start new panes with
-auto-review on</strong>; a pane started from another one (a fan-out row or a
-<code>flockdeck spawn</code> helper) starts as that pane is.
-A pane keeps its setting across restarts, whichever way you left it.</p>
+<h3>Auto-approve read-only</h3>
+<p>A pane can pass a plain read-only command (<code>git status</code>, <code>cat</code>, <code>grep</code>) without
+stopping at Claude Code's permission prompt. It is off unless you turn it on,
+with the ✓ in the pane's header or in Settings. Anything that changes a file,
+or that it is not sure of, still asks. <a href="/app/auto-approve.html">Auto-approve read-only</a>
+has the policy and the settings.</p>
 <p>One answer is not reported by any event: a permission prompt answered from
 the keyboard. Enter turns the pane cyan, since allowing the tool starts it
 running. Refusing it puts Claude Code back at its prompt without a word, so
@@ -338,20 +285,34 @@ default</strong> and needs both of these:</p>
 turned on. It can only be turned
 on from the machine itself, not from a window reached through the relay;
 turning it off works from a window reached through the relay too.</li>
-<li>A TypeSafe API key: either the one you paste into <strong>Settings › Status
-detection › TypeSafe API key</strong> (kept on this machine with your other keys, never shown
-back, only ever sent to <code>api.typesafe.ai</code>, and only set from the machine
+<li>A TypeSafe API key: either the one you paste into <strong>Settings › API
+keys › TypeSafe API key</strong> (kept on this machine with your other keys, never
+shown back, only ever sent to <code>api.typesafe.ai</code>, and only set from the machine
 itself), or <code>TYPESAFE_API_KEY</code> in the environment Flockdeck starts in. The
 one in Settings is used first. Saving a key does not turn anything on.</li>
 </ol>
 <p>With either missing, nothing is ever sent, and no error is shown.</p>
 <p>What is sent, when a pane of an agent that reports nothing has been quiet for
 a few seconds and its status is still a guess: the <strong>last 30 lines of its
-output, at most 2,000 bytes, with the escape sequences taken out</strong>. It goes in one
-request holding that text and the two questions asked of it. The
-scrollback and the pane's name and folder are not sent. Secrets that happen to be on screen
-in those lines are <strong>not</strong> removed. Shell panes, and agents that report their
-own status, are never sent.</p>
+output, at most 2,000 bytes, with the escape sequences taken out and secrets
+redacted</strong>. It goes in one request holding that text and the two questions asked
+of it. The scrollback and the pane's name and folder are not sent.</p>
+<p>Before it is sent, the text goes through the redaction the transcript recorder
+uses, with additions for a terminal. The redaction takes out API keys of the
+common providers (Anthropic, OpenAI-style, GitHub, GitLab, AWS, Google, Slack,
+Stripe, Hugging Face, DigitalOcean, Twilio, npm), JWTs, bearer and basic
+credentials, passwords in URLs, private key blocks, and values assigned to a
+name such as TOKEN, SECRET or PASSWORD. The additions are these: any word that
+is a path to a secret file (<code>.env</code>, <code>id_rsa</code>, <code>~/.aws/credentials</code>) is replaced,
+and so are three or more lines in a row of base64 (the body of a key whose first
+line has scrolled away). A key that the terminal wrapped onto the next line is
+joined first when the line before it is a full-width line, so it is caught in
+the common case. If nothing is left but redacted text, nothing is sent.</p>
+<p>Redaction works by pattern and <strong>does not catch every secret</strong>: a password or
+key with no recognisable shape, on a line that does not name it as one, is sent
+as it is on screen, and so is everything else in those lines (code, file names,
+prose). If a pane may show something you cannot send to a third party, leave
+this off. Shell panes, and agents that report their own status, are never sent.</p>
 <p>What it can change: a quiet pane called idle becomes waiting, or blocked, only
 when Jev answers with high confidence. It never turns waiting or blocked into
 anything else, and if it errors, is slow, is rate limited, or is unsure, the
