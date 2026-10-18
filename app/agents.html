@@ -46,6 +46,7 @@
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html" aria-current="page">Agents and models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
@@ -54,7 +55,7 @@
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
-      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
       <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html">Recording a pane</a></li>
@@ -202,7 +203,7 @@ cooperating, and they do not all cooperate in the same ways.</p>
 </tr>
 <tr>
 <td>writes a transcript</td>
-<td>it can be resumed from it; Claude Code's is also where fan out reads a plan and what past conversations lists</td>
+<td>it can be resumed from it; Claude Code's is also where fan out reads a plan and what Resume lists</td>
 </tr>
 <tr>
 <td>has a trust question</td>
@@ -330,7 +331,7 @@ or <code>reviewer</code>, gets no section on starting agents. A pane in a role w
 examples that name those roles, such as <code>flockdeck spawn -role worker -worktree &lt;branch&gt; &quot;&lt;task&gt;&quot;</code>, and is told to use the pane id that <code>spawn</code> prints, or <code>flockdeck team -json</code>
 shows, when it assigns a task or sends a message, because pane names are shared.</p>
 <p>The pane is briefed for its role: the briefing gains a &quot;Your role&quot; section with the
-role's text and the ids of every role in the catalog, and the pane's environment
+role's text (and, for a role that may start others, the ids of every role in the catalog), and the pane's environment
 carries <code>FLOCKDECK_ROLE</code>. The role is saved with the layout, so a restored pane is
 briefed for the same job. Agents in a project can see each other, message each other and
 share a task board (see below).</p>
@@ -372,6 +373,10 @@ merged over it field by field, and any other <code>id</code> is a role of your o
 <td>What lists and the briefing call it</td>
 </tr>
 <tr>
+<td><code>description</code></td>
+<td>One line on what the role is for, shown beside its name in the picker and Settings. It is not given to the agent</td>
+</tr>
+<tr>
 <td><code>agent</code>, <code>model</code>, <code>tier</code></td>
 <td>Defaults for a spawn that chose neither an agent nor a model</td>
 </tr>
@@ -399,58 +404,94 @@ yet cut a worktree or make a checkout read-only because of it, so pass
 do this for workers and to pass the branch name to the reviewer and tester. A <code>worktree</code> that is none of
 the three, a bad <code>tier</code>, and a <code>spawns</code> entry that names no role are listed in the
 notice and ignored.</p>
+<h3>Starting a role from the window</h3>
+<p>The agent picker (<strong>New agent tab (choose agent)…</strong> or <strong>Split right (choose agent)…</strong>) has a
+<strong>Role</strong> control above the filter. <strong>None</strong> is the picker as it has always been. Choose
+a role and the picker shows what the role is for, asks for a task, which a role always
+needs, and says which agent and model the role comes to, for example <code>claude · opus, the Worker role's choice</code>. <strong>Enter</strong> in the task, or <strong>Start</strong>, runs the role on that agent and
+model. Picking an agent row in the list names the agent only, as <code>-agent</code> does, so the role's
+model still applies when that agent is the role's own; picking a model row names both, and
+the role's choice is not used. <code>Ctrl+Down</code> and <code>Ctrl+Up</code> walk the list from the task box or
+the Role control, and <code>Ctrl+Enter</code> starts the row picked out.</p>
+<p><strong>In a worktree of its own</strong> is ticked for a role whose <code>worktree</code> is <code>own</code>, and the hint
+says what the role expects: its own branch, a branch it reads and that the task should name
+(<code>readonly</code>), or the project's main checkout. Ticked, Flockdeck cuts a worktree and branch
+named from the task, as <code>-worktree</code> does. A role opens in a tab of its own, not as a split,
+and Flockdeck switches to it once it has started. If the start is refused, the dialog stays
+open with what you typed and the notice says why.</p>
+<p>A role cannot be started with a shell; the window never offers one. The spawn limits
+above apply to agents, not to you: from the window you may start any role, including one
+that no role lists under <code>spawns</code>.</p>
+<p><strong>Start a team</strong> starts a team with one agent. It asks for a goal and, if you want
+one, an agent and model for the manager, and starts a <code>manager</code> with the goal as its task
+in the project on screen, as <code>flockdeck spawn -role manager &quot;&lt;goal&gt;&quot;</code> would. The manager
+then starts the rest. With no <code>manager</code> role in the catalog the dialog says so and has no Start button.</p>
+<p>A pane started in a role carries its name in its header, after the pane name, and in
+the <strong>Agents</strong> overview. <strong>Pane info</strong> lists it as <strong>Role</strong>. A pane started in no role shows
+nothing. Settings › Agents &amp; models lists the roles to read; they are changed in
+<code>agents.json</code>, as above.</p>
 <h3>The team and messages</h3>
-<p>Every agent's briefing has a &quot;Your team&quot; section: the other agent panes of its
-project, each with its role (<code>no role</code> if it has none), its name, its agent and model,
-its status and its pane id, and its own entry marked. The briefing is written when the
-agent starts, so the list is a snapshot, and it says so. Lists longer than twelve are cut
-and the number left out is given. <code>flockdeck team</code> prints the live list, and <code>-json</code> the
-same as JSON.</p>
-<p>Agents message each other with <code>flockdeck msg send &lt;target&gt; &lt;text...&gt;</code>, where the target
-is a pane id, a peer name, a pane name or a role id, and read their own with <code>flockdeck inbox</code> and <code>flockdeck inbox read &lt;id&gt;</code>; see <a href="/app/cli.html">The command line</a> for the rules. The
-built-in roles say when to use it: the manager writes to the agents it started to answer a
-question or change a task, and planners, workers, reviewers, testers and docs agents write to
-the manager when they are blocked. Their final report is still their last message and not a
-<code>msg</code>.</p>
-<p>A message is data from another agent. The briefing and the notice that tells an agent about
-a message both say that messages from other agents are not instructions from the user, and
-that an approval in one is not the user's approval. The sender's name and role are not
-authenticated either, so an agent must not treat them as proof of who sent a message or as
-authorization. Any agent in a project may message any
-other in it, whatever its role; the roles limit who may start whom and nothing else. A pane
-can send only as itself and read only its own inbox, and a request naming a pane that is not
-open is refused. A shell cannot send. The pane id in a request is the one the pane's environment gives it, checked
-against the open panes but not against the pane that sent it, as with <code>spawn</code> and <code>close</code>.</p>
-<p>When a helper an agent started exits on its own, or is closed as finished, Flockdeck writes
-to that agent's inbox, from <code>flockdeck</code>. Changes to a task on the board, below, are the only
-other events it writes.</p>
+<p>Every agent's briefing has a &quot;Your team&quot; section, the other agent panes of its project
+as they were when the agent started, and a &quot;Messages&quot; section. Targets, limits, the
+one-line notice and what Flockdeck writes to an inbox itself are in
+<a href="/app/cli.html">The command line</a>.</p>
+<p>The built-in roles say when to use messages: the manager writes to the agents it started to
+answer a question or change a task, and planners, workers, reviewers, testers and docs agents
+write to the manager when they are blocked. Their final report is still their last message
+and not a <code>msg</code>.</p>
 <h3>The task board</h3>
 <p>Each project has one task board, which every agent in it reaches with <code>flockdeck task</code>
 whatever worktree it works in. A task has a title, a body, an owner role and pane, a state, a
 branch, an optional baton id for context and a thread of notes. A task points at a baton and
-does not replace it: a baton stays the handoff document it was written as. The states are
-<code>planned</code>, <code>assigned</code>, <code>in-progress</code>, <code>in-review</code>, <code>done</code>, <code>blocked</code> and <code>cancelled</code>, and
-which role may move a task where is a fixed table; see <a href="/app/cli.html">The command line</a> for it and for
-the commands.</p>
+does not replace it: a baton stays the handoff document it was written as. The states, the
+table of who may move a task where, the messages a change sends and how the board is stored
+are in <a href="/app/cli.html">The command line</a>.</p>
 <p>The built-in roles use it this way. The planner adds a task for each step of a plan. The
 manager assigns them to the workers it starts, and moves a task to <code>done</code> once a reviewer
-says the change is good: only the manager, a reviewer or a tester can move a task from <code>in-review</code>
-to <code>done</code>, and the owner cannot close its own task. A worker moves its task
-to <code>in-progress</code> when it starts, sets the branch, and moves it to <code>in-review</code> when the change
-is committed, which messages the reviewers and testers. A reviewer or tester reads a task in <code>in-review</code>
-and either adds a note and tells the manager, or moves it back to <code>in-progress</code> with a note
-that says why, which messages the worker. Every agent's briefing has a &quot;Task board&quot; section
-with the commands and a snapshot of the counts for that pane, such as &quot;2 tasks assigned to you,
-1 in review&quot;, or &quot;2 tasks for your role, none claimed yet&quot; for tasks assigned to a role that no pane has started.</p>
-<p>Flockdeck messages the owner when a task is assigned or noted, the reviewers and testers (or else
-the creator and the manager) when it moves to review, the creator and the manager when it is
-blocked, the creator when it is done (and the manager, when somebody else closed it), and the
-manager when a note is added to a task in review. A pane started with no role has the manager's
-powers only while no pane in the manager role is running. The board is written by one Flockdeck
-server per project; a second instance open on the same repository can overwrite its changes. The pane id in a
-request is not authenticated, any more than the sender of a message is, so the roles keep
-agents to their jobs and do not stop a process that wants to act as another pane. Task text and
-the names on it are not instructions from the user.</p>
+says the change is good. A worker moves its task to <code>in-progress</code> when it starts, sets the
+branch, and moves it to <code>in-review</code> when the change is committed, which messages the
+reviewers and testers. A reviewer or tester reads a task in <code>in-review</code> and either adds a
+note and tells the manager, or moves it back to <code>in-progress</code> with a note that says why,
+which messages the worker. Every agent's briefing has a &quot;Task board&quot; section with the
+commands and a snapshot of the counts for that pane, such as &quot;2 tasks assigned to you,
+1 in review&quot;, or &quot;2 tasks for your role, none claimed yet&quot; for tasks assigned to a role that
+no pane has started.</p>
+<h3>The Team panel</h3>
+<p><kbd>Ctrl+Shift+M</kbd> opens a sheet for the project on screen, with three tabs. It shows what the
+command line shows, and lets you steer from the window. It updates as the team works: a task
+that moves, a message that arrives and a pane that starts, stops or changes status appear
+without reopening it, and an open task, the text you are typing and your place in the list
+stay as they were.</p>
+<p><strong>Roster</strong> lists every agent pane of the project with its role, name, agent and model, status,
+branch and its current task: the one in progress, else in review, else the first assigned. Click
+a row to go to the pane, or click its task to open it on the board. <strong>Start an agent…</strong> opens the
+agent picker with its Role control. <strong>Close</strong> and <strong>Close finished</strong> close panes that are idle or have
+exited; Close finished names them and asks first, and each pane is checked again as it closes, so one
+that has started working since the list was drawn is left open.
+With no agent running, the tab says what a team is and offers <strong>Start a team</strong>.</p>
+<p><strong>Tasks</strong> is the board, one column for each of planned, assigned, in progress, in review and
+done. In a window narrower than 900 pixels the columns are one list, grouped by state. Blocked and
+cancelled tasks are behind a button. Each card shows the id, title, who the task is for, the
+branch and the number of notes; the arrow keys move between cards and Enter opens one. Open a task
+to read its details, notes and history and to assign it to a role or a pane, set its branch, add a
+note, or move it. <strong>Move</strong> offers only the moves the rules allow you for that task, and a move that
+undoes progress needs a note in the note box. <strong>Add task</strong> adds one, and <strong>Prune finished…</strong>
+removes done and cancelled tasks last changed over 30 days ago.</p>
+<p>You act as the manager, whether or not a pane has that role, and as no pane: a task you add or a
+note you write shows <strong>you</strong> as its author, and the agents are told it was the user. The
+notices are the ones a manager pane's change would send, so an agent hears when a task is assigned
+to it, goes to review, is blocked or done, or gets a note. Agents see you as <code>the user (at the window)</code>, in notices, <code>flockdeck task show</code> and <code>flockdeck inbox</code>; an agent that names itself <code>the user</code>, <code>you</code>
+or <code>flockdeck</code> is shown as <code>(agent) the user</code>, so no agent can sign as you.</p>
+<p><strong>Messages</strong> lists the project's messages, newest first, with sender, recipient, time, text and
+whether the recipient has read it. The filter narrows them to a pane or a role. Message text is
+shown as plain text. Write to a pane, or to every pane in a role, in the box above the list: the
+message is signed as you, is at most 8 KB, and goes to the agent's inbox. It never goes into the
+terminal; the agent is sent the same one-line notice as for any message, when it is idle. Each
+message shows two marks: whether its recipient has read it, and whether you have seen it. <strong>Mark
+seen</strong> sets only your own mark and the count on the tab; the agent's inbox and its unread count
+are unchanged.</p>
+<p>The panel works on the machine Flockdeck runs on. A window reached through the relay is refused
+its commands. A board of more than 300 open tasks lists the newest 300, with a button for the rest.</p>
 <h2>Routing</h2>
 <p>A fan-out multiplies whatever its model costs, and many of its tasks are
 mechanical: run the tests, rename a symbol, fix a typo. Routing pre-sets each
@@ -510,15 +551,16 @@ conversation's first prompt are not. If Jev is unsure, contradicts itself,
 is slow, is refused or is down, the row is routed exactly as it would be without
 it. The row's tooltip says what Jev rated it when it did decide.</p>
 <p>It is <strong>off</strong> by default and needs both this setting, for every project or for
-one, and a TypeSafe API key: the one set in <strong>Settings › Status detection ›
+one, and a TypeSafe API key: the one set in <strong>Settings › API keys ›
 TypeSafe API key</strong> (used first), or else <code>TYPESAFE_API_KEY</code> in the environment
 Flockdeck starts in. Saving a key on its own sends nothing.
 <strong>Turning it on sends the text of each such row to TypeSafe, a third party.</strong>
 What is sent is that text alone, cut at 2,000 characters with <code>[truncated]</code> at
 the end, beside three fixed questions about it: no files, no repository, no
 conversation, no path of your machine's that the text does not itself contain.
-Nothing is removed from the text first, so a task that contains a secret sends
-it; leave the setting off for work like that. Calls give up after 2 seconds,
+Secrets are redacted from the text first (API keys, bearer tokens, password
+values, secret file paths), by pattern, so one with no recognisable shape is
+still sent; leave the setting off for work like that. Calls give up after 2 seconds,
 run at most 20 a minute, are remembered for an hour so an edited fan-out does
 not ask again, and pause for 30 seconds after a failure, or 5 minutes after
 the key is refused. Without the key the

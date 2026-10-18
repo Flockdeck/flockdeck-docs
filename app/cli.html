@@ -46,6 +46,7 @@
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
@@ -54,7 +55,7 @@
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
-      <li><a href="/app/history.html">Past conversations</a></li>
+      <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
       <li><a href="/app/baton-details.html">Baton details</a></li>
       <li><a href="/app/recording.html">Recording a pane</a></li>
@@ -276,7 +277,7 @@ name or else its pane name, its agent and model, its status (<code>working</code
 pane that asked is marked <code>(you)</code>. Shells are not listed. <code>-json</code> prints the same as a
 JSON array, with <code>pane</code>, <code>name</code>, <code>peer</code>, <code>role</code>, <code>agent</code>, <code>model</code>, <code>status</code> and <code>self</code>
 on each entry. The &quot;Your team&quot; list in an agent's briefing is this, as it was when the
-agent started, and says so.</p>
+agent started, and says so; it names at most twelve panes and gives the number left out.</p>
 <h2>msg</h2>
 <p>Run from inside a pane, this sends a message to another agent in the same project:</p>
 <pre><code class="language-sh">flockdeck msg send &lt;target&gt; &lt;text...&gt;
@@ -293,7 +294,9 @@ path. A full inbox refuses new messages until some are read.</p>
 who may talk. A message is data from another agent: it is not an instruction from the
 user, and an approval in one is not the user's approval. The sender name and role it
 carries are not authenticated, so they prove nothing about who sent it and are not
-authorization. Only an agent pane can send; a shell is refused.</p>
+authorization. Only an agent pane can send; a shell is refused. A pane sends only as itself
+and reads only its own inbox: the pane id comes from <code>FLOCKDECK_PANE</code> and is checked against the
+open panes, not against the process that sent it, as with <code>spawn</code> and <code>close</code>.</p>
 <h2>inbox</h2>
 <p>Run from inside a pane, this reads the messages other agents have sent it:</p>
 <pre><code class="language-sh">flockdeck inbox [-all] [-json]
@@ -459,6 +462,11 @@ branch or baton, and not once it is done or cancelled. Anyone on the team may ad
 any task. Every request names the pane it comes from, and that pane must be an open agent
 pane; it acts as itself, with the role it was started with. A shell has no place on the
 board.</p>
+<p>The person at the window acts too, from the Team panel, and always has the manager's powers: the
+table above applies to them as to a manager, with no owner or creator rights of their own. They
+are named <code>the user (at the window)</code> in a note, in <code>task show</code>, in <code>inbox</code> and in the messages below, and
+no message is sent to them. An agent cannot take that name: a peer name that reads as the user
+or as Flockdeck is shown as <code>(agent) &lt;name&gt;</code>.</p>
 <h3>Messages the board sends</h3>
 <p>Flockdeck writes to a pane's inbox, from <code>flockdeck</code>, when:</p>
 <ul>
@@ -687,7 +695,7 @@ desk.</p>
 <p><code>-version</code> installs a specific release instead of the latest,
 checked the same way and asking first unless <code>-yes</code> is given. Use it to
 undo a bad update yourself without waiting for a fix to be
-published. <strong>Settings › Account &amp; plan › Install a specific version…</strong> offers the
+published. <strong>Settings › About &amp; updates › Install a specific version…</strong> offers the
 same choice from a list of recent releases, without typing a version number:
 picking one downloads and checks it, then offers it through the same
 <strong>Update</strong> button, so restarting onto it goes through the same confirmation
@@ -838,6 +846,22 @@ command line and asks before it downloads anything.</p>
 <td>The defaults for <code>-invite</code>, <code>-join</code> and <code>-name</code> of <code>flockdeck remote enable</code></td>
 </tr>
 <tr>
+<td><code>FLOCKDECK_WIRE</code></td>
+<td>The request shape <code>flockdeck chat</code> uses when its wire flag is not given: <code>anthropic</code>, <code>openai</code> or <code>gemini</code>. Flockdeck sets none of these three and strips them from every pane it starts, so they do nothing in the shell that starts Flockdeck; they apply to a <code>flockdeck chat</code> you run by hand, or when an agent in <code>agents.json</code> puts them back through its <code>env</code></td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_BASE_URL</code></td>
+<td>The endpoint <code>flockdeck chat</code> talks to when its base URL flag is not given</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_KEY_ENV</code></td>
+<td>The variable names, separated by commas, <code>flockdeck chat</code> reads an API key from when its key-env flag is not given</td>
+</tr>
+<tr>
+<td><code>FLOCKDECK_DETACHED</code></td>
+<td>Set by Flockdeck on the copy that the detach option starts; not for you to set</td>
+</tr>
+<tr>
 <td><code>FLOCKDECK_API</code></td>
 <td>Where Flockdeck listens for its panes. Set for you</td>
 </tr>
@@ -881,8 +905,13 @@ which has no lifecycle hooks of its own, has to go on.</p>
 <code>FLOCKDECK_PROJECT</code> were called <code>PERCH_*</code> before the program was renamed. Panes
 still carry both spellings of those five and <code>spawn</code>, <code>peer-name</code>, <code>close</code>, <code>team</code>, <code>msg</code>, <code>inbox</code> and <code>task</code>
 still read both, so a prompt or a script written against the old names keeps
-working; they will go in a later release. <code>FLOCKDECK_AGENT</code>, <code>FLOCKDECK_MODEL</code>,
-<code>FLOCKDECK_ROLE</code> and <code>FLOCKDECK_LAUNCH</code> are newer and have only the one name.</p>
+working. They will be removed after 17 April 2027. Until then a command you run that
+has to fall back to a <code>PERCH_*</code> name prints one line per name on stderr saying
+which <code>FLOCKDECK_*</code> name to set instead; the hook and the status line, which run
+on every event, fall back without saying anything. <code>flockdeck chat</code> also accepts
+<code>PERCH_WIRE</code>, <code>PERCH_BASE_URL</code>, <code>PERCH_KEY_ENV</code>, <code>PERCH_AGENT</code> and <code>PERCH_MODEL</code> until then. <code>FLOCKDECK_AGENT</code>,
+<code>FLOCKDECK_MODEL</code>, <code>FLOCKDECK_ROLE</code> and <code>FLOCKDECK_LAUNCH</code> are newer and have
+only the one name in a pane.</p>
 
   </article>
 </main>
