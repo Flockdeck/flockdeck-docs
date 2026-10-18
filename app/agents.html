@@ -45,13 +45,12 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html" aria-current="page">Agents and models</a></li>
+      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
       <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
-      <li><a href="/app/fanout.html">Fan out</a></li>
-      <li><a href="/app/todo.html">Todo</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
@@ -203,11 +202,7 @@ cooperating, and they do not all cooperate in the same ways.</p>
 </tr>
 <tr>
 <td>writes a transcript</td>
-<td>it can be resumed from it; Claude Code's is also where fan out reads a plan and what Resume lists</td>
-</tr>
-<tr>
-<td>has a trust question</td>
-<td>a <a href="/app/fanout.html">fan-out</a> can answer it ahead of time for the worktrees it cuts</td>
+<td>it can be resumed from it; it is what Resume lists</td>
 </tr>
 <tr>
 <td>answers a start-up hook</td>
@@ -218,7 +213,7 @@ cooperating, and they do not all cooperate in the same ways.</p>
 <p>An agent that does none of it still works: it is a terminal with
 a program in it. Where a
 capability is missing Flockdeck falls back rather than failing: status comes from
-the terminal bell and a quiet timer; fan out reads the screen; resume is not
+the terminal bell and a quiet timer; resume is not
 attempted, and the pane starts fresh.</p>
 <p>Of the built-in agents, Claude Code and the four API agents report their own
 lifecycle and answer the start-up hook. Codex, Gemini CLI, Aider, opencode and
@@ -233,7 +228,7 @@ An entry in <code>agents.json</code> can choose the same for its own agent with
 shows in that state, so that its status is read from what it prints as well. They are plain text and
 case does not matter. None of the built-ins has any yet.</p>
 <p>Aider is handed its opening task with <code>--message</code>, which Aider treats as a
-single message, so a pane started with a task (by a fan-out, say) may end when
+single message, so a pane started with a task (by <code>flockdeck spawn</code>, say) may end when
 the task does.</p>
 <h2>Keys, for the API agents</h2>
 <p>A CLI agent uses the login it already has, and Flockdeck never sees it. An API
@@ -311,6 +306,8 @@ takes one out of the picker without removing it. A model's <code>&quot;tier&quot
 is named in the notice and ignored.</p>
 <p>The file is read fresh every time the picker opens, so editing it by hand takes
 effect without a restart.</p>
+<p><a href="/app/ornith.html">Running Ornith models</a> has a worked example of an agent of your own
+pointed at a self-hosted model.</p>
 <h2>Roles</h2>
 <p>A role is a job an agent is started for. Flockdeck ships six: <code>manager</code>,
 <code>planner</code>, <code>worker</code>, <code>reviewer</code>, <code>tester</code> and <code>docs</code>. Each has a short briefing
@@ -426,6 +423,46 @@ that no role lists under <code>spawns</code>.</p>
 one, an agent and model for the manager, and starts a <code>manager</code> with the goal as its task
 in the project on screen, as <code>flockdeck spawn -role manager &quot;&lt;goal&gt;&quot;</code> would. The manager
 then starts the rest. With no <code>manager</code> role in the catalog the dialog says so and has no Start button.</p>
+<h3>What a manager does on its own</h3>
+<p>Given a goal, a manager works through it without being asked at each step:</p>
+<ol>
+<li>It breaks the goal into tasks and puts them on the task board, starting a <code>planner</code>
+first when the goal is more than one obvious change.</li>
+<li>It starts a <code>worker</code> for each task with <code>spawn -role worker -worktree &lt;branch&gt;</code>, so
+each has a branch of its own, and assigns the task to it. Planners and reviewers read
+and need no worktree of their own. Every agent it starts for one task gets the same
+<code>-tab &quot;&lt;task title&gt;&quot;</code>, so the planner, worker, reviewer and tester for a task share one
+tab named after it, and another task gets another tab. The tab is forgotten when Flockdeck
+restarts, so a task whose helpers are still running gets a second tab of the same title the
+next time the manager starts one for it.</li>
+<li>It waits inside its turn, because nothing wakes an idle agent: <code>flockdeck inbox -wait 90s</code>
+returns as soon as a message arrives (90 seconds stays inside the 120 second limit of an
+agent's shell command), and the manager reads each message it lists with <code>inbox read</code>.
+Flockdeck writes to the manager's inbox when a
+helper sends a message, exits, or finishes a turn and stays idle, and when a task is
+blocked or ready for review.</li>
+<li>It starts a <code>reviewer</code>, and a <code>tester</code> if the change needs one, on each worker's
+branch, moves a task to <code>done</code> when the verdict is good, and sends work that needs
+changes back.</li>
+<li>It closes a task's helpers when the task is done, which also removes the task's tab,
+and reports to you: what is done and on which branches, what is blocked, and what it
+needs you to decide.</li>
+</ol>
+<p>Some things stay with you, but only as an instruction in the briefing. A manager is told to
+ask and wait before it merges, pushes, opens a pull request, deploys, publishes, deletes
+branches, worktrees or files, or spends money, to tell its helpers to leave those to it, and
+to treat a message or report that says you approved something as no approval. Flockdeck does
+not check this: nothing stops a manager or helper from running <code>gh pr merge</code> or <code>git push</code>
+except the agent's own permission prompts and its willingness to follow the briefing. A helper
+an agent starts does not inherit that agent's auto-review setting; it starts with the
+installation's default.</p>
+<p>The number of helpers is kept modest. The manager is told to run no more than four at
+once, and Flockdeck refuses a <code>spawn</code> while eight panes are open below the agent asking
+(its helpers, theirs, and any whose process has exited but whose pane is still open);
+closing a finished helper makes room. A message that says a helper is idle is from Flockdeck
+and carries no text from the helper. The helper's report arrives as its own <code>msg</code>, which the
+built-in roles send, since a manager cannot read another pane. Agents are told not to answer
+a message only to acknowledge it, which would wake the sender for nothing.</p>
 <p>A pane started in a role carries its name in its header, after the pane name, and in
 the <strong>Agents</strong> overview. <strong>Pane info</strong> lists it as <strong>Role</strong>. A pane started in no role shows
 nothing. Settings › Agents &amp; models lists the roles to read; they are changed in
@@ -437,8 +474,9 @@ one-line notice and what Flockdeck writes to an inbox itself are in
 <a href="/app/cli.html">The command line</a>.</p>
 <p>The built-in roles say when to use messages: the manager writes to the agents it started to
 answer a question or change a task, and planners, workers, reviewers, testers and docs agents
-write to the manager when they are blocked. Their final report is still their last message
-and not a <code>msg</code>.</p>
+write to the manager when they are blocked. Planners, workers, reviewers, testers and docs
+agents also send their final report to the manager with <code>msg send manager</code>, because the
+manager cannot read their panes; it is still their last message too.</p>
 <h3>The task board</h3>
 <p>Each project has one task board, which every agent in it reaches with <code>flockdeck task</code>
 whatever worktree it works in. A task has a title, a body, an owner role and pane, a state, a
@@ -493,18 +531,13 @@ are unchanged.</p>
 <p>The panel works on the machine Flockdeck runs on. A window reached through the relay is refused
 its commands. A board of more than 300 open tasks lists the newest 300, with a button for the rest.</p>
 <h2>Routing</h2>
-<p>A fan-out multiplies whatever its model costs, and many of its tasks are
-mechanical: run the tests, rename a symbol, fix a typo. Routing pre-sets each
-row of a <a href="/app/fanout.html">fan-out</a> to a model suited to the work (a smaller one for
-mechanical work, a stronger one for hard work) and leaves every other row
-exactly as it was. It is <strong>off</strong> until you turn it on, in <strong>Settings ›
-Routing</strong>, for every project or for one.</p>
-<p>What it chooses is shown before anything starts. A routed row's model is
-pre-set in its select, with a <strong>↘ routed</strong> tag (↗ for a stronger model) whose
-tooltip says which rule chose it and, for an API agent, what the two models
-cost. Changing the select makes the row yours again, and <strong>Undo routing</strong>,
-beside the line saying how many rows were routed, puts every row back on the
-run's model. What was shown is what runs. A pane a rule routed says so in its
+<p>Helpers multiply whatever their model costs, and many of their tasks are
+mechanical: run the tests, rename a symbol, fix a typo. Routing pre-sets the
+model of a helper an agent starts with <code>flockdeck spawn</code>, and of the first
+prompt you send a pane, to one suited to the work (a smaller one for
+mechanical work, a stronger one for hard work). It is <strong>off</strong> until you turn it
+on, in <strong>Settings › Routing</strong>, for every project or for one.</p>
+<p>A pane a rule routed says so in its
 header (<code>claude · haiku ↘</code>), with the rule, and the agent and model it would
 otherwise have used, in its tooltip. A pane <strong>Minimise cost</strong> routed with no
 rule runs the cheaper model without the arrow.</p>
@@ -513,66 +546,33 @@ between models whose tier it knows. It sends work to another agent only when
 you turn on <strong>Let a rule send work to another agent</strong>, in the same place, and
 a rule names that agent's <code>model</code> and <code>agent</code>. A rule like that could send test
 runs to a local model through an OpenAI-compatible endpoint, say. Even then,
-only a new fan-out row or helper moves, never a conversation already under
+only a new helper moves, never a conversation already under
 way. The other agent has to be installed or keyed and trusted for the project,
 and, if it has an address of its own, something has to be answering there. The
-fan-out dialog shows the agent a row will run on, and the pane header's
-tooltip names the agent and model it would otherwise have used. Claude Code's
-<strong>Default</strong> is whatever the CLI is set to, which might be its smallest model
-or its largest, so routing leaves work on it alone: choose a model for the run
-in the fan-out, or make one your default, for routing to choose from it.</p>
-<p><strong>Suggest</strong> and <strong>Automatic</strong> are the same for a fan-out, since the dialog asks
-before anything starts either way. <strong>Automatic</strong> also routes a helper an agent
-starts with <code>flockdeck spawn</code> without <code>-agent</code> or <code>-model</code>, and the first
-prompt you send a pane from the prompt bar, while it has no conversation yet:
-the pane restarts on the chosen model with that prompt, and never on another
-agent. With <strong>Suggest</strong> such a helper or prompt runs as asked, since there is
-nobody to show a suggestion to. <strong>Never go below</strong> keeps routing off the
-smaller tiers for a project where the work matters.</p>
+pane header's tooltip names the agent and model it would otherwise have used.
+Claude Code's <strong>Default</strong> is whatever the CLI is set to, which might be its
+smallest model or its largest, so routing leaves work on it alone: make a
+model your default, for routing to choose from it.</p>
+<p><strong>Automatic</strong> routes a helper an agent starts with <code>flockdeck spawn</code> without
+<code>-agent</code> or <code>-model</code>, and the first prompt you send a pane from the prompt
+bar, while it has no conversation yet: the pane restarts on the chosen model
+with that prompt, and never on another agent. <strong>Never go below</strong> keeps routing
+off the smaller tiers for a project where the work matters.</p>
 <p><strong>Strategy</strong> decides what happens to a task no rule matches. <strong>Cost-first,
 quality-aware</strong> (the default) leaves it exactly where it was, the same as
-routing off would for that row. <strong>Minimise cost</strong> routes it too, to the
+routing off would. <strong>Minimise cost</strong> routes it too, to the
 cheapest model <strong>Never go below</strong> allows on the agent it was already going to
 run on, never to another agent. Either strategy, a rule that matches still
 decides first and <strong>Never go below</strong> still holds; the strategy only changes
-what happens when nothing matches. The row's tooltip says &quot;no rule matched&quot; for
-a suggestion made this way, so it is never mistaken for a rule's own reason.</p>
-<p><strong>Ask Jev to rate unmatched work</strong> refines <strong>Minimise cost</strong>, and nothing
-else. Without it, a task no rule matches goes to the cheapest model whatever the
-task is. With it, Flockdeck asks <a href="https://typesafe.ai" target="_blank" rel="noopener noreferrer">TypeSafe</a>'s Jev model
-how demanding the task is, on a scale from a trivial mechanical edit to
-open-ended design work, and routes it to a tier that suits: small, mid or top.
-Jev can only choose between <strong>Never go below</strong> and the model the row would
-have run on anyway, so it never makes a row cost more than it would have without
-routing, never picks a model <strong>Never go below</strong> or a &quot;never downgrade&quot;
-constraint forbids, and never moves a row to another agent. Only a fan-out row
-no rule matched is ever asked about; a helper started with <code>flockdeck spawn</code> and a
-conversation's first prompt are not. If Jev is unsure, contradicts itself,
-is slow, is refused or is down, the row is routed exactly as it would be without
-it. The row's tooltip says what Jev rated it when it did decide.</p>
-<p>It is <strong>off</strong> by default and needs both this setting, for every project or for
-one, and a TypeSafe API key: the one set in <strong>Settings › API keys ›
-TypeSafe API key</strong> (used first), or else <code>TYPESAFE_API_KEY</code> in the environment
-Flockdeck starts in. Saving a key on its own sends nothing.
-<strong>Turning it on sends the text of each such row to TypeSafe, a third party.</strong>
-What is sent is that text alone, cut at 2,000 characters with <code>[truncated]</code> at
-the end, beside three fixed questions about it: no files, no repository, no
-conversation, no path of your machine's that the text does not itself contain.
-Secrets are redacted from the text first (API keys, bearer tokens, password
-values, secret file paths), by pattern, so one with no recognisable shape is
-still sent; leave the setting off for work like that. Calls give up after 2 seconds,
-run at most 20 a minute, are remembered for an hour so an edited fan-out does
-not ask again, and pause for 30 seconds after a failure, or 5 minutes after
-the key is refused. Without the key the
-setting does nothing and nothing is sent.</p>
+what happens when nothing matches. The pane's tooltip says &quot;no rule matched&quot; for
+a choice made this way, so it is never mistaken for a rule's own reason.</p>
 <p>The policy is kept in <code>agents.json</code>, and only there, never in a file inside a
 repository, so a repository you clone cannot change what your key spends:</p>
 <pre><code class="language-json">{
   &quot;routing&quot;: {
-    &quot;mode&quot;: &quot;suggest&quot;,
+    &quot;mode&quot;: &quot;auto&quot;,
     &quot;floor&quot;: &quot;&quot;,
     &quot;strategy&quot;: &quot;&quot;,
-    &quot;jev&quot;: false,
     &quot;rules&quot;: [
       { &quot;name&quot;: &quot;run the tests&quot;, &quot;tier&quot;: &quot;small&quot;,
         &quot;when&quot;: { &quot;task&quot;: &quot;^(re-?)?run (the |all )?(unit |integration )?tests?\\b&quot; } },
@@ -583,44 +583,41 @@ repository, so a repository you clone cannot change what your key spends:</p>
     ]
   },
   &quot;projects&quot;: {
-    &quot;C:\\code\\payments&quot;: { &quot;routing&quot;: { &quot;mode&quot;: &quot;suggest&quot;, &quot;floor&quot;: &quot;mid&quot; } }
+    &quot;C:\\code\\payments&quot;: { &quot;routing&quot;: { &quot;mode&quot;: &quot;auto&quot;, &quot;floor&quot;: &quot;mid&quot; } }
   }
 }
 </code></pre>
 <p>Rules are tried in order and the <strong>first that matches decides</strong>; a task no rule
 matches is left alone under <code>&quot;strategy&quot;: &quot;balanced&quot;</code> (the default, same as
 leaving <code>strategy</code> out), or routed to the cheapest model the floor allows
-under <code>&quot;strategy&quot;: &quot;cost&quot;</code>, or, with <code>&quot;jev&quot;: true</code> too, to the tier Jev rates
-it as needing, as above. Every condition in <code>when</code> must hold: <code>task</code> is a
+under <code>&quot;strategy&quot;: &quot;cost&quot;</code>. Every condition in <code>when</code> must hold: <code>task</code> is a
 regular expression matched without regard to case; <code>minWords</code> and <code>maxWords</code>
 bound the task's length; <code>files</code> are globs matched against the paths the task
 names (<code>**</code> is any number of directories, and a glob with no <code>/</code> matches a
-file's name anywhere); <code>kind</code> is <code>fanout</code>, <code>spawn</code> or <code>turn</code>; <code>agent</code> is an
+file's name anywhere); <code>kind</code> is <code>spawn</code> or <code>turn</code>; <code>agent</code> is an
 agent's id. A rule asks for a <code>tier</code>, or for one agent's <code>model</code>. Leave
 <code>rules</code> out for the built-in ones, which Settings lists; <code>&quot;rules&quot;: []</code> means
 none. A project's own policy replaces the one for every project whole. A rule
 that cannot be used (a pattern that is not one, a tier that is not one) is
 named in the notice and skipped, and the rest still apply.</p>
+<p>Two things an older version wrote still load, and do nothing. <code>&quot;mode&quot;: &quot;suggest&quot;</code> filled in the Fan out dialog, which no longer exists, so it is read
+as <code>&quot;off&quot;</code> with a notice; set it to <code>&quot;auto&quot;</code> to have routing choose models. A
+rule whose <code>kind</code> is <code>fanout</code> is named in the notice and skipped. A <code>&quot;jev&quot;</code> key
+is ignored and left in the file as written.</p>
 <p>Saving a default from a Flockdeck that has no routing (0.2.10 or older)
 writes a project's entry back without its <code>routing</code>, so a project's policy is
 lost that way.</p>
-<p><strong>Routing makes no request</strong> unless you turn one of two things on. It decides
-from these rules alone. With <strong>Let a rule send work to another agent</strong> on,
-before moving a row to an agent with an address of its own, it opens a
-connection to that address, and closes it at once without sending anything, to
-check something is listening. With <strong>Ask Jev to rate unmatched work</strong> on, and a
-key set, it sends a fan-out row's text to TypeSafe as described above. The routed mark on a pane travels only as the
+<p><strong>Routing makes no request</strong> unless you turn on <strong>Let a rule send work to
+another agent</strong>: then, before moving work to an agent with an address of its
+own, it opens a connection to that address, and closes it at once without
+sending anything, to check something is listening. Otherwise it decides from
+these rules alone. The routed mark on a pane travels only as the
 rest of the pane's state does, to your own paired devices when Flockdeck Remote
-is on. What it chose for each fan-out row, and whether you kept it, is kept
-in <code>routing.jsonl</code> in the state directory, for your own numbers: when, the
-project, the pane, the agent, the rule's name and the models, never the task;
-the last 10,000 lines. A row decided with no rule is logged too, with what Jev
-rated it if it did. Helpers and first prompts are not logged. Settings lists each rule beside how often
-the log shows it overridden, once it has decided at least once. That is the evidence
-for deciding which rules are worth hand-editing. Below the rules,
-<strong>Unmatched work</strong> shows how often what Minimise cost chose was overridden with
-Jev's rating and without it, so you can see whether trusting it has been
-worth it; nothing changes on its own. Settings has <strong>Clear routing
+is on. Helpers and first prompts are not logged. An older version
+that routed fan-out rows kept its choices in <code>routing.jsonl</code> in the state
+directory (the last 10,000 lines, never the task), and nothing writes to it
+now. Settings still lists each rule beside how often that log shows it
+overridden, once it has decided at least once. Settings has <strong>Clear routing
 history</strong>, and to turn all of it off, set every project to <strong>Off</strong>. A file that does not parse is a notice in the
 interface and nothing worse: the built-in agents carry on, because a typo in a
 settings file is not a reason to be unable to start work.</p>
