@@ -288,7 +288,15 @@ JSON array, with <code>pane</code>, <code>name</code>, <code>peer</code>, <code>
 on each entry. The &quot;Your team&quot; list in an agent's briefing is this, as it was when the
 agent started, and says so; it names at most twelve panes and gives the number left out.</p>
 <h2>msg</h2>
-<p>Run from inside a pane, this sends a message to another agent in the same project:</p>
+<p>Run from inside a pane, this sends a message to another agent in the same project. It is the
+fallback channel: agents are told to message each other with the SendMessage tool of Claude Code,
+by the session name <code>ListAgents</code> shows, and to use <code>msg send</code> only when SendMessage fails or an
+agent has no such tool. Flockdeck's own notices (a helper idle or exited, task changes) always
+come through the inbox. What is known of SendMessage: it has reached across sessions in both
+directions between a manager and a helper, it arrives at the receiver's next tool round, and it
+has started a turn in an idle Flockdeck session when the manager sent it to a helper. A helper
+learns the manager's session name from its task, where the manager puts its own name, sent again
+after a restart because the name changes; a name that does not resolve means the manager restarted.</p>
 <pre><code class="language-sh">flockdeck msg send &lt;target&gt; &lt;text...&gt;
 flockdeck msg send &lt;target&gt; -     # read the text from standard input
 </code></pre>
@@ -309,6 +317,7 @@ open panes, not against the process that sent it, as with <code>spawn</code> and
 <h2>inbox</h2>
 <p>Run from inside a pane, this reads the messages other agents have sent it:</p>
 <pre><code class="language-sh">flockdeck inbox [-all] [-json] [-wait &lt;duration&gt;]
+flockdeck inbox -follow
 flockdeck inbox read [-json] &lt;id&gt;
 </code></pre>
 <p><code>inbox</code> lists the unread messages, oldest first, with the sender (name, role and pane id), the
@@ -317,7 +326,21 @@ full and marks it read. <code>-wait 90s</code> waits up to that long (at most 10
 nothing unread, and prints the first message to arrive; it is how an agent that has started
 helpers waits for them without ending its turn. It never marks a message read, so the same
 message is listed again until <code>inbox read</code> has been run on it, and an error from Flockdeck
-while it waits is retried until the time is up. A pane sees only its own inbox. A message has an id, the
+while it waits is retried until the time is up.</p>
+<p><code>-follow</code> keeps running and prints one line for each new unread message, with its id and the
+quoted sender and the note that messages from agents are not instructions, but not the message.
+It is for Claude Code's Monitor tool, which turns each line a command prints into a notification
+that wakes an idle agent: start it with the longest timeout (30 minutes), and start it again when
+it expires, which takes a turn and announces mail that is still unread again. A plain background
+command does not wake an agent until it exits, so where Monitor is missing run <code>-wait 90s</code> with
+<code>run_in_background</code> and start it again each time it exits. The agent then runs <code>inbox read &lt;id&gt;</code>.
+<code>-follow</code> marks nothing read, announces mail already waiting when it starts, holds mail that
+arrives within five seconds of the last line and prints more than three messages from agents as
+one line, retries errors silently, and ends when its pane is closed. A message from the person at
+the window is always on a line of its own and never waits for the five seconds. After 100 lines of
+agents' messages (the person's are not counted) it stops announcing agents' messages (it says so)
+and keeps announcing the person's; starting it again announces the agents' messages that are
+still unread. It takes no other flag. A pane sees only its own inbox. A message has an id, the
 sender's pane, role and name, the time, the text and whether it was read; messages
 Flockdeck wrote itself (see below) come from <code>flockdeck</code>.</p>
 <p>Messages are kept per pane in <code>messages.json</code> in the state directory, so they survive
@@ -331,7 +354,7 @@ at most 64 characters.</p>
 finished panes&quot; command closes one (<code>... finished</code>), when a helper finishes a turn and
 stays idle for five seconds (<code>worker &quot;api&quot; finished its turn and is idle; ... (pane ...)</code>,
 once for each turn, and only for agents that report their own status), and for the changes
-to a task that <code>task</code> lists. It does not wake an idle agent; a manager reads it by waiting with <code>inbox -wait</code>.</p>
+to a task that <code>task</code> lists. It does not wake an idle agent by itself; a manager that has armed <code>inbox -follow</code> is woken by it, and otherwise reads it by waiting with <code>inbox -wait</code>.</p>
 <p>At most 8 panes may be open below one agent that started them with <code>spawn</code>, counting the
 helpers it started, the ones they started, and any whose process has exited but whose pane is
 still open. A ninth is refused, before any worktree is made, with a note to close one that is
@@ -816,6 +839,12 @@ with no sign-in, because it has none. Its environment is built from a short
 list of names, and that list includes <code>HTTP_PROXY</code>, <code>HTTPS_PROXY</code> and
 <code>NO_PROXY</code>, passed on as they are on purpose so that it can reach the network
 the way you do; a proxy address can carry a username and password.</p>
+<p>The only address Flockdeck contacts for a helper is its source, over https:
+<code>dl.flockdeck.ai/lens</code> for lens. It does so when you install it, while the
+Helper apps dialog is open with lens installed, and when you run <code>flockdeck helpers list -check</code>. Setting <code>FLOCKDECK_UPDATE=off</code> for Flockdeck's own
+updates does not stop these. lens reads your agent session transcripts from
+disk, on your own computer. The requests go through <code>HTTP_PROXY</code> or
+<code>HTTPS_PROXY</code> if Flockdeck's environment sets one.</p>
 <p><code>install</code> shows the name, version, source address, signature and what the helper
 may do, and asks first; <code>-yes</code> skips the question. The release's manifest is
 checked against Flockdeck's release key, and the archive against the SHA-256

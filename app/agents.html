@@ -435,9 +435,14 @@ and need no worktree of their own. Every agent it starts for one task gets the s
 tab named after it, and another task gets another tab. The tab is forgotten when Flockdeck
 restarts, so a task whose helpers are still running gets a second tab of the same title the
 next time the manager starts one for it.</li>
-<li>It waits inside its turn, because nothing wakes an idle agent: <code>flockdeck inbox -wait 90s</code>
-returns as soon as a message arrives (90 seconds stays inside the 120 second limit of an
-agent's shell command), and the manager reads each message it lists with <code>inbox read</code>.
+<li>It arms <code>flockdeck inbox -follow</code> once, before it starts helpers: under the Monitor tool in
+Claude Code. Each new message prints one line, which wakes the manager even after it has ended
+its turn, and it reads the message with <code>inbox read</code>. The Monitor tool expires after at most 30
+minutes, and the manager starts it again. Without the Monitor tool it runs <code>inbox -wait 90s</code>
+with Bash <code>run_in_background</code> in a loop, because a plain background command wakes the agent
+only when it exits. Only Claude Code is known to be woken this way; an agent without it waits
+inside its turn with <code>inbox -wait 90s</code> (90 seconds stays inside the 120 second limit of an
+agent's shell command). The other roles arm the stream too, and stop once they have reported.
 Flockdeck writes to the manager's inbox when a
 helper sends a message, exits, or finishes a turn and stays idle, and when a task is
 blocked or ready for review.</li>
@@ -460,8 +465,8 @@ installation's default.</p>
 once, and Flockdeck refuses a <code>spawn</code> while eight panes are open below the agent asking
 (its helpers, theirs, and any whose process has exited but whose pane is still open);
 closing a finished helper makes room. A message that says a helper is idle is from Flockdeck
-and carries no text from the helper. The helper's report arrives as its own <code>msg</code>, which the
-built-in roles send, since a manager cannot read another pane. Agents are told not to answer
+and carries no text from the helper. The helper's report arrives as a SendMessage from the helper, which the
+built-in roles send, since a manager cannot read another pane (<code>msg send</code> is the fallback). Agents are told not to answer
 a message only to acknowledge it, which would wake the sender for nothing.</p>
 <p>A pane started in a role carries its name in its header, after the pane name, and in
 the <strong>Agents</strong> overview. <strong>Pane info</strong> lists it as <strong>Role</strong>. A pane started in no role shows
@@ -475,7 +480,7 @@ one-line notice and what Flockdeck writes to an inbox itself are in
 <p>The built-in roles say when to use messages: the manager writes to the agents it started to
 answer a question or change a task, and planners, workers, reviewers, testers and docs agents
 write to the manager when they are blocked. Planners, workers, reviewers, testers and docs
-agents also send their final report to the manager with <code>msg send manager</code>, because the
+agents also send their final report to the manager with SendMessage, because the
 manager cannot read their panes; it is still their last message too.</p>
 <h3>The task board</h3>
 <p>Each project has one task board, which every agent in it reaches with <code>flockdeck task</code>
