@@ -110,7 +110,7 @@ instead. Glancing at a pane from the phone leaves the desk's terminal as it was;
 typing on the phone fits it to the phone until you type at the desk again. A
 pane is never made smaller than 20 columns by 5 rows or larger than 500 by 200.
 The desk's own window shows a small phone glyph on a pane's header while a
-paired device has it open, in its chat or its terminal, naming the device, so
+paired device has it open, in its terminal, naming the device, so
 text appearing there is not a surprise.</p>
 <p>Nothing on this machine listens for the network. The local server still binds
 to loopback only, and its token never leaves the machine. A request that came
@@ -125,8 +125,8 @@ serves headless: no window, and no browser is ever looked for on that
 machine. It runs just as well on a spare box, a home server, a NAS or a
 cheap VPS as it does on the machine in front of you. Pair it the same way
 (<code>flockdeck remote enable</code> then <code>flockdeck remote pair</code>) and it's a desktop
-in every way that matters here: full interface, chat on a phone, the
-lot. That puts the app itself on hardware you already control, for free;
+in every way that matters here: the full interface, a pane's terminal on
+a phone, the lot. That puts the app itself on hardware you already control, for free;
 reaching it from a phone through the shared relay is the same Flockdeck Remote
 subscription as from any desktop.</p>
 <p><code>-detach</code> also releases the terminal that started it, so an SSH session can
@@ -175,9 +175,9 @@ the button beside a device's name steps it through three settings:</p>
 then the device is shut out: it is sent no panes, tabs, projects, paths or
 preferences, gets no push notifications, cannot open a terminal, and Flockdeck
 refuses every command it sends.</li>
-<li><strong>View artifacts and watch panes</strong>: the same, and it also sees the panes, their
-chat and their terminal output, and gets push notifications about waiting
-agents. It still cannot type, resize or run anything.</li>
+<li><strong>View artifacts and watch panes</strong>: the same, and it also sees the panes (their
+names, status and what they are waiting for, but not what the agents said) and
+their terminal output, and gets push notifications about waiting agents. It still cannot type, resize or run anything.</li>
 </ul>
 <p>The setting is kept on this machine and checked here, on every command and every
 keystroke, not in the device's window, so a modified page does not get round it.
@@ -266,12 +266,17 @@ tablet, or a browser window that wide) a desktop's list of panes sits in its
 own column beside whichever one is open, instead of swapping the whole
 screen for it; tapping another row swaps only that side, so the list keeps
 its scroll position and any helper group you had open.</p>
-<p>On a phone, opening a pane shows a chat with the agent rather than its raw
-terminal, for a Claude Code pane and Flockdeck's own chat client (see
+<p>On a phone, opening a pane shows its terminal for now, not a chat (see
 <strong>Your agents on your phone</strong>, below). When an agent stops to ask a question
-with set answers, it appears as buttons, so you can answer with a tap rather
-than typing into the terminal.</p>
+or for a permission, the phone says so and which tool it is; the question
+and the command are read, and answered, at the desk (see below).</p>
 <h2>Your agents on your phone</h2>
+<p>For now the chat is not sent to a phone. The relay can read the connection the
+chat travels on, so until the text it carries is checked and sealed, opening a
+pane on a phone shows its terminal, which is encrypted end to end, and the pane
+list shows who is waiting and why but not what the agent said. The chat is still
+on the desktop. The rest of this section describes the chat as it will work once
+that is done.</p>
 <p>Opening a pane from a paired device shows a chat with the agent, not its raw
 terminal, for a Claude Code pane and for Flockdeck's own chat client (the
 built-in Anthropic, OpenAI, Google and OpenAI-compatible agents). Anything
@@ -297,11 +302,21 @@ arriving is never folded mid-stream; jumping to it from search opens
 whichever fold is in the way. Each turn's tool calls and thinking fold into
 one line, &quot;12 steps · 3 files edited · 4 commands&quot;, tapped open to see each
 step; an edit shows its diff, with line numbers. A question
-or a permission prompt appears as a card with buttons in the chat, rather
-than needing the terminal. Multiple choice, a typed answer, and Yes/No for a
-permission are all covered, including a call that asks several questions at
-once: answer them one at a time on the card, then send them all together.
-Each reply also carries its own <strong>Copy</strong>, for the whole thing as Markdown,
+or a permission prompt shows as a card that says what is waiting and for which
+tool, such as &quot;Run a command, details on the desktop&quot;, and has no buttons. The
+command, the file, the diff and the question itself stay on the desktop, because
+they can hold a key or a password and the phone is reached through the relay.
+Answer at the desk, or open the pane's terminal view from the phone, where the
+whole prompt is shown and the answer is typed over the encrypted connection.
+Earlier versions answered a question with buttons on the phone; that is no
+longer done. Tool rows are not sent to a phone at all for now.</p>
+<p>This needs a phone app that hides Yes and No for a card marked <code>redacted</code>. An
+older app draws Yes and No whenever a card is there, and presses the terminal's
+answer without showing what it is. The fix is in flockdeck-remote v0.2.51. It
+reaches phones when the relay is next deployed. Until a phone shows the new
+cards, do not answer a permission card from a phone: answer at the desk, or
+open the pane's terminal view.</p>
+<p>Each reply also carries its own <strong>Copy</strong>, for the whole thing as Markdown,
 and <strong>Quote</strong>, which drops a paragraph or so of it into the box, quoted,
 ahead of whatever you've already typed. A message you start and don't send
 is kept too, per agent, in that browser, so leaving the chat and coming back
@@ -318,18 +333,17 @@ it. The chat header, and each row in the list below, also says what the
 agent has spent in its conversation (a token count and the tightest of its
 usage windows for one on a subscription, or a rough cost in dollars for one
 paying by the token). The usage window itself is coloured once it is close to running out.</p>
-<p>Every open pane also appears in the paired device's list with its latest
-reply, or the question it's waiting on, a time, and an unread dot, so you
-can see what's happened everywhere without opening each one. Opening the
-list again after a while away leads with <strong>Since you last looked</strong>: new
-replies, agents that finished, and ones that started waiting, since this
-device last had it open. A tap on any of those jumps to and
+<p>Every open pane also appears in the paired device's list with its status and
+what it is waiting on (the agent's latest reply is not sent for now), a time,
+and an unread dot, so you can see what's happened everywhere without opening
+each one. Opening the list again after a while away leads with <strong>Since you last
+looked</strong>: new replies (a count only, with no text), agents that finished, and
+ones that started waiting, since this device last had it open. A tap on any of those jumps to and
 highlights the first row it counts, opening its helper group first if that
 was folded. It says nothing once there is nothing honest left to count. One
-waiting on a permission offers Yes and No right there in the list; one
-waiting on a single, short question offers a button for each option;
-anything more (several questions at once, a typed answer) still just
-opens the chat, the way tapping the row always has. Messages Flockdeck
+waiting on a permission or a question says so in the list, with the tool
+named; tapping the row opens the pane's terminal for now, and the answer is
+given at the desk or in the terminal view. Messages Flockdeck
 itself injects (a background task finishing, a session notice) show as
 small notes, never as if you had typed them.</p>
 <p>A lead agent's own helpers (started by <code>flockdeck spawn</code>)
@@ -447,8 +461,9 @@ it and what it prints) is end-to-end encrypted between this machine and the
 paired browser, with keys the relay hands out but never holds. Only the
 terminal and the recordings viewer are: when either side has no registered key,
 the terminal is served unencrypted, and the recordings viewer is not served. Everything else passes through the relay decrypted, so it is
-<strong>trusted</strong>, and whoever runs it could read it: the chat view of a pane and
-what you type into it, the state and latest replies of every pane, pictures you
+<strong>trusted</strong>, and whoever runs it could read it: the state of every pane (its
+name, directory, branch, status and what it is waiting for, but not what an
+agent said or the text of a permission request or question), pictures you
 attach, diffs, commit, push and pull request data, and anything typed into a
 dialog, an API key included. The relay never sees this machine's local token or
 the API keys kept here, though anything typed into a remote window, a shell
@@ -550,8 +565,8 @@ shared relay cannot read them, unless a side has no registered key, or the relay
 swaps or withholds the keys it hands out or tampers with the client it serves
 (see <strong>What the relay can see</strong>). Apart from push notification content, and terminals (except in the cases
 above), the operator can read everything else that passes through: pane state,
-the chat view, diffs, commit and pull request data, pictures and any API key
-typed into a dialog. It is not generally
+diffs, commit and pull request data, pictures and any API key typed into a
+dialog. It is not generally
 available yet. The
 relay's own configuration is described in
 <a href="https://docs.flockdeck.ai/self-hosting/overview.html" target="_blank" rel="noopener noreferrer">Self-hosting the relay</a>.</p>

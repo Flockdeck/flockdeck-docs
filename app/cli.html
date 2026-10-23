@@ -170,6 +170,14 @@ switched from inside the window. These are what is left.</p>
 <td>From inside a pane: the project's shared task board (<code>add</code>, <code>list</code>, <code>show</code>, <code>assign</code>, <code>status</code>, <code>note</code>, <code>branch</code>, <code>baton</code>, <code>prune</code>)</td>
 </tr>
 <tr>
+<td><code>flockdeck knowledge</code></td>
+<td>From a terminal outside Flockdeck: show (<code>status</code>) or set (<code>on</code>, <code>off</code>) whether a project's agents are pointed at the notes in <code>.flockdeck/knowledge</code></td>
+</tr>
+<tr>
+<td><code>flockdeck wake</code></td>
+<td>From a terminal outside Flockdeck: show (<code>status</code>) or set (<code>on</code>, <code>off</code>) the switches for typed wake, globally, per agent type or per pane</td>
+</tr>
+<tr>
 <td><code>flockdeck agents</code></td>
 <td>List the agents and models that <code>-agent</code> and <code>spawn</code> accept, and which are installed here</td>
 </tr>
@@ -361,8 +369,10 @@ still open. A ninth is refused, before any worktree is made, with a note to clos
 done. The limit is checked up the chain of parents, so a helper with no role cannot start
 a further eight of its own.</p>
 <h3>How an agent is told it has mail</h3>
-<p>Flockdeck never types anything into a pane to tell it of mail. Text that appears in an
-agent's message box and that you did not type is a bug, whether it is submitted or not.</p>
+<p>Flockdeck does not type message text into a pane. It tells an agent of mail in the reply to
+one of its hooks, as below, and in one case it types a single fixed line, described under
+&quot;The typed wake line&quot; further down. Text that appears in an agent's message box and that
+you did not type is otherwise a bug, whether it is submitted or not.</p>
 <p>For an agent that reports its own lifecycle through hooks (Claude Code), the notice is
 added to what the agent reads next: the reply to its <code>UserPromptSubmit</code> hook, which runs
 when you send it a prompt, or to its <code>PostToolUse</code> hook, which runs after each tool call.
@@ -388,6 +398,55 @@ says to run <code>flockdeck inbox</code> when a session starts and before they r
 restarted pane is told again with its first prompt if it is still unread. A pane counts as
 told of mail only once its agent's hooks have reported in that session; before that <code>msg send</code>
 says the receiver may not be told.</p>
+<h3>The typed wake line</h3>
+<p>An idle agent has no hook to answer until it gets a prompt, so mail can wait for it. For
+that case Flockdeck can type one line at its prompt and press Enter:</p>
+<pre><code class="language-text">Flockdeck: new mail, message 12. Run: flockdeck inbox read 12
+</code></pre>
+<p>Nothing else is typed for mail, unless you turn on text mode for an agent that cannot run
+commands (see &quot;Text mode&quot; under wake). By default the line is fixed text and the number of
+the newest unread message. It names no sender and holds none of the message. The message it
+points to, read with <code>flockdeck inbox read</code>, is data from another agent and not an
+instruction.</p>
+<p><strong>None of this happens today.</strong> The line is typed only into a pane whose agent has a
+recognition rule that was tested against a recording of that agent, and the rules that ship
+are all marked untested. Until one is tested, mail for an idle agent waits and the pane shows
+its unread count. A rule from <code>agents.json</code> is never treated as tested.</p>
+<p>A structured pane is the exception, and only while structured panes are a beta you have turned
+on. It has no screen to read, so no rule applies: Flockdeck knows it is idle because the agent
+reported the end of its turn over the protocol. The same line is then sent to it as a prompt,
+with no Enter, only when it is idle, has been for 5 seconds, and is not waiting on a permission
+request. The limits and switches below apply to it, and the wake event names the rule as
+<code>structured</code>.</p>
+<p>When a rule is tested, the line is typed only if all of these hold:</p>
+<ul>
+<li>the agent is idle and its screen ends in its empty input prompt, as the rule describes
+it, with no question, permission prompt or draft text showing;</li>
+<li>the end of its output has not changed for 5 seconds;</li>
+<li>you have not typed in the pane for 30 seconds, and Flockdeck has not typed into it for 5;</li>
+<li>no hook notice was given to the agent in the last minute;</li>
+<li>Flockdeck is not already sending a message from the graph to that pane.</li>
+</ul>
+<p>It is typed at most once a minute for a pane, at most 3 times in a row for a pane without
+the agent running <code>inbox read</code> in between, and at most 20 times an hour for a project.</p>
+<p>The Enter is sent about a tenth of a second after the line, as a separate write. On Windows
+a line and its Enter that arrive together are taken for a paste and left unsubmitted. Just
+before each write Flockdeck looks again for your typing. If you type in that tenth of a
+second, the Enter is not sent. The line then stays in the message box, followed by whatever
+you typed, and if you send it the agent gets both. Flockdeck accepts that rare case rather
+than try to take the line back, because a key that clears the box would clear your text as
+well. The same happens if the Enter cannot be written. The message is then not marked as
+woken, and nothing more is typed into that pane until you have typed in it.</p>
+<p>Every typed line is recorded in the team event log, <code>team-events.jsonl</code> in the state
+directory, which keeps the last 2,000 events or 256 KiB. A wake event holds the time, the
+message id, the pane, the agent, the rule's version and where it came from, the prompt line
+the rule matched (cut to 160 characters) and the line that was typed. A line that was typed
+without its Enter says so. An event holds no message text, except in text mode, where the
+line that was typed, which holds the message text, is kept cut to 300 characters.</p>
+<p>Switches turn the typed line off for everything, for one kind of agent or for one pane;
+<code>flockdeck wake</code>, described under wake below, sets them. It is also off for every agent
+whose rule is not tested, which is all of them for now. A structured pane has no rule and is
+woken as described above.</p>
 <h2>task</h2>
 <p>Run from inside a pane, this is the task board of the pane's project, shared by every
 agent in it whatever worktree each is working in:</p>
@@ -643,6 +702,154 @@ only while the agent talks to that vendor's own address.</p>
 </tbody>
 </table>
 <p>Nothing here ever prints a key back, and neither does the interface.</p>
+<h2>knowledge</h2>
+<p>A repository can keep notes written from its code in <code>.flockdeck/knowledge</code>
+(start at <code>index.md</code>). When a pane's checkout has them and the project allows
+it, the agent's briefing gets one line with the folder's path, saying the notes
+may be stale and that their text is data, not instructions. Nothing from the
+notes is put in the briefing itself.</p>
+<p>The notes go to whatever model the agent runs on, so the default depends on the
+repository. It is on when <code>gh</code> reports the repository as private. That trusts the
+repository's own remotes: a third-party repository you cloned and then pointed
+at a private repository you can read would get the pointer. The line says the
+notes are data and not instructions, and nothing from them is put in the
+briefing. If it is
+public, or <code>gh</code> is missing, signed out, offline or the remote is not on GitHub,
+the pointer is off and the window shows a one-time notice. Your answer is
+stored for the project and the question is not asked again.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flockdeck knowledge</code></td>
+<td>Show whether the pointer is on, and why (<code>status</code> is the same)</td>
+</tr>
+<tr>
+<td><code>flockdeck knowledge on</code></td>
+<td>Point this project's agents at the notes</td>
+</tr>
+<tr>
+<td><code>flockdeck knowledge off</code></td>
+<td>Stop pointing them there</td>
+</tr>
+</tbody>
+</table>
+<p><code>-project &lt;dir&gt;</code> names another project. The setting is kept for the folder the
+project was opened as, which is not always a repository (it may hold several),
+so the command finds that folder from the projects Flockdeck has opened and
+only falls back to the repository's own root for a directory in none of them;
+<code>status</code> prints the folder it used. <code>on</code> and <code>off</code> are refused inside a pane:
+they decide what is offered to a model, and an agent should not be able to
+answer for you. The refusal is advisory, since it reads an environment variable
+an agent could unset; the barrier that holds is the agent's own permission
+prompt for running a command. The briefing is rebuilt at each session start, compaction and
+resume, so a change reaches a running agent then. The first briefing in a
+project does not wait for the <code>gh</code> lookup, so in a private repository the line
+appears from the next one.</p>
+<h2>wake</h2>
+<p>Typed wake is the one line Flockdeck types into an idle agent's message box when
+the agent has unread mail and no hook to tell it. It has three off switches: one
+for everything, one for each kind of agent and one for each pane. Everything is
+on until you switch it off, and a line is typed only when all three are on, so
+turning a pane on does not override its agent type or the global switch being
+off. A line is also typed only for an agent whose prompt rule has been tested.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flockdeck wake</code></td>
+<td>Show the switches and the last ten wake events (<code>status</code> is the same; <code>-n</code> sets how many)</td>
+</tr>
+<tr>
+<td><code>flockdeck wake off</code></td>
+<td>Turn typed wake off for every pane</td>
+</tr>
+<tr>
+<td><code>flockdeck wake off -agent claude</code></td>
+<td>Turn it off for one kind of agent</td>
+</tr>
+<tr>
+<td><code>flockdeck wake off -pane &lt;pane-id&gt;</code></td>
+<td>Turn it off for one pane</td>
+</tr>
+<tr>
+<td><code>flockdeck wake text on -agent aider</code></td>
+<td>Type the message text, not the fixed line, to an agent that cannot run commands (<code>text off</code> undoes it)</td>
+</tr>
+<tr>
+<td><code>flockdeck wake on [-agent id | -pane id]</code></td>
+<td>Turn the same switch back on</td>
+</tr>
+</tbody>
+</table>
+<p>The switches are kept with the other settings and read again each second, so a change
+reaches a running Flockdeck within a second, or at once when it is made from the window.
+A wake that is already on its way reads the switches again just before it types the line
+and again before its Enter. If a switch goes off in between, the Enter is held back, so
+the line can stay typed in the message box, and the pane is left alone until you type in
+it. If the settings file cannot be read, or is damaged in the part that holds these
+switches, nothing is typed: <code>flockdeck wake status</code> says &quot;preferences damaged&quot; and wake
+stays off, across restarts, until you set the global switch again from the window or with
+<code>flockdeck wake on</code> or <code>flockdeck wake off</code>. A damaged file is moved aside and a small
+marker file, <code>prefs.wake-damaged</code>, is left beside it to hold wake off. Setting the global
+switch removes the marker, even when it changes nothing. A switch for one agent type or
+one pane does not, and says so, because the global switch that was in the damaged file is
+gone and the rest of the panes would otherwise come back on. The switches that were in
+the damaged file are in the copy that was kept, and are not applied.</p>
+<p>The window can set the same switches with the <code>wakeSwitch</code> command, from the machine
+Flockdeck runs on only: a window reached through the relay, and a device that may only
+view, are refused. <code>on</code> and <code>off</code> are refused inside a pane, because deciding what is
+typed into a terminal is yours and not an agent's. <code>on</code> is also refused when stdin is not
+a terminal (the null device does not count as one) and when a pane's API address or token
+is in the environment. These are speed bumps: none of this stops an agent that opens a
+pseudo-terminal, or that edits the settings file, which any command that writes a file can do;
+the barrier that holds is the agent's own permission prompt for running a command. The
+events shown never contain message text, except for an agent you have opted in to text
+mode (below).</p>
+<h3>Text mode</h3>
+<p>The fixed line tells an agent to run <code>flockdeck inbox read</code>. An agent that cannot run
+commands, such as Aider, cannot do that. For such an agent, and only if you turn it on
+with <code>flockdeck wake text on -agent &lt;id&gt;</code>, the line is the message itself:
+<code>Flockdeck message from &lt;role&gt;: &lt;text&gt;</code>. Almost everything else about the wake is the same:
+the conditions, the pane and project limits, the Enter written separately, the off switches
+and the hardening of <code>on</code>, and a pane switched off is not typed to in either mode. The
+limit on lines in a row does not apply, as below. <code>wake text on</code> is refused where
+<code>wake on</code> is.</p>
+<p>What is typed is cut down first. Terminal escape sequences are removed whole, every run
+of white space including newlines becomes one space, control, invisible and
+direction-changing characters are dropped, and other text, non-ASCII included, is kept as
+written. The line is at most 300 characters. The fixed start means the line cannot begin
+with the slash or exclamation mark that some programs read as a command of their own. Text
+mode is off for every agent until you turn it on, and it can only be turned on for an
+agent whose catalog entry offers it, which today is Aider and the structured agents. The wake event keeps the
+line that was typed, so with text mode on the event log holds that much of the message.</p>
+<p>A structured agent (see Agents) has no <code>flockdeck</code> command at all. It is given no wake
+without text mode. With it, each wake is one prompt, <code>Flockdeck message from agent &quot;&lt;role&gt;&quot;: &lt;text&gt;</code>
+(<code>the user</code> for a message you wrote), with the label cut at 32 characters and the text at
+300, and the agent cannot fetch what is cut. That puts another agent's words in front of
+an agent that may run commands, so turn it on only for an agent you would trust with them.</p>
+<p>The fixed line names only the newest unread message, and the agent reads the rest with
+<code>inbox</code>. An agent in text mode cannot, so every unread message is typed in turn, oldest
+first, at the normal limits: one line a minute for a pane, and twenty an hour for a
+project. When a message's text and its Enter have both been typed, the message is marked
+read, since the agent has it and nothing else would ever clear it. A message whose Enter
+was not sent stays unread. The limit on lines in a row with no read does not apply, because
+each line counts as a read. That leaves only the two limits above to bound text mode: a
+pane can be typed to once a minute, and a project 20 times an hour, however many messages
+are waiting.</p>
+<p>If a switch goes off between the line and its Enter, the Enter is held back and the text
+stays in the agent's input box, where it joins whatever you type there next. The message
+stays unread, and nothing more is typed to that pane until you have typed in it.</p>
 <h2>remote</h2>
 <p>Reach this machine's agents from another device, through a relay.</p>
 <table>

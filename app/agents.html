@@ -151,6 +151,56 @@ begins like a priced model, is shown in tokens with no dollars, because a
 made-up price is worse than none. An API agent given an address of its own,
 such as a gateway's, is not priced at all, since what it charges is not the
 vendor's list price.</p>
+<h2>Structured agents (beta)</h2>
+<p>A structured agent is one Flockdeck talks to over the Agent Client Protocol
+instead of in a terminal. Its pane has no screen: the new interface's drawer
+shows its conversation, a box to send it a prompt and a Stop button, and the
+current window shows a stub line and sends it nothing. Today the one offered is
+opencode (structured). There is none for Claude Code.</p>
+<p>It is off until you turn it on. Put <code>&quot;structuredPanes&quot;: true</code> in <code>prefs.json</code>
+in the state directory (there is no setting for it in the window); until then
+the picker does not offer a structured agent. Turning it off again takes effect
+when you restart a pane or when the agents are read again, and does not end a
+running pane.</p>
+<p>What to know before you use one:</p>
+<ul>
+<li><strong>Approval is at the desk.</strong> A permission request is answered from a window on
+this machine, by choosing one of the options the agent offered. A phone gets no
+notification for it and cannot answer it, and a window reached through the
+relay is told its name, status, directory, branch, project, agent and model, and
+no text the agent wrote. Nothing is answered for you; a request still open when you stop the turn, close or restart
+the pane or quit is answered <em>cancelled</em>.</li>
+<li><strong>The cards may gate nothing.</strong> opencode, as shipped, runs shell commands,
+writes and edits without asking, so no permission card appears for them.
+Flockdeck does not change that; the drawer header of such a pane says so for as
+long as the pane is open. The setting <code>{&quot;permission&quot;:{&quot;bash&quot;:&quot;ask&quot;,&quot;edit&quot;:&quot;ask&quot;}}</code> in opencode's
+own configuration makes it ask.</li>
+<li><strong>Mail needs an opt-in.</strong> A structured agent has no <code>flockdeck</code> command and is
+not given the pane identity one needs, so it cannot run <code>flockdeck inbox</code>. By
+default it is not woken by mail at all, and its briefing says mail is not
+available to it. <code>flockdeck wake text on -agent opencode-acp</code> turns it on for
+that agent type. Then each wake is one prompt holding the oldest unread
+message, as <code>Flockdeck message from agent &quot;&lt;role&gt;&quot;: &lt;text&gt;</code> (<code>the user</code> for a
+message you wrote), and the message counts as read once the agent takes it.
+This puts text written by another agent in front of an agent that may run
+commands, as if it were a turn from you. What limits it: the fixed start of the
+line, one line with escapes and control characters removed, the sender label cut
+at 32 characters, the text cut at 300 characters, and a briefing that tells the
+agent to treat the text as a message from another agent and not as your
+instruction. The agent cannot fetch what is cut. Leave it off for an agent you
+would not trust with a peer's words.</li>
+<li><strong>A login or Node problem</strong> shows as a blocked pane marked &quot;needs setup&quot;, and
+as &quot;Needs setting up&quot; in the team graph, with the one step to take: sign in with
+the agent's own tool (Flockdeck never signs in), install the agent, or install Node 20 or
+newer where the adapter needs it and restart Flockdeck, since a new Node on the
+path is only seen by a restarted Flockdeck. Start the pane again after the other
+two.</li>
+<li><strong>A restart starts a new session.</strong> The earlier entries stay above a line saying
+the agent was restarted. If the new agent cannot be started, they stay too, with
+a line giving the reason.</li>
+<li><strong>Nothing is recorded or exported.</strong> Recording and export are not available for a
+structured pane yet.</li>
+</ul>
 <h2>An endpoint's address</h2>
 <p>The OpenAI-compatible endpoint ships with no address, because none would be
 right for everybody, so it waits under <strong>not installed</strong> until it has one.
@@ -475,8 +525,8 @@ nothing. Settings › Agents &amp; models lists the roles to read; they are chan
 <h3>The team and messages</h3>
 <p>Every agent's briefing has a &quot;Your team&quot; section, the other agent panes of its project
 as they were when the agent started, and a &quot;Messages&quot; section. Targets, limits, the
-one-line notice and what Flockdeck writes to an inbox itself are in
-<a href="/app/cli.html">The command line</a>.</p>
+one-line notice, the fixed line that can wake an idle agent and what Flockdeck writes to an
+inbox itself are in <a href="/app/cli.html">The command line</a>.</p>
 <p>The built-in roles say when to use messages: the manager writes to the agents it started to
 answer a question or change a task, and planners, workers, reviewers, testers and docs agents
 write to the manager when they are blocked. Planners, workers, reviewers, testers and docs
