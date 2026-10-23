@@ -152,6 +152,31 @@ or for new panes with <strong>Settings › General › Auto-approve read-only
 in new panes</strong>; a pane started from another one (a
 <code>flockdeck spawn</code> helper) starts as that pane is.
 A pane keeps its setting across restarts, whichever way you left it.</p>
+<h2>Reading Flockdeck mail</h2>
+<p>Reading Flockdeck mail is allowed in every pane, whether or not this switch is
+on, and it does not count towards the pane's auto-approved calls. Only these
+forms are allowed, written exactly so:</p>
+<ul>
+<li><code>flockdeck inbox</code>, with <code>-all</code> and <code>-json</code> each at most once</li>
+<li><code>flockdeck inbox read &lt;id&gt;</code>, with <code>-json</code> before the id if you want it, and an
+id of one to nine digits</li>
+</ul>
+<p>Anything else is asked about as usual: <code>-wait</code>, <code>-follow</code>, any other flag or
+extra word, sending a message (<code>flockdeck msg send</code>), every other subcommand,
+a path to the program (<code>./flockdeck</code>), a variable set in front of it, a pipe,
+a quote, or a command over 4 KiB. It is also asked about when the folder the
+command runs in holds a file named <code>flockdeck</code> or starting with <code>flockdeck.</code>
+(<code>flockdeck.exe</code>, <code>flockdeck.ps1</code> and so on, in any letter case), since the
+shell could run that instead. A project that builds its own <code>flockdeck</code> binary
+into its root therefore never has mail reads allowed in that folder. The same
+goes when a <code>flockdeck</code> earlier on the pane's launch PATH than this application
+would run instead of it, when no <code>flockdeck</code> is found on the PATH at all, or
+when the PATH has a <code>~</code> entry. Words must be
+separated by single spaces.</p>
+<p>This works for agents that report their tool calls to Flockdeck (Claude Code)
+and for the built-in chat client. Other command-line agents have approval
+modes of their own, which Flockdeck does not change; their briefings say how to
+allow <code>flockdeck inbox</code>.</p>
 
   </article>
 </main>
