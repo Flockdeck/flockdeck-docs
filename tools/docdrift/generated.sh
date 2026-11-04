@@ -79,8 +79,20 @@ case "${1:-}" in
 regenerate)
   tag=${2:-$(latest_tag)}
   sha=$(fetch_flockdeck "$tag")
-  rm -rf "$root/app" "$root/self-hosting"
-  (cd "$work/flockdeck" && go run ./cmd/docgen -out "$root")
+  # Move the old pages aside, not delete them, so a docgen failure (an old Go,
+  # say) leaves the working tree as it was.
+  mkdir "$work/old"
+  for d in app self-hosting; do
+    if [ -d "$root/$d" ]; then mv "$root/$d" "$work/old/$d"; fi
+  done
+  if ! (cd "$work/flockdeck" && go run ./cmd/docgen -out "$root"); then
+    echo "docgen failed; restoring app/ and self-hosting/ as they were" >&2
+    rm -rf "$root/app" "$root/self-hosting"
+    for d in app self-hosting; do
+      if [ -d "$work/old/$d" ]; then mv "$work/old/$d" "$root/$d"; fi
+    done
+    exit 1
+  fi
   printf '%s %s\n' "$tag" "$sha" >"$stamp"
   echo "regenerated from flockdeck $tag ($sha); review with git diff, then commit .docs-generated-from with it"
   ;;
@@ -107,7 +119,10 @@ check)
 
 upstream)
   report=${2:?usage: generated.sh upstream REPORT}
-  read -r stamped _ <<<"$(tr -d "[:cntrl:]" <"$stamp")" || stamped=unknown
+  # A missing or empty stamp reads as "unknown", not as an empty version.
+  stamped=
+  if [ -f "$stamp" ]; then read -r stamped _ <<<"$(tr -d "[:cntrl:]" <"$stamp")"; fi
+  [ -n "$stamped" ] || stamped=unknown
   tag=$(latest_tag)
   fetch_flockdeck "$tag" >/dev/null
   scratch_copy

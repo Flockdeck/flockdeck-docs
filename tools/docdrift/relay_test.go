@@ -291,3 +291,56 @@ func TestRelaySnapshotIsWellFormed(t *testing.T) {
 		t.Errorf("snapshot/relay.version = %q, want a bare semver like 0.2.50", v)
 	}
 }
+
+func TestLoadAllowSplitsOnTab(t *testing.T) {
+	p := t.TempDir() + "/allow.txt"
+	if err := os.WriteFile(p, []byte("-foo\tintentionally omitted\n-bar \t hosted only\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	got, err := loadAllow(p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got["-foo"] != "intentionally omitted" || got["-bar"] != "hosted only" {
+		t.Errorf("got %q", got)
+	}
+}
+
+func TestParseRelayHelpSingleLetterBool(t *testing.T) {
+	flags, err := parseRelayHelp("Flags for serve:\n  -addr string\n    \tlisten address (default \":8080\")\n  -q\tquiet\n  -v\tverbose output\n")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, n := range []string{"-addr", "-q", "-v"} {
+		if _, ok := flags[n]; !ok {
+			t.Errorf("%s not parsed: %v", n, flags)
+		}
+	}
+	if flags["-q"].Usage != "quiet" || flags["-addr"].Default != ":8080" {
+		t.Errorf("got %+v", flags)
+	}
+}
+
+func TestServeFenceCountsOnlyServeFlags(t *testing.T) {
+	md := "```\ndocker run -d -p 8080:8080 img flockdeck-relay serve -addr :8080\nls -la\n```\n" +
+		"```\ndocker run \\n  -p 1:1 \\n  img flockdeck-relay serve \\n  -data /d \\n  -trust-proxy\nls -la\n```\n"
+	d := parseConfigDoc(md)
+	for _, want := range []string{"-addr", "-data", "-trust-proxy"} {
+		if !d.Mentions[want] {
+			t.Errorf("%s not seen", want)
+		}
+	}
+	for _, not := range []string{"-d", "-p", "-la"} {
+		if d.Mentions[not] {
+			t.Errorf("%s counted as a serve flag", not)
+		}
+	}
+}
+
+func TestNewFindingsKeepsAllowlistFindings(t *testing.T) {
+	f := "allowlist entry -trial-length names a flag the relay no longer has; remove it"
+	got := newFindings([]string{f, "x"}, []string{f, "x"})
+	if len(got) != 1 || got[0] != f {
+		t.Errorf("got %q", got)
+	}
+}

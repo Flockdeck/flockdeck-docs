@@ -17,7 +17,7 @@ type relayFlag struct {
 }
 
 var (
-	flagLine    = regexp.MustCompile(`^  -([A-Za-z0-9][A-Za-z0-9_-]*)(?: .*)?$`)
+	flagLine    = regexp.MustCompile(`^  -([A-Za-z0-9][A-Za-z0-9_-]*)(?:[ 	].*)?$`)
 	defaultTail = regexp.MustCompile(`\(default ("[^"]*"|[^)"]*)\)\s*$`)
 	orGroup     = regexp.MustCompile(`\(or\b[^)]*\)`)
 	envName     = regexp.MustCompile(`FLOCKDECK_RELAY_[A-Z0-9_]+`)
@@ -60,6 +60,10 @@ func parseRelayHelp(text string) (map[string]relayFlag, error) {
 		if m := flagLine.FindStringSubmatch(l); m != nil {
 			flush()
 			cur = &relayFlag{Name: "-" + m[1]}
+			// A single-letter bool prints its usage on the same line, after a tab.
+			if _, usage, ok := strings.Cut(l, "	"); ok {
+				cur.Usage = usage
+			}
 		} else if cur != nil && strings.HasPrefix(strings.TrimLeft(l, " "), "\t") { // flag prints "    \t"
 			cur.Usage += " " + strings.TrimSpace(l)
 		} else if strings.TrimSpace(l) == "" {
@@ -129,23 +133,32 @@ func parseConfigDoc(md string) docFlags {
 	d := docFlags{Rows: map[string]docRow{}, Mentions: map[string]bool{}}
 	lines := strings.Split(strings.ReplaceAll(md, "\r\n", "\n"), "\n")
 	var header []string
-	inFence, serveFence := false, false
+	inFence, serveCmd := false, false
 	for _, l := range lines {
 		t := strings.TrimSpace(l)
 		if strings.HasPrefix(t, "```") {
 			inFence = !inFence
-			serveFence = false
+			serveCmd = false
 			header = nil
 			continue
 		}
 		if inFence {
-			if strings.Contains(t, "flockdeck-relay serve") {
-				serveFence = true
+			// Only the serve command's own arguments count: the text after
+			// "flockdeck-relay serve" and any lines it continues with a
+			// trailing backslash. Flags of docker or of a later command in
+			// the same fence are not claims about serve.
+			args := ""
+			if i := strings.Index(t, "flockdeck-relay serve"); i >= 0 {
+				args = t[i+len("flockdeck-relay serve"):]
+				serveCmd = true
+			} else if serveCmd {
+				args = t
 			}
-			if serveFence {
-				for _, m := range flagInCode.FindAllStringSubmatch(t, -1) {
+			if serveCmd {
+				for _, m := range flagInCode.FindAllStringSubmatch(args, -1) {
 					d.Mentions[m[1]] = true
 				}
+				serveCmd = strings.HasSuffix(t, "\\")
 			}
 			continue
 		}

@@ -79,6 +79,17 @@ jobs:
             // still runs and asks for approval exactly as it did before
             // this check existed.
             let trusted = false;
+            // The actor is whoever triggered the run, not who wrote the code:
+            // a maintainer pushing to or updating a fork PR branch is the
+            // actor of a run over the contributor's changes. A run whose
+            // head is in another repository always goes through the gate.
+            const wr = context.payload.workflow_run;
+            const fullName = `${context.repo.owner}/${context.repo.repo}`;
+            if (wr.head_repository && wr.head_repository.full_name !== fullName) {
+              core.info(`the run's head is ${wr.head_repository.full_name}, a fork; treating as untrusted whoever the actor is`);
+              core.setOutput("trusted", false);
+              return;
+            }
             try {
               const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
                 owner: context.repo.owner,
