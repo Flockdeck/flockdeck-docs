@@ -1,0 +1,63 @@
+flockdeck runs your coding agents on hardware you control.
+
+Usage:
+  flockdeck [flags]
+
+Subcommands:
+  spawn [-worktree <branch>] [-split] [-tab <title>] [-shell] [-record] [-agent <id>] [-model <model>] [-role <id>] [-baton <ref> [-baton-send-elsewhere]] <task>
+        start another agent; run from inside a pane
+        run flockdeck spawn -h for what the flags do
+  baton list | baton show [-path] <baton-id>
+        the handoffs agents have made, which spawn -baton starts a helper from
+  peer-name <name>
+        report the name another Claude session would address this pane by; run from inside a pane
+  close [-force] <pane-id> | close -finished
+        close another pane, or every finished one; run from inside a pane
+  team [-json]
+        list the agents of this pane's project, with role and status; run from inside a pane
+  msg send <target> <text...>
+        message another agent by pane id, name or role; run from inside a pane
+  inbox [-all] [-json] [-wait <duration>] | inbox -follow | inbox read <id>
+        the messages other agents sent this pane; run from inside a pane
+  task add <title> [-body text] [-role r] [-branch b] | list [-state s] [-role r] [-mine] [-json]
+       | show <id> | assign <id> <who> | status <id> <state> [-note text] | note <id> <text>
+       | branch <id> <branch> | baton <id> <baton-id> | prune [-days N]
+        the project's shared task board; run from inside a pane
+  recordings [-dir] [-json]
+        list the transcripts panes have recorded, newest first; -dir prints the folder they are kept in
+  recordings export [-o file] [-reveal] <pane-id | conversation-id>
+        write an agent's stored conversation as a transcript, whether or not the pane
+        was recorded; only Claude Code stores a conversation flockdeck can read
+  knowledge [status | on | off] [-project dir]
+        whether agents' briefings point at the project's notes in .flockdeck/knowledge;
+        on and off are refused inside a pane
+  wake [status | on | off] [-agent id | -pane id]
+        the off switches for typed wake (global, per agent type, per pane) and the
+        last wake events; on and off are refused inside a pane
+  agents
+        list the agents flockdeck can run, with their models
+  chat [flags]
+        flockdeck's own chat client, which an API agent's pane runs; chat -h for its flags
+  keys [list|set <agent>|clear <agent>|check <agent>|endpoint <agent> [<url> | default]]
+        the API keys agents talk to a model API with
+  remote enable [-relay <url>] [-name <name>] [-join <code>] [-invite <code>]
+        enrol this machine with a relay, so another device can reach its agents
+  remote pair [-desktop] | status | devices | revoke <id or name> | disable | remove [-force] [-yes]
+        pair a device, and see or change what is paired
+  remote delete-account [-yes -confirm <text>]
+        erase the account on the relay, with every machine and device in it
+  remote rename [-device <id or name>] <name>
+        rename this machine, or a paired device, as every device lists it
+  remote move [-invite <code>] [-join <code>] [-name <name>] [-yes] <relay>
+        move this machine to another relay; every device then pairs again
+  update [-check] [-version=<release> [-yes]]
+        fetch the latest release, or the one named, and put it in place
+  helpers list [-check] | install [-version=<version>] [-yes] <helper>
+  helpers start|stop|open <helper> | uninstall [-purge-data] [-yes] <helper>
+        install, run and open helper apps such as lens; start, stop and open need Flockdeck running
+  help [<subcommand>]
+        this usage, or a subcommand's own
+
+Environment:
+  FLOCKDECK_UPDATE=off
+        do not look for new releases in the background; update still works

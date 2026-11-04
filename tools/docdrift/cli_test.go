@@ -139,3 +139,29 @@ func indexOf(s, sub string) int {
 	}
 	return -1
 }
+
+func TestParseDesktopHelpContinuationAndBrackets(t *testing.T) {
+	cmds, err := parseDesktopHelp(fixture(t, "desktop-v0.8.2-help.txt"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{
+		// task's alternatives continue on lines that start with "| ".
+		"task/add", "task/list", "task/show", "task/assign", "task/status",
+		"task/note", "task/branch", "task/baton", "task/prune",
+		// a bracketed group of alternatives.
+		"knowledge/status", "knowledge/on", "knowledge/off", "wake/status", "wake/on", "wake/off",
+		// bare words joined by a bar.
+		"helpers/list", "helpers/install", "helpers/start", "helpers/stop", "helpers/open", "helpers/uninstall",
+		"baton/list", "baton/show", "inbox/read", "recordings/export",
+	} {
+		if !cmds[want] {
+			t.Errorf("%s not parsed; got %v", want, sortedKeys(cmds))
+		}
+	}
+	for _, not := range []string{"task/-body", "task/|", "wake/-agent", "knowledge/-project", "helpers/-check"} {
+		if cmds[not] {
+			t.Errorf("%s parsed", not)
+		}
+	}
+}
