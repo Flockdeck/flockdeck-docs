@@ -118,10 +118,11 @@ ships() { [ -n "$(shipping_files "$1" "$2")" ]; }
 
 # ci_green: the latest run of the CI workflow for the commit, on a push to
 # main, finished and succeeded. A run still going, or none yet, is not green;
-# the workflow_run trigger comes again when it finishes.
+# the workflow_run trigger comes again when it finishes. Returns 2, not 1,
+# when GitHub could not be asked.
 ci_green() {
 	state=$(gh api "repos/$REPO/actions/workflows/$CI_WORKFLOW/runs?head_sha=$1&branch=$BASE_BRANCH&event=push&per_page=20" \
-		--jq '[.workflow_runs[]] | sort_by(.created_at) | last | (.status + "/" + (.conclusion // "none"))') || return 1
+		--jq '[.workflow_runs[]] | sort_by(.created_at) | last | (.status + "/" + (.conclusion // "none"))') || return 2
 	[ "$state" = "completed/success" ]
 }
 
@@ -144,7 +145,15 @@ main() {
 		if git merge-base --is-ancestor "$sha" "$last"; then
 			skip "$sha is already part of $last"
 		fi
-		ci_green "$sha" || skip "CI has not passed on $sha"
+		# 0 green, 1 not green, 2 the API call failed: an outage or a bad token
+		# is an error to see, not a quiet "CI has not passed".
+		rc=0
+		ci_green "$sha" || rc=$?
+		case $rc in
+			0) ;;
+			1) skip "CI has not passed on $sha" ;;
+			*) fail "could not ask GitHub whether CI passed on $sha" ;;
+		esac
 		ships "$last" "$sha" || skip "nothing that ships has changed since $last"
 		next=$(next_patch_tag "$last") || fail "'$last' is not a version"
 
