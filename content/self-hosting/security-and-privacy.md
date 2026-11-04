@@ -21,11 +21,17 @@ none is served without it, in plaintext, and a relay that holds back a device's
 key can cause that: the manual check below cannot show that a key was withheld.
 
 Everything else passes through the relay decrypted, so whoever operates the
-relay you use can see it: the chat view of a pane and what is typed into it,
-the state of a pane (what its agent has spent, its usage limits, and which
-model routing chose for it), the latest replies, photos attached from a
-phone, diffs and commit, push and pull request data, and an API key typed
-into a dialog.
+relay you use can see it: the state of a pane (its name, directory, branch,
+status and what it is waiting for), photos attached from a phone, and diffs
+and commit, push and pull request data.
+
+A desktop on v0.8.2 or later sends no conversation text. The words of a
+conversation, tool output, the command or question of a permission prompt, a
+pane's opening prompt and its latest reply stay on the desktop, and a device
+reached through the relay can't ask for them. A desktop older than v0.8.2 does
+send the chat view of a pane, so update the desktop before relying on this.
+The desktop also refuses to set or clear an API key from a device, so a
+key is never typed through the relay.
 
 End-to-end encryption defeats an honestly-run relay. It doesn't defend
 against a relay that's been actively compromised and tampered with to swap
