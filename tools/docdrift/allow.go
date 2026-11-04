@@ -24,8 +24,10 @@ func loadAllow(path string) (map[string]string, error) {
 		if line == "" || strings.HasPrefix(line, "#") {
 			continue
 		}
-		name, reason, _ := strings.Cut(line, " ")
-		reason = strings.TrimSpace(reason)
+		name, reason := line, ""
+		if i := strings.IndexAny(line, " 	"); i >= 0 {
+			name, reason = line[:i], strings.TrimSpace(line[i+1:])
+		}
 		if reason == "" {
 			return nil, fmt.Errorf("%s:%d: %q has no reason; every allowlist entry needs a one-line why", path, n, name)
 		}
