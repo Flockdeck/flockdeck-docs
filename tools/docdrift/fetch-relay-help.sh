@@ -41,17 +41,37 @@ denied() {
   exit 3
 }
 
-token=$(curl -fsS -u "${RELAY_GHCR_READ_USER}:${RELAY_GHCR_READ_TOKEN}" \
+# api CURL_ARGS...: GET with a timeout and retries on 5xx. Only a 401 or 403 is
+# a credential problem (exit 3); a network error, timeout or any other status
+# is a plain failure (exit 1), so an outage is not reported as an expired token.
+api() {
+  local out code
+  out=$(mktemp)
+  code=$(curl -sS --max-time 30 --retry 3 -o "$out" -w '%{http_code}' "$@") || {
+    rm -f "$out"
+    echo "request to ghcr.io failed (network error or timeout)" >&2
+    exit 1
+  }
+  case $code in
+    2??) cat "$out"; rm -f "$out" ;;
+    401 | 403) rm -f "$out"; denied ;;
+    *) rm -f "$out"; echo "ghcr.io answered HTTP ${code}" >&2; exit 1 ;;
+  esac
+}
+
+token=$(api -u "${RELAY_GHCR_READ_USER}:${RELAY_GHCR_READ_TOKEN}" \
   "https://ghcr.io/token?service=ghcr.io&scope=repository:${repo}:pull" |
-  sed -n 's/.*"token":"\([^"]*\)".*/\1/p') || denied
+  sed -n 's/.*"token":"\([^"]*\)".*/\1/p')
+[ -n "$token" ] || { echo "ghcr.io returned no token" >&2; exit 1; }
 
 tag=${RELAY_TAG:-}
 if [ -z "$tag" ]; then
   tags=""
   url="https://ghcr.io/v2/${repo}/tags/list?n=1000"
   while [ -n "$url" ]; do
-    page=$(curl -fsS -D "${TMPDIR:-/tmp}/relay-tags.headers" -H "Authorization: Bearer ${token}" "$url") || denied
-    tags+=$(printf '%s' "$page" | grep -oE '"[0-9]+\.[0-9]+\.[0-9]+"' | tr -d '"')$'\n'
+    page=$(api -D "${TMPDIR:-/tmp}/relay-tags.headers" -H "Authorization: Bearer ${token}" "$url")
+    # A page of only non-semver tags (sha-*, latest) has no match; that is not an error.
+    tags+=$({ printf '%s' "$page" | grep -oE '"[0-9]+\.[0-9]+\.[0-9]+"' || true; } | tr -d '"')$'\n'
     next=$(tr -d '\r' <"${TMPDIR:-/tmp}/relay-tags.headers" | sed -n 's/^[Ll]ink: <\([^>]*\)>; rel="next".*/\1/p')
     if [ -n "$next" ]; then url="https://ghcr.io${next}"; else url=""; fi
   done
