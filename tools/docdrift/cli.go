@@ -9,10 +9,13 @@ import (
 )
 
 var (
-	cmdLine    = regexp.MustCompile(`^  ([a-z][a-z0-9-]*)\b(.*)$`)
-	bareWord   = regexp.MustCompile(`^[a-z][a-z0-9-]*$`)
-	codeBlock  = regexp.MustCompile(`(?s)<code[^>]*>(.*?)</code>`)
-	htmlTag    = regexp.MustCompile(`<[^>]*>`)
+	cmdLine   = regexp.MustCompile(`^  ([a-z][a-z0-9-]*)\b(.*)$`)
+	bareWord  = regexp.MustCompile(`^[a-z][a-z0-9-]*$`)
+	codeBlock = regexp.MustCompile(`(?s)<code[^>]*>(.*?)</code>`)
+	htmlTag   = regexp.MustCompile(`<[^>]*>`)
+	// groupHead matches "wake [status | on | off]": the command word followed
+	// by a bracketed group of bare-word alternatives, nothing nested.
+	groupHead  = regexp.MustCompile(`^([a-z][a-z0-9-]*) \[([^\[\]]*)\]`)
 	docCommand = regexp.MustCompile(`(?m)^[ \t]*(?:\$[ \t]*)?flockdeck[ \t]+([a-z][a-z0-9-]*)(?:[ \t]+([a-z][a-z0-9-]*))?`)
 )
 
@@ -39,25 +42,46 @@ func parseDesktopHelp(text string) (map[string]bool, error) {
 	if start < 0 {
 		return nil, fmt.Errorf("desktop help has no %q heading; did the help format change?", "Subcommands:")
 	}
-	cmds := map[string]bool{}
+	// A command whose alternatives do not fit on one line continues on lines
+	// that start with "| " (task's usage does); join them to the line above.
+	var entries []string
 	for _, l := range lines[start:] {
 		if strings.TrimSpace(l) == "" {
 			break // the section ends at the blank line before "Environment:"
 		}
-		m := cmdLine.FindStringSubmatch(l)
-		if m == nil {
-			continue // a description line
+		if t := strings.TrimSpace(l); strings.HasPrefix(t, "| ") && len(entries) > 0 {
+			entries[len(entries)-1] += " " + t
+			continue
 		}
-		top := m[1]
+		if cmdLine.MatchString(l) {
+			entries = append(entries, strings.TrimSpace(l))
+		} // else a description line
+	}
+	cmds := map[string]bool{}
+	for _, e := range entries {
+		top := strings.Fields(e)[0]
 		cmds[cmdKey(top)] = true
-		alts := strings.Split(strings.TrimSpace(m[0]), " | ")
-		for i, alt := range alts {
+		if m := groupHead.FindStringSubmatch(e); m != nil && strings.Contains(m[2], " | ") {
+			e = m[1] + " " + m[2] + e[len(m[0]):]
+		}
+		for i, alt := range strings.Split(e, " | ") {
 			f := strings.Fields(alt)
-			if i == 0 {
-				if len(f) > 1 && bareWord.MatchString(f[1]) {
-					cmds[cmdKey(top, f[1])] = true
+			if i > 0 && len(f) > 0 && f[0] == top {
+				f = f[1:] // "baton list | baton show"
+			} else if i == 0 {
+				f = f[1:]
+			}
+			if len(f) == 0 {
+				continue
+			}
+			// "helpers start|stop|open <helper>": bare words joined by a bar.
+			if strings.Contains(f[0], "|") && !strings.ContainsAny(alt, "[]") {
+				for _, w := range strings.Split(f[0], "|") {
+					if bareWord.MatchString(w) {
+						cmds[cmdKey(top, w)] = true
+					}
 				}
-			} else if len(f) > 0 && bareWord.MatchString(f[0]) && f[0] != top {
+			} else if bareWord.MatchString(f[0]) && f[0] != top {
 				cmds[cmdKey(top, f[0])] = true
 			}
 		}
