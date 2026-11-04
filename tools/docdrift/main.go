@@ -18,6 +18,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -72,10 +73,14 @@ func main() {
 	fmt.Printf("%s: no new findings (%d already on the base branch)\n", mode, len(findings))
 }
 
+// newFindings returns the head findings the base does not have. Allowlist
+// findings are never filtered: they depend on the help snapshot and the
+// allowlist, which the baseline run shares with the head run, so they would
+// always match and a stale entry could never fail a PR.
 func newFindings(head, base []string) []string {
 	var out []string
 	for _, f := range head {
-		if !contains(base, f) {
+		if strings.HasPrefix(f, "allowlist entry ") || !contains(base, f) {
 			out = append(out, f)
 		}
 	}
