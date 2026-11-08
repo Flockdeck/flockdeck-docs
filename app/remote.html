@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -143,8 +143,6 @@ them from one:</p>
 <li>making a code for another desktop to join this account;</li>
 <li>setting or clearing an API key (one typed on a phone would pass through
 the relay, which can read it);</li>
-<li>changing where an API agent sends its prompts, its address, since its key
-goes wherever that says;</li>
 <li>turning the check for updates on or off, or checking for one now, and
 listing or installing a specific version;</li>
 <li>exporting a transcript, showing one in the file manager, and opening the
@@ -278,8 +276,7 @@ list shows who is waiting and why but not what the agent said. The chat is still
 on the desktop. The rest of this section describes the chat as it will work once
 that is done.</p>
 <p>Opening a pane from a paired device shows a chat with the agent, not its raw
-terminal, for a Claude Code pane and for Flockdeck's own chat client (the
-built-in Anthropic, OpenAI, Google and OpenAI-compatible agents). Anything
+terminal, for a Claude Code pane. Anything
 else still opens as a terminal, because Flockdeck doesn't yet read what it's
 saying. Nothing to turn on: the phone asks the desktop when it opens a pane,
 and gets a chat back if there is one to give it. A <strong>Chat</strong>/<strong>Terminal</strong>
@@ -405,6 +402,13 @@ minutes after you leave it, you are told then.</li>
 <li><strong>Send nothing identifying</strong> has a notification say only &quot;An agent on <em>this
 machine</em> needs you&quot;, rather than naming the pane and its project.</li>
 </ul>
+<p>A structured agent (a new Claude Code or opencode pane starts as one) that is waiting on a permission
+or a question also sends this notification. It says &quot;Answer on the desktop&quot; and nothing of what the
+agent asked. The phone cannot answer yet: the phone app does not offer Allow or Deny, and structured
+panes are not sent to a phone over the relay. Because of that, new panes on a machine with paired
+devices or Remote stay terminal by default; Settings, General, <strong>New panes start as</strong> can
+choose Structured there. An agent left running on a structured pane stalls at its first permission
+until someone answers at the desk.</p>
 <p>A single agent that is chatty and safe to leave can also be muted from the
 bell in its own header on the phone, which leaves it out of what is sent
 while it goes on showing as waiting everywhere, including here. Muting lives
@@ -463,7 +467,10 @@ terminal and the recordings viewer are: when either side has no registered key,
 the terminal is served unencrypted, and the recordings viewer is not served. Everything else passes through the relay decrypted, so it is
 <strong>trusted</strong>, and whoever runs it could read it: the state of every pane (its
 name, directory, branch, status and what it is waiting for, but not what an
-agent said or the text of a permission request or question), pictures you
+agent said or the text of a permission request or question), the shape of your
+teams (which pane manages which, each pane's role, status, the kind of wait it is
+in, its unread count and the project name, but no pane or team names, goals or
+message text) which is not sealed until the team socket exists, pictures you
 attach, diffs, commit, push and pull request data, and anything typed into a
 dialog, an API key included. The relay never sees this machine's local token or
 the API keys kept here, though anything typed into a remote window, a shell
@@ -565,7 +572,7 @@ shared relay cannot read them, unless a side has no registered key, or the relay
 swaps or withholds the keys it hands out or tampers with the client it serves
 (see <strong>What the relay can see</strong>). Apart from push notification content, and terminals (except in the cases
 above), the operator can read everything else that passes through: pane state,
-diffs, commit and pull request data, pictures and any API key typed into a
+team shape (unsealed until the team socket exists), diffs, commit and pull request data, pictures and any API key typed into a
 dialog. It is not generally
 available yet. The
 relay's own configuration is described in

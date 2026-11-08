@@ -1,0 +1,169 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The team views | Flockdeck docs</title>
+<meta name="description" content="The switch above the main area chooses how the project is drawn: Team, Dependencies, Board, Changes and Replay. Team is the one the window opens on. A pane&#39;s own terminal and conversation are in the drawer, which any row or card can open.">
+<link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F1418">
+<meta property="og:title" content="The team views | Flockdeck docs">
+<meta property="og:description" content="The switch above the main area chooses how the project is drawn: Team, Dependencies, Board, Changes and Replay. Team is the one the window opens on. A pane&#39;s own terminal and conversation are in the drawer, which any row or card can open.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://docs.flockdeck.ai/app/views.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://docs.flockdeck.ai/app/views.html">
+<link rel="preload" href="/fonts/ibm-plex-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/docs.css">
+
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="wordmark" href="/"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><circle fill="#93A1A9" cx="9" cy="5.5" r="3.3"/><circle fill="#93A1A9" cx="16" cy="10.75" r="3.3"/><circle fill="#93A1A9" cx="16" cy="21.25" r="3.3"/><circle fill="#93A1A9" cx="9" cy="26.5" r="3.3"/><circle fill="#4FD1DB" cx="23" cy="16" r="3.3"/></svg>Flockdeck <span class="tag">docs</span></a>
+  <nav aria-label="Site">
+    <a href="/app/getting-started.html">Using Flockdeck</a>
+    <a href="/self-hosting/overview.html">Self-hosting</a>
+    <a href="https://flockdeck.ai/">flockdeck.ai</a>
+    <a href="https://github.com/Flockdeck/flockdeck-docs">Source</a>
+  </nav>
+</header>
+
+
+<main class="wrap docs-shell" id="main">
+  
+<nav class="docs-nav" aria-label="Documentation">
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Using Flockdeck</p>
+    <ol>
+      <li><a href="/app/getting-started.html">Getting started</a></li>
+      <li><a href="/app/panes.html">Panes and tabs</a></li>
+      <li><a href="/app/agents.html">Agents and models</a></li>
+      <li><a href="/app/status.html">Knowing who needs you</a></li>
+      <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
+      <li><a href="/app/spend.html">Spend and limits</a></li>
+      <li><a href="/app/rearranging.html">Rearranging what is already running</a></li>
+      <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
+      <li><a href="/app/worktrees.html">Git worktrees</a></li>
+      <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html" aria-current="page">The team views</a></li>
+      <li><a href="/app/github.html">GitHub</a></li>
+      <li><a href="/app/history.html">Resume</a></li>
+      <li><a href="/app/baton.html">Handing work to another agent</a></li>
+      <li><a href="/app/baton-details.html">Baton details</a></li>
+      <li><a href="/app/recording.html">Recording a pane</a></li>
+      <li><a href="/app/projects.html">Projects</a></li>
+      <li><a href="/app/persistence.html">What comes back, and what keeps running</a></li>
+      <li><a href="/app/remote.html">Flockdeck Remote</a></li>
+      <li><a href="/app/settings.html">Settings</a></li>
+      <li><a href="/app/shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="/app/cli.html">The command line</a></li>
+      <li><a href="/app/troubleshooting.html">When something is wrong</a></li>
+      
+    </ol>
+  </div>
+  
+  <div class="docs-nav-group">
+    <p class="eyebrow">Self-hosting</p>
+    <ol>
+      <li><a href="/self-hosting/overview.html">Self-hosting the Flockdeck relay</a></li>
+      <li><a href="/self-hosting/requirements.html">Requirements</a></li>
+      <li><a href="/self-hosting/deploying-the-relay.html">Deploying the relay</a></li>
+      <li><a href="/self-hosting/configuration.html">Configuration</a></li>
+      <li><a href="/self-hosting/storage-and-data.html">Storage and data</a></li>
+      <li><a href="/self-hosting/admin-and-invites.html">Admin and invites</a></li>
+      <li><a href="/self-hosting/connecting-desktops.html">Connecting desktops</a></li>
+      <li><a href="/self-hosting/security-and-privacy.html">Security and privacy</a></li>
+      <li><a href="/self-hosting/upgrading.html">Upgrading</a></li>
+      <li><a href="/self-hosting/troubleshooting.html">Troubleshooting</a></li>
+      
+    </ol>
+  </div>
+  
+</nav>
+
+  <article class="prose">
+    <p class="eyebrow">Using Flockdeck</p>
+<h1>The team views</h1>
+<p class="doc-lede">The switch above the main area chooses how the project is drawn: <strong>Team</strong>,
+<strong>Dependencies</strong>, <strong>Board</strong>, <strong>Changes</strong> and <strong>Replay</strong>. Team is the one the
+window opens on. A pane's own terminal and conversation are in the
+drawer, which any row or card can open.</p>
+<h2>Team</h2>
+<p>An outline with one row for each agent. A helper is indented under the agent that
+started it, and within a level the rows that need you come first, then ended
+panes, then working ones, then the rest. A row shows the agent, its role and
+task, what it is doing now, how long it has been in that state, and, on a team's
+manager, what the team has cost.</p>
+<p>A row with an amber bar is waiting on you for a permission or a question. A red
+bar is a pane that ended. Chips on a row say what else is going on: a file
+overlap with another agent, what the agent is waiting on, messages not yet read,
+and a quiet &quot;stuck&quot; for a working agent that has written nothing to its terminal
+for a while. A chip that names another agent is a link: hovering or focusing it
+lights both rows.</p>
+<p>The outline is one tab stop. The arrow keys move between rows, <kbd>Home</kbd>
+and <kbd>End</kbd> go to the ends, and <kbd>Enter</kbd> or <kbd>Space</kbd> opens
+the agent in the drawer. <kbd>Esc</kbd> closes the drawer and puts the keyboard
+back on the row.</p>
+<h2>Dependencies</h2>
+<p>The team's work as a tree of what blocks what, built from the tasks' <code>depends</code>
+lists. Work at the top is finished last. The <strong>Critical path</strong> is the chain of
+tasks that sets when the team can finish; times show only when the tasks carry an
+estimate, and without one the path is the longest chain. A task with nothing
+open blocking it and no owner is marked <strong>ready</strong>, and a task that appears under
+more than one blocker is drawn in full once and then folded as &quot;see above&quot;.</p>
+<p>Under the tasks are the agents that wait on each other. If they wait in a ring,
+none can move: the view names them as an N-way loop and has a button to ask the
+manager to break it. With several teams, a team's view lists the tasks it runs,
+the tasks that block them and the tasks that wait on them directly. Rows move
+like the Team outline.</p>
+<h2>Board</h2>
+<p>The project's tasks in a column for each state. A card shows the id, title, owner,
+branch and number of notes, and opens the agent that owns the task, or the
+<a href="/app/agents.html">Team dialog</a> when that agent is not open. <strong>Add and manage tasks…</strong>
+opens the dialog, where tasks are added, assigned and moved. A very long board
+lists the newest tasks and says how many it left out.</p>
+<h2>Goal tabs</h2>
+<p>Each team has a tab along the top, named after its goal, and a <strong>Solo</strong> tab holds
+panes in no team. A tab shows how many of its agents need you, or a dot for
+whether it is working. Choosing a tab limits the views to that team.</p>
+<ul>
+<li><strong>Rename</strong> by double-clicking a tab, or from the <strong>+</strong> menu. An empty name
+puts the goal's own back. Names are at most 80 characters.</li>
+<li><strong>Reorder</strong> by dragging a tab, or with <strong>Move left</strong> and <strong>Move right</strong> in the
+<strong>+</strong> menu.</li>
+<li><strong>Archive</strong> with the × on the tab. This hides the tab in this window and
+nothing else: the team keeps working, and a tab that gains an agent needing you
+puts a dot on the <strong>+</strong> menu. <strong>Archived goals</strong> in that menu bring it back.</li>
+</ul>
+<p>Names, order and archived goals are kept on the machine Flockdeck runs on and are
+not sent to a window reached through the <a href="/app/remote.html">relay</a>, which has no goal tabs.</p>
+
+  </article>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Flockdeck documentation.<br>
+       <span class="foot-note">The desktop app is free, with its source available for noncommercial use.</span></p>
+    <nav aria-label="Footer">
+      <a href="https://flockdeck.ai/">flockdeck.ai</a>
+      <a href="https://flockdeck.ai/privacy.html">Privacy</a>
+      <a href="https://flockdeck.ai/terms.html">Terms</a>
+      <a href="https://github.com/Flockdeck/flockdeck-docs">Source</a>
+    </nav>
+    <div class="foot-legal">
+      <p>© 2026 Jim Wright</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

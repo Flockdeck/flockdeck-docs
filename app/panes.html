@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html" aria-current="page">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -103,19 +103,19 @@ and a tab can hold one or several, split however you like.</p>
 </thead>
 <tbody>
 <tr>
-<td><kbd>Ctrl+Shift+T</kbd></td>
+<td><kbd data-key="newAgentTab">Ctrl+Shift+T</kbd></td>
 <td>A tab with one agent in it</td>
 </tr>
 <tr>
-<td><kbd>Ctrl+Shift+N</kbd></td>
+<td><kbd data-key="newShellTab">Ctrl+Shift+N</kbd></td>
 <td>A tab with a plain shell (no agent, no hooks)</td>
 </tr>
 <tr>
-<td><kbd>Ctrl+Shift+D</kbd></td>
+<td><kbd data-key="splitRight">Ctrl+Shift+D</kbd></td>
 <td>An agent beside the focused pane</td>
 </tr>
 <tr>
-<td><kbd>Ctrl+Shift+E</kbd></td>
+<td><kbd data-key="splitDown">Ctrl+Shift+E</kbd></td>
 <td>An agent below the focused pane</td>
 </tr>
 <tr>
@@ -140,14 +140,14 @@ shortcuts are on <kbd>Ctrl+Shift</kbd>, which agents do not use.</p>
 <li>Drag the divider between two panes to resize them, or reach it with
 <kbd>Tab</kbd> and use the arrow keys, and <kbd>Home</kbd> to share the room
 equally again.</li>
-<li><kbd>Ctrl+Shift+Z</kbd> gives the focused pane the whole tab, and gives it back;
+<li><kbd data-key="zoomPane">Ctrl+Shift+Z</kbd> gives the focused pane the whole tab, and gives it back;
 so does double-clicking the pane's header. The others keep running; they
 are simply not on screen.</li>
-<li><kbd>Ctrl+Shift+F</kbd> searches the focused terminal's scrollback.</li>
+<li><kbd data-key="findInTerminal">Ctrl+Shift+F</kbd> searches the focused terminal's scrollback.</li>
 <li>Select text with the mouse and <kbd>Ctrl+C</kbd> copies it; <kbd>Ctrl+V</kbd>
 pastes. With nothing selected, <kbd>Ctrl+C</kbd> goes to the agent, as it
 always did. <a href="/app/shortcuts.html">Keyboard shortcuts</a> has the rest, and macOS.</li>
-<li><kbd>Ctrl+Shift+W</kbd> closes a pane and stops the agent in it, without asking.
+<li><kbd data-key="closePane">Ctrl+Shift+W</kbd> closes a pane and stops the agent in it, without asking.
 It also ends what was started in the pane and is still running there: a
 shell's background jobs, a server an agent left going, a job that ignores
 the hangup. A program with windows of its own (a browser, an editor
@@ -164,7 +164,7 @@ let through unasked so far), and the pane keeps the setting across a
 restart of Flockdeck: see <a href="/app/status.html">Knowing who needs you</a>. Record is off
 until you turn it on too; export and record are not shown on a shell pane,
 which has no conversation. Showing the transcript file in your file manager is
-in <kbd>Ctrl+Shift+Y</kbd> and the command palette rather than the header, and works
+in <kbd data-key="paneInfo">Ctrl+Shift+Y</kbd> and the command palette rather than the header, and works
 only in a window on the machine Flockdeck runs on: see
 <a href="/app/recording.html">Recording a pane</a>.</p>
 <h2>One pane, several windows</h2>
@@ -178,7 +178,7 @@ it nearest the bottom left, where the latest lines are, with a note such as
 window instead. A pane's terminal is never
 made smaller than 20 columns by 5 rows or larger than 500 by 200.</p>
 <h2>Pane info</h2>
-<p><kbd>Ctrl+Shift+Y</kbd>, in the command palette and as the <code>ⓘ</code> in the pane header,
+<p><kbd data-key="paneInfo">Ctrl+Shift+Y</kbd>, in the command palette and as the <code>ⓘ</code> in the pane header,
 lists what names a pane in files, logs and commands, each with a <strong>Copy</strong>
 button, and <strong>Copy all</strong> puts the whole list on the clipboard as plain text.
 A value the pane does not have yet says &quot;not set&quot;. The list has:</p>
@@ -197,10 +197,8 @@ status.</li>
 recording to, or its latest export, with a <strong>Show in folder</strong> button that
 selects it in your file manager) and the path of the conversation file the
 agent stores itself. That last path is shown for panes that run Claude Code
-(including a second Claude account) and for Flockdeck's own API agents, once
-the agent has written the file. Until then, and for every other agent, it says
-&quot;not set&quot;. Only Claude Code panes can be exported or recorded, so an API
-agent's transcript path always says &quot;not set&quot;.</li>
+(including a second Claude account), once the agent has written the file.
+Until then, and for every other agent, it says &quot;not set&quot;.</li>
 </ul>
 <p>A shell has no agent, conversation or transcript, so those are left out for it.
 Nothing secret is listed: no keys, tokens or environment. A path can name your
@@ -208,7 +206,7 @@ own folders, so look at <strong>Copy all</strong> before pasting it somewhere pu
 list is read on the machine Flockdeck runs on and is not sent anywhere else, so
 a window reached through <a href="/app/remote.html">Flockdeck Remote</a> cannot open it.</p>
 <h2>Finding a pane</h2>
-<p><kbd>Ctrl+Shift+L</kbd>, in the command palette, searches every pane in every open
+<p><kbd data-key="findPane">Ctrl+Shift+L</kbd>, in the command palette, searches every pane in every open
 project. Type part of a pane's name, project, tab, agent, model, directory,
 branch, pane id, conversation id, process id or peer name; several words must
 all match, in any of those, and case does not matter. A conversation id matches
@@ -225,7 +223,7 @@ unlocks it again, and the palette names it <strong>Unlock pane</strong> while th
 locked. A locked pane shows a padlock and the word &quot;Locked&quot; in its header, and
 while it is locked:</p>
 <ul>
-<li><kbd>Ctrl+Shift+W</kbd> and the <code>×</code> in its header do nothing but say the pane is locked.</li>
+<li><kbd data-key="closePane">Ctrl+Shift+W</kbd> and the <code>×</code> in its header do nothing but say the pane is locked.</li>
 <li>Its tab cannot be closed, by the <code>×</code> on the tab or the middle button, while
 any pane in it is locked, and neither can a project that holds one.</li>
 <li><strong>Close finished panes</strong> leaves it open and says how many it left.</li>
@@ -254,8 +252,8 @@ itself, not to clear the screen.</p>
 buttons, <strong>Restart</strong> and <strong>Close pane</strong>, rather than leaving a dead black
 rectangle.</p>
 <h2>Font size</h2>
-<p><kbd>Ctrl+=</kbd> and <kbd>Ctrl+-</kbd> change the terminal font size for every
-pane; <kbd>Ctrl+0</kbd> puts it back.</p>
+<p><kbd data-key="fontUp">Ctrl+=</kbd> and <kbd data-key="fontDown">Ctrl+-</kbd> change the terminal font size for every
+pane; <kbd data-key="fontReset">Ctrl+0</kbd> puts it back.</p>
 
   </article>
 </main>

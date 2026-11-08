@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html" aria-current="page">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -137,6 +137,13 @@ the one you are looking at.</p>
 <p>Each state has its own shape as well as its colour, so you can tell them apart
 without seeing colour, except that waiting and blocked share the triangle. A
 blocked pane counts as waiting everywhere waiting agents are counted (below).</p>
+<p>In the Team view the requests show under the agent's row. A permission asked by
+a terminal pane is answered in its drawer, where its terminal is, so its block has
+no Approve button; the buttons are for a question that offers choices and for a
+permission from a structured pane. A Down block offers &quot;Ask the manager to
+reassign&quot; only when the pane has a task. The number on a project in the rail counts
+panes that are waiting or blocked. The goal line and the goal tab count requests,
+so a pane with two requests is one in the rail and two there.</p>
 <p>A pane whose turn is over but that has background work still running, a
 command or subagent it started, is still <strong>Idle</strong> and its header says how many
 are &quot;in background&quot;. Its dot is the working dot all the same, and its tooltip
@@ -189,7 +196,7 @@ taskbar with the window behind something else.</li>
 project, the same counts the window title draws from; an
 idle agent whose background work is still running counts as working, here
 and in the window title and the tab icon. Click
-the count for the same list <kbd>Ctrl+Shift+A</kbd> opens.</li>
+the count for the same list <kbd data-key="agents">Ctrl+Shift+A</kbd> opens.</li>
 <li><strong>The rail</strong> down the left of the window has a tile for each open project,
 and the tile says what that project's agents are doing, most urgent first: an
 amber badge where an agent is waiting on you, a pulsing cyan one where
@@ -210,7 +217,7 @@ gone quiet, waiting for a new prompt) never raises any of the above, for
 any pane: it says nothing more than that the pane is still there. A
 permission prompt or a real question always still reaches you, including
 for <strong>a helper another agent started</strong> for itself (see <a href="/app/agents.html">Agents and models</a>).</li>
-<li><kbd>Ctrl+Shift+A</kbd> lists every pane in every open project with its status, and
+<li><kbd data-key="agents">Ctrl+Shift+A</kbd> lists every pane in every open project with its status, and
 jumps to any of them.</li>
 <li><strong>Close finished panes</strong> clears out every agent pane that has gone idle
 and every pane that has exited cleanly, in every open project, in one go,
@@ -226,7 +233,7 @@ restarted. An idle agent that still has background work going (a command
 it started with <code>run_in_background</code>, or a background subagent) is not
 finished either, since closing it would kill that work. Its header says
 <code>◔ 1 in background</code> while it has any, and so does its row in
-<kbd>Ctrl+Shift+A</kbd>. Flockdeck learns the work has ended when Claude Code tells
+<kbd data-key="agents">Ctrl+Shift+A</kbd>. Flockdeck learns the work has ended when Claude Code tells
 the agent so, says at the end of a turn what is still running, or has
 recorded the end in the stored conversation (see above). Work that is
 counted but unverified still keeps the pane open. A Claude
@@ -242,10 +249,8 @@ A question or permission prompt it puts to you still turns it amber.</li>
 <p>For an agent that can report its own lifecycle, this is not screen scraping.
 Claude Code is launched with a generated <code>--settings</code> file registering its
 lifecycle hooks (<code>UserPromptSubmit</code>, <code>PreToolUse</code>, <code>Notification</code>, <code>Stop</code> and
-the rest), and an API agent, which is Flockdeck's own chat client, reports the same
-events itself. For Claude Code each event re-invokes this same binary in a
-hidden mode; the chat client sends its own. Either way the report reaches the
-application over the loopback interface.</p>
+the rest). Each event re-invokes this same binary in a hidden mode, and the
+report reaches the application over the loopback interface.</p>
 <p>Status therefore reflects what the agent is doing, not what
 its output happens to look like. Those settings are additive: your own
 settings, hooks and permissions still apply.</p>
