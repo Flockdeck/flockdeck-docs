@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -111,24 +111,16 @@ stopped. On macOS, allow it under System Settings → Privacy &amp; Security, or
 <code>xattr -d com.apple.quarantine</code> on the binary. On Windows, choose More info →
 Run anyway, or run <code>Unblock-File</code> on the program in PowerShell. The install
 scripts download with curl and PowerShell, which leave no such mark.</p>
-<h2>A pane says its CLI was not found on PATH</h2>
-<p>The agent's command is not on your <code>PATH</code>, so the pane shows that message where
-its terminal would be. Install it (the picker shows where to get every agent it
-knows about, and Claude Code is at
-<a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer">claude.com/claude-code</a>), then press
-<strong>Restart</strong> on the pane. The command is looked for each time a pane starts, but
-in the <code>PATH</code> Flockdeck itself was started with: if the installer added a new
-directory to <code>PATH</code> rather than using one already on it, quit Flockdeck and
-start it again so that it sees the change.</p>
-<h2>An agent is greyed out in the picker</h2>
-<p>For a CLI agent, its command is not on your <code>PATH</code>; the line under it says
-where to get it. For an API agent, no key was found: nothing in the
-environment variables it looks at, and nothing in Flockdeck's own store. <code>flockdeck keys set &lt;agent&gt;</code> reads one from stdin, and <a href="/app/agents.html">Agents and models</a> covers the
-rest. The OpenAI-compatible endpoint ships with no address, because none would
-be right for everybody: pick it, and the picker asks for one. It shows as
-available once it has a key, or at once when that address is on this machine
-and needs none. Unavailable agents are shown rather than hidden, so that an
-agent you have not installed is a visible choice.</p>
+<h2>A pane or an agent says it is unavailable</h2>
+<p>Flockdeck could not find the agent's command, or could not start it, and says
+only that the agent is unavailable. It does not install agents. Check that the
+command runs in a terminal, then press <strong>Restart</strong> on the pane. The command is
+looked for each time a pane starts, but in the <code>PATH</code> Flockdeck itself was
+started with: if you changed <code>PATH</code>, quit Flockdeck and start it again so that
+it sees the change.</p>
+<p>In the picker an unavailable agent is greyed and cannot be chosen. Unavailable
+agents are shown rather than hidden, so that an agent you have not got is a
+visible choice.</p>
 <h2>A pane is dead, with a Restart button</h2>
 <p>The process exited. <strong>Restart pane</strong> starts it again in the same directory
 and, where the agent can, resumes the same conversation. If it exits immediately every time, run the

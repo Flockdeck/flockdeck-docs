@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Broadcast and the prompt bar | Flockdeck docs</title>
-<meta name="description" content="Some instructions are for every agent at once: &#34;run the tests and fix what breaks&#34;, across five worktrees. The prompt bar is how you say a thing once, and broadcast decides who hears it.">
+<meta name="description" content="This page describes the old window. The current window has no prompt bar for all panes and no broadcast: a team is a graph, and a manager sends to its team with the box under the graph or flockdeck msg send. The commands still exist in the desktop, so they can come back.">
 <link rel="icon" href="/favicon.ico" sizes="16x16 20x20 24x24 32x32 40x40 48x48 64x64 96x96 128x128 256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0F1418">
 <meta property="og:title" content="Broadcast and the prompt bar | Flockdeck docs">
-<meta property="og:description" content="Some instructions are for every agent at once: &#34;run the tests and fix what breaks&#34;, across five worktrees. The prompt bar is how you say a thing once, and broadcast decides who hears it.">
+<meta property="og:description" content="This page describes the old window. The current window has no prompt bar for all panes and no broadcast: a team is a graph, and a manager sends to its team with the box under the graph or flockdeck msg send. The commands still exist in the desktop, so they can come back.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://docs.flockdeck.ai/app/broadcast.html">
 <meta name="twitter:card" content="summary">
@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html" aria-current="page">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -91,11 +91,14 @@
   <article class="prose">
     <p class="eyebrow">Using Flockdeck</p>
 <h1>Broadcast and the prompt bar</h1>
-<p class="doc-lede">Some instructions are for every agent at once: &quot;run the tests and fix what
+<blockquote>
+<p>This page describes the old window. The current window has no prompt bar for all panes and no broadcast: a team is a graph, and a manager sends to its team with the box under the graph or <code>flockdeck msg send</code>. The commands still exist in the desktop, so they can come back.</p>
+</blockquote>
+<p>Some instructions are for every agent at once: &quot;run the tests and fix what
 breaks&quot;, across five worktrees. The prompt bar is how you say a thing once,
 and broadcast decides who hears it.</p>
 <h2>The prompt bar</h2>
-<p><kbd>Ctrl+Shift+P</kbd> opens the prompt bar at the bottom of the window. Compose
+<p><kbd data-key="promptAll">Ctrl+Shift+P</kbd> opens the prompt bar at the bottom of the window. Compose
 the instruction there and press <kbd>Enter</kbd> or <strong>Send</strong>: it is delivered
 as one submitted message rather than typed key by key. <kbd>Esc</kbd> or
 <strong>Cancel</strong> closes it without sending anything, and what you had written is
@@ -119,7 +122,7 @@ If a pane takes your lines one at a time, send it one line, or write the
 prompt as one.</p>
 <h2>Who receives it</h2>
 <p>With broadcast off, the prompt goes to the focused pane, and to any panes you
-have added with their <code>⇉</code> button. <kbd>Ctrl+Shift+B</kbd>, or <strong>Broadcast</strong> in
+have added with their <code>⇉</code> button. <kbd data-key="toggleBroadcast">Ctrl+Shift+B</kbd>, or <strong>Broadcast</strong> in
 the rail, turns broadcast on, and then it goes to every pane in the
 <strong>broadcast set</strong>: by default every agent in the tab on screen. Whenever the
 prompt will reach more than one pane, the bar's label says how many, as in

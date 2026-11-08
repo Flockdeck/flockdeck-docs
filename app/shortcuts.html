@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -94,9 +94,9 @@
 <p class="doc-lede">Everything not listed here goes to the focused agent, which needs the rest of
 the keyboard for itself. That is why almost every binding is on
 <kbd>Ctrl+Shift</kbd>. The exceptions are the ones no terminal program claims:
-switching tabs, the font size, <kbd>Ctrl+,</kbd> for the settings,
-<kbd>F1</kbd> for this help, and <kbd>F6</kbd> for the rest of the window.
-The one exception that does take a key from programs is <kbd>Ctrl+B</kbd> for
+switching tabs, the font size, <kbd data-key="settings">Ctrl+,</kbd> for the settings,
+<kbd data-key="help">F1</kbd> for this help, and <kbd data-key="nextRegion">F6</kbd> for the rest of the window.
+The one exception that does take a key from programs is <kbd data-key="toggleRail">Ctrl+B</kbd> for
 the rail, which a terminal program such as tmux or readline also uses; remap it
 under Settings › Keyboard if one needs it.</p>
 <p>These are the defaults. Change or clear any of them under Settings › Keyboard,
@@ -105,18 +105,18 @@ binding's button and then the new key, <kbd>Backspace</kbd> or
 <kbd>Delete</kbd> to leave the action with no binding, or <kbd>Esc</kbd> to
 change nothing.</p>
 <p>Inside a terminal <kbd>Tab</kbd> belongs to the program running there, so
-<kbd>F6</kbd> is how the keyboard gets out: it moves between the rail, the
+<kbd data-key="nextRegion">F6</kbd> is how the keyboard gets out: it moves between the rail, the
 top bar, the focused pane's buttons and its terminal, in that order, and
-<kbd>Shift+F6</kbd> goes the other way. Both work from the prompt bar too.
+<kbd data-key="prevRegion">Shift+F6</kbd> goes the other way. Both work from the prompt bar too.
 While a dialog is open the keyboard stays there.</p>
 <p>Copying and pasting in a terminal works as it does in Windows Terminal.
 <kbd>Ctrl+C</kbd> copies what is selected, and with nothing selected goes to
 the program as usual, to interrupt it. <kbd>Ctrl+Shift+C</kbd> copies too, and
 <kbd>Ctrl+V</kbd> and <kbd>Ctrl+Shift+V</kbd> paste. On macOS,
 <kbd>Cmd+C</kbd> and <kbd>Cmd+V</kbd> copy and paste, and <kbd>Ctrl</kbd>
-with a letter goes to the program, except for <kbd>Ctrl+B</kbd>.</p>
+with a letter goes to the program, except for <kbd data-key="toggleRail">Ctrl+B</kbd>.</p>
 <p>Actions marked <em>Command palette</em> have no binding of their own: press
-<kbd>Ctrl+Shift+K</kbd>, or <strong>Commands</strong> at the right of the top bar, and search for
+<kbd data-key="palette">Ctrl+Shift+K</kbd>, or <strong>Commands</strong> at the right of the top bar, and search for
 them by name. The palette also has <strong>Rename this tab…</strong>, <strong>Focus the next
 pane</strong> and <strong>Focus the previous pane</strong>, which are not in the table below. Type
 <code>&gt;</code> first in the palette, or choose <strong>Go to…</strong>, to list only the places to go
@@ -364,6 +364,10 @@ how most Mac layouts type characters such as <kbd>[</kbd>, <kbd>|</kbd> and
 <td>Next agent that needs you</td>
 </tr>
 <tr>
+<td><kbd>Ctrl+Shift+J</kbd></td>
+<td>Previous agent that needs you</td>
+</tr>
+<tr>
 <td><kbd>Ctrl+Shift+H</kbd></td>
 <td>Message the manager</td>
 </tr>
@@ -434,6 +438,17 @@ Middle-click a tab to close it.</p>
 then the arrow keys move it and <kbd>Home</kbd> shares the room equally. In the
 tab bar, <kbd>←</kbd> and <kbd>→</kbd> move between tabs, and <kbd>Home</kbd>
 and <kbd>End</kbd> go to the first and the last.</p>
+<h2>Right-click menus</h2>
+<p>A right-click on a part of the window that has a menu opens it, and so do
+<kbd>Shift+F10</kbd> and the menu key on the part the keyboard is on. In the
+menu, <kbd>↑</kbd> and <kbd>↓</kbd>, <kbd>Home</kbd> and <kbd>End</kbd> move,
+a letter jumps to the next item that starts with it, <kbd>Enter</kbd> or
+<kbd>Space</kbd> chooses, and <kbd>Esc</kbd> closes it and puts the keyboard
+back. Where an item has a shortcut, it is shown beside it. In a text field, and
+on text you have selected, a right-click opens the usual copy and paste menu.</p>
+<p>Menus are on agent rows, the terminal, goal tabs, projects in the rail,
+worktrees, history rows, team tasks and messages, changed files, conversation
+rows, diff comments and the empty part of the main area.</p>
 <h2>Inside a dialog</h2>
 <ul>
 <li><kbd>Esc</kbd> closes any dialog, the command palette and the prompt bar, and
@@ -442,8 +457,8 @@ typed in it, the first <kbd>Esc</kbd> empties the field, and a dialog opened
 from another goes back to that one. <kbd>Tab</kbd> stays inside an open
 dialog.</li>
 <li>While a dialog is open, the other shortcuts wait until it closes, so nothing
-changes behind it unseen. The font size keys, <kbd>Ctrl+Shift+K</kbd> and
-<kbd>F1</kbd> still work, and the key that opened the dialog closes it.</li>
+changes behind it unseen. The font size keys, <kbd data-key="palette">Ctrl+Shift+K</kbd> and
+<kbd data-key="help">F1</kbd> still work, and the key that opened the dialog closes it.</li>
 <li>In the command palette, the agent picker and the help's contents,
 <kbd>↑</kbd> and <kbd>↓</kbd> move through the list and <kbd>Enter</kbd>
 takes the one selected.</li>

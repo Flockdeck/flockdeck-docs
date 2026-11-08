@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html" aria-current="page">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -95,142 +95,252 @@
 choosing. Claude Code is the default and behaves exactly as it always has; the
 picker is how you reach anything else.</p>
 <h2>Picking one</h2>
-<p>The plain <kbd>Ctrl+Shift+T</kbd> and <kbd>Ctrl+Shift+D</kbd> stay one keystroke and
+<p>The plain <kbd data-key="newAgentTab">Ctrl+Shift+T</kbd> and <kbd data-key="splitRight">Ctrl+Shift+D</kbd> stay one keystroke and
 take the default agent, because that is what you want almost every time. To
 choose deliberately, use <strong>New agent tab (choose agent)…</strong> or
 <strong>Split right (choose agent)…</strong> from the command palette, or click the <code>▾</code> beside
 the <code>+</code> that opens a new tab.</p>
-<p>The picker lists agents in two groups, <strong>installed</strong> and <strong>not installed</strong>. An
-agent you have not got is shown greyed with where to get it rather than
-hidden: somebody who has never installed Codex should still learn that Flockdeck
-would run it. Expand an agent for its models, with its default marked. A
+<p>The picker lists the agents that can be started first and then the ones that
+cannot. An agent that cannot be started is shown greyed and marked
+<strong>unavailable</strong>, without a reason, rather than hidden: somebody who has never
+installed Codex should still learn that Flockdeck would run it. Expand an agent for its models, with its default marked. A
 model carries its tier where it has a fixed one (<strong>small</strong>, <strong>mid</strong> or <strong>top</strong>: how capable, and so how
-costly, it is among that agent's own models). A model of an API agent shows its published
-price per million tokens, in and out, with the day it was read. A command-line
-agent's models show no price: the same model may be billed per token or
-covered by a subscription, and only you know which. Every price comes from one
-table compiled into Flockdeck, each rate with the day it was read from the
-provider's own pricing page. It changes with releases; nothing is fetched. The
-chat's status line and the estimates in the pane header are priced from the
-same table. At the
+costly, it is among that agent's own models). A model shows no price: the same
+model may be billed per token or covered by a subscription, and only you know
+which. At the
 foot of the picker, <strong>Set as default for</strong> makes the choice stick, either for
 this project or for every project, so the one-keystroke split keeps doing the
 right thing. <strong>Use the default for every project</strong> removes this project's own
 choice.</p>
 <p>The pane header names what is running, beside the branch and in the same dim
 weight: <code>claude · sonnet</code>, <code>codex · gpt-5.6-sol</code>. A shell pane shows nothing there,
-because there is nothing to choose. For the API agents, and for Claude Code
-where its status line is read, it is followed by what the conversation has
-spent and how near its usage limit it is; <a href="/app/spend.html">Spend and limits</a> explains
-the figures.</p>
-<h2>Two kinds of agent</h2>
-<p><strong>CLI agents</strong> are the tools you would run in a terminal yourself: Claude Code,
-Codex, Gemini, Aider, opencode, Cursor's agent. Flockdeck runs the command in the
+because there is nothing to choose. For Claude Code, where its status line is
+read, it is followed by what the conversation has spent and how near its usage
+limit it is; <a href="/app/spend.html">Spend and limits</a> explains the figures.</p>
+<h2>Agents are programs</h2>
+<p>Agents are the tools you would run in a terminal yourself: Claude Code,
+Codex, Gemini, Aider, opencode, Cursor's agent. In a terminal pane Flockdeck runs the command in the
 pane's pseudo-terminal, so it behaves exactly as it does anywhere else and uses
-whatever login that tool already has. Nothing is installed for you; an agent
-whose command is not on your <code>PATH</code> is the greyed kind.</p>
-<p><strong>API agents</strong> talk to a model API directly. There is no wrapper CLI, no node
-and no Python: Flockdeck runs its own chat client, <code>flockdeck chat</code>, in the pane. It is
-a real terminal chat client with streamed answers, a status line showing the
-model, its token counts and, for a model in the price table, the running cost,
-and tools for reading files, editing them and
-running commands. The ones that write a file or run a command ask before they
-act. A command can be let through for the rest of the session by answering
-<em>always</em>, and so can edits to files (except inside <code>.git</code> or <code>.hg</code>). <em>Always</em>
-is not offered for a
-command that can run anything at all (a shell, <code>git config</code>, <code>npm exec</code>,
-<code>docker run</code>), and a command with an option that writes a file wherever it
-says or runs a program it names, such as <code>git log --output</code> or
-<code>go test -exec</code>, is asked about even after <em>always</em>. Anthropic, OpenAI and
-Google are built in, and so is a plain OpenAI-compatible endpoint, which is how
-a local server (Ollama, LM Studio, vLLM) or a gateway becomes an agent.</p>
-<p>The price table holds Anthropic's, OpenAI's and Google's models. A model is
-priced only when its id is one the table names, or a dated snapshot of one
-such as <code>claude-haiku-4-5-20251001</code>; any other id, including one that only
-begins like a priced model, is shown in tokens with no dollars, because a
-made-up price is worse than none. An API agent given an address of its own,
-such as a gateway's, is not priced at all, since what it charges is not the
-vendor's list price.</p>
-<h2>Structured agents (beta)</h2>
+whatever login that tool already has. New Claude Code and opencode panes are
+structured instead; see the next section. Flockdeck does not install agents. One whose
+command cannot be found or started is shown as unavailable.</p>
+<p>Flockdeck no longer has a chat client of its own for talking to a model API
+directly. The <code>flockdeck chat</code> command, and the Anthropic, OpenAI, Google and
+OpenAI-compatible agents built on it, were removed. An <code>agents.json</code> entry that
+still has an <code>api</code> block, or <code>&quot;runner&quot;: &quot;api&quot;</code>, is refused with a notice saying
+so.</p>
+<h2>Structured agents</h2>
+<blockquote>
+<p>Direction (27 Oct 2026, updated 6 Nov 2026): new Claude Code and opencode panes start structured. The shell inbox, <code>flockdeck msg</code> and typed wake are the mail routes of terminal panes, which stay as the opt-out and for agents with no structured route. A structured pane sends with <code>send_message</code>, looks at the team with <code>list_peers</code>, and gets mail as prompts. The task board is a planned removal. See docs/acp-direction.md in the repository.</p>
+</blockquote>
 <p>A structured agent is one Flockdeck talks to over the Agent Client Protocol
-instead of in a terminal. Its pane has no screen: the new interface's drawer
-shows its conversation, a box to send it a prompt and a Stop button, and the
-current window shows a stub line and sends it nothing. Today the one offered is
-opencode (structured). There is none for Claude Code.</p>
-<p>It is off until you turn it on. Put <code>&quot;structuredPanes&quot;: true</code> in <code>prefs.json</code>
-in the state directory (there is no setting for it in the window); until then
-the picker does not offer a structured agent. Turning it off again takes effect
-when you restart a pane or when the agents are read again, and does not end a
-running pane.</p>
+instead of in a terminal. Its pane has no screen: the drawer
+shows its conversation, a box to send it a prompt and a Stop button.</p>
+<p>New Claude Code and opencode panes are structured by default. This applies to
+new panes only: a saved layout brings each pane back as it was, so a terminal
+pane stays a terminal pane.</p>
+<p>To use a terminal instead:</p>
+<ul>
+<li>Settings, General, <strong>New panes start as</strong>: choose Terminal. Panes that are
+already running are not ended.</li>
+<li>The picker lists both, as &quot;Claude Code (structured)&quot; and &quot;Claude Code
+(terminal)&quot;, and the same for opencode.</li>
+<li><code>flockdeck spawn -terminal</code> starts the terminal version from the command line.</li>
+<li>A structured pane that did not start, needs signing in, or whose agent ended
+has a <strong>Restart as terminal</strong> button. The pane keeps its place and folder; the
+conversation starts afresh.</li>
+</ul>
+<p>These agents have no structured version and always run in a terminal: Cursor
+Agent, Aider, plain shells, and any command-line agent you add in <code>agents.json</code>.
+Codex and Gemini CLI stay in a terminal for now too; their structured versions
+are hidden until they have been tried against the real programs.</p>
+<p>On a machine with paired devices or Remote turned on, new panes stay
+terminal unless you choose Structured in Settings. A phone is told when a
+structured agent is waiting and cannot answer it yet, so a person away from the
+desk would be left with a stalled pane.</p>
+<p>Type <code>/</code> at the start of the prompt box to list the commands the agent offers, with
+their argument hints. Keep typing to filter, move with the arrow keys, and press Enter
+or Tab to choose one, or Escape to close the list. A choice only writes <code>/name </code> into
+the box: the agent runs the command when you send the text. Flockdeck's own commands
+(today <code>/stop</code>) are listed first, under their own heading, and run at once. The list
+is whatever the agent advertises, so it differs between agents.</p>
+<p>A row of selectors above the conversation shows the agent's mode, its model and any
+other setting it offers, such as the effort. Pick a value to change it. The selector
+shows what the agent reports, so a change the agent refused leaves the old value in
+place. <code>/mode</code> and <code>/model</code> appear in Flockdeck's group for the agents that offer them:
+choosing one moves you to its selector, and typing <code>/mode plan</code> and sending sets the
+mode without a prompt. A value that is not on the agent's list is not sent. A change to
+a mode that reads as running without asking (such as a YOLO or bypass mode) asks you to
+confirm first, by either route, and the pane shows its warning while it is in that mode.
+<code>/mode</code> and <code>/model</code> replace an agent command of the same name; to send the agent its own,
+start the text with a space.</p>
+<p>The prompt box takes several lines. Enter sends (so does Ctrl or Command with Enter) and
+Shift+Enter adds a line; there is no setting to swap them. The box grows to ten lines.
+Up, with the caret on the first line, steps back through the prompts you sent to this
+pane, and Down steps forward again to the text you were writing. The draft and the last
+50 prompts are kept for each pane in this window's storage, so they are still there after
+you switch tabs or close the drawer; a prompt over 8 KiB is sent but not remembered, and
+the records of the 30 panes you used last are kept. They are plain text on this machine,
+so clear them with the browser data of the window if you pasted something private.</p>
+<p>Type <code>@</code> at the start of a word to list files under the pane's working directory. In a
+git checkout the list is what git tracks or does not ignore, so <code>.gitignore</code> is honoured;
+elsewhere it is a bounded walk that skips hidden folders and <code>node_modules</code>. At most 50
+names are shown, best match first, and &quot;More files match&quot; says there are more. Tab
+takes the highlighted name; Enter takes one only after you moved to it with an arrow key or
+the mouse, and otherwise sends your text. Choosing one writes <code>@relative/path </code> into the text; Flockdeck does not read the file, so the
+agent opens it. Links are never followed or listed. A window reached through the relay
+has no file list.</p>
+<p>You can type while the agent is working. The text waits in a queue of up to 16 prompts and
+is sent when the turn ends. The queue is listed under the conversation, next first, with
+Edit, Remove and Send now on each of your prompts, and Clear to remove all of yours. An edit
+or removal is refused, and says so, if the prompt was sent while you were looking at it.
+Messages from other agents are in the same list, marked &quot;Mail from&quot; and the sender's name,
+and the pane's opening prompt is marked &quot;From Flockdeck&quot;. You cannot edit or remove either, and
+Clear leaves them; Send now works on them, and a mail turn you cancel that way counts as handled. Send now ends the
+running turn (the agent is told to cancel) and sends that prompt next with the rest of the
+queue behind it, which is the nearest ACP has to steering an agent mid-turn: the agent does
+not read your text while it works. Stop ends the turn and drops the whole queue; Stop, keep
+queue ends the turn and goes on to the next prompt. Mail beyond the 16 the pane holds waits
+in the inbox and is not listed until there is room.</p>
+<p>While a turn runs, Esc stops it, and so does Ctrl+C when no text is selected (with text selected it
+copies). While the agent waits on a permission, Esc belongs to the permission and only Ctrl+C stops the turn. Unlike the Stop button these keep the prompts waiting in the queue, so the next one is sent. Esc
+does nothing while a menu is open or the box has text in it. The box says so while the agent works.</p>
+<p>When the agent keeps a plan or todo list, it is shown above the conversation as a checklist: how many are
+done and which is in progress, and each item with its state. Click the Plan line to close or open it.</p>
+<p>When a window is behind another, a structured agent that asks for a permission or needs setting up raises a
+desktop notification &quot;needs you&quot;, and one that finishes a turn of ten seconds or more raises &quot;finished&quot;. The notification names the pane and its branch and
+never what the agent asked or said. A phone paired through Flockdeck Remote is sent &quot;Answer on the desktop&quot; when a
+structured agent is waiting, and cannot answer it yet: the phone app does not offer Allow or Deny, and
+nothing the agent asked reaches the phone.</p>
+<p>Start a line with <code>!</code> to run a command yourself: <code>!git status</code> runs in this pane's folder, as you, and
+shows its output in a list under the conversation. The agent is not asked and does not see it; press Send to
+agent on a command to give the agent the command and the end of its output as a prompt. One line only, and a
+command ends by itself after ten minutes. Stop ends one sooner, and closing the pane ends all of them. The
+command sees your usual PATH but none of Flockdeck's own variables or any stored API key. To send the agent
+a prompt that starts with <code>!</code>, put a space before it. A window reached through the relay has no <code>!</code>.
+On Windows a windowed program such as <code>!notepad</code> is not ended by Stop or by closing the pane, and
+console output in a non-ASCII code page can show as replacement characters. Send to agent puts the
+output in a fenced block marked as program output, without further scrubbing, so read it first.
+Commands an agent starts in the background are not listed: Flockdeck does not run the agent's commands
+for it, so they show only as the agent's tool output.</p>
+<p>When the agent takes images, paste one into the box, drop one on it, or press Attach
+image. Flockdeck saves the picture in its own state folder, not in your checkout, and
+writes <code>[image: path]</code> into the text for the agent to read. A large picture is scaled
+down first, and one picture is attached at a time. Agents that do not take images get
+no Attach image button and say so if you paste one.</p>
+<p>The header shows how much of the agent's context window is used, as a bar and a
+percentage; press it for the figures: tokens used, the window, what is left, and the cost
+if the agent reports one. These are the numbers the agent last sent. A figure it did not
+send says &quot;Not reported&quot;, and tokens in and out and a breakdown of the context are not
+shown, because the agent's report does not have them. Each reply has a Copy button, and
+Copy last reply in the conversation bar copies the newest one as plain text; a code block
+has its own Copy.</p>
+<p>Going back and forking (the claude and codex agents only; other agents do not show it): type
+<code>/rewind</code> or <code>/fork</code> in the prompt box. The list shows the prompts you can go back to. &quot;Go back to before
+this&quot; asks first, then removes that prompt and everything after it from the conversation and from the agent,
+and puts the prompt's text in the box to edit and send again. It does not put back files the agent changed.
+&quot;Fork from before this&quot; and &quot;Fork the whole conversation&quot; start a new pane beside this one, labelled Fork, with
+the conversation up to that point; this pane is not changed. Both wait until the agent is idle. The first
+prompt, and a prompt that follows a stopped turn, have no point before them. A fork works in the same folder
+as the original, so two agents can edit the same files, and its window starts empty. Both are on the machine
+Flockdeck runs on.</p>
+<p>Export, in the conversation bar, saves the conversation as a Markdown file. Type the full
+path of a folder that exists; Flockdeck makes a new file there named <code>flockdeck-</code> and the pane's
+name and the time, never replacing one, and says where. The file holds your prompts, the
+agent's replies, each tool call with its summary, helper reports, notices, and mail from other
+agents, marked as mail with who sent it and whether it was delivered. It leaves out tool output,
+diffs and images, and the agent's thinking unless you tick the box (only what Flockdeck still
+holds is included). Every line of the conversation is quoted in the file, so nothing the agent
+wrote can look like a turn of yours, and images and HTML in it are written as text so that a
+viewer does not load them. Links and code fences are left as they were. The file takes the
+folder's permissions, so on Windows it is not private. A folder on a network share is refused. Secrets are replaced with <code>[REDACTED: ...]</code> marks by the
+same redactor batons use: the values in the pane's environment, the keys Flockdeck holds, the
+checkout's <code>.env</code> files and the shapes of keys. It is a filter, so read the file before you
+share it. Export is on the machine Flockdeck runs on; a window reached through the relay has
+no Export.</p>
+<p>Agent info, a button in the header (or <code>/info</code>), lists what the agent says about itself: its
+name and version, the ways it signs in, the session, mode and model, what it can do, the
+names of the MCP servers the session was given, the folder and the adapter. It shows names only,
+with no keys and no MCP command, arguments or environment.
+It is on the machine Flockdeck runs on. When an agent is waiting for you to sign in, the panel
+opens by itself, says what the agent asked for, and has a button to start the agent again once
+you have signed in with the agent's own tool. Flockdeck never asks for a password or key there.
+To sign out, use the agent's own tool and restart the agent. The agent's own <code>/help</code>,
+<code>/config</code>, <code>/permissions</code>, <code>/mcp</code>, <code>/hooks</code>, <code>/memory</code>, <code>/agents</code>, <code>/init</code> and <code>/status</code> work
+when it lists them in the <code>/</code> menu; type them like any other command.</p>
 <p>What to know before you use one:</p>
 <ul>
 <li><strong>Approval is at the desk.</strong> A permission request is answered from a window on
-this machine, by choosing one of the options the agent offered. A phone gets no
-notification for it and cannot answer it, and a window reached through the
+this machine, by choosing one of the options the agent offered. A phone is told
+to answer on the desktop and cannot answer it, and a window reached through the
 relay is told its name, status, directory, branch, project, agent and model, and
 no text the agent wrote. Nothing is answered for you; a request still open when you stop the turn, close or restart
 the pane or quit is answered <em>cancelled</em>.</li>
-<li><strong>The cards may gate nothing.</strong> opencode, as shipped, runs shell commands,
-writes and edits without asking, so no permission card appears for them.
-Flockdeck does not change that; the drawer header of such a pane says so for as
-long as the pane is open. The setting <code>{&quot;permission&quot;:{&quot;bash&quot;:&quot;ask&quot;,&quot;edit&quot;:&quot;ask&quot;}}</code> in opencode's
-own configuration makes it ask.</li>
-<li><strong>Mail needs an opt-in.</strong> A structured agent has no <code>flockdeck</code> command and is
-not given the pane identity one needs, so it cannot run <code>flockdeck inbox</code>. By
-default it is not woken by mail at all, and its briefing says mail is not
-available to it. <code>flockdeck wake text on -agent opencode-acp</code> turns it on for
-that agent type. Then each wake is one prompt holding the oldest unread
-message, as <code>Flockdeck message from agent &quot;&lt;role&gt;&quot;: &lt;text&gt;</code> (<code>the user</code> for a
-message you wrote), and the message counts as read once the agent takes it.
-This puts text written by another agent in front of an agent that may run
-commands, as if it were a turn from you. What limits it: the fixed start of the
-line, one line with escapes and control characters removed, the sender label cut
-at 32 characters, the text cut at 300 characters, and a briefing that tells the
-agent to treat the text as a message from another agent and not as your
-instruction. The agent cannot fetch what is cut. Leave it off for an agent you
-would not trust with a peer's words.</li>
-<li><strong>A login or Node problem</strong> shows as a blocked pane marked &quot;needs setup&quot;, and
-as &quot;Needs setting up&quot; in the team graph, with the one step to take: sign in with
-the agent's own tool (Flockdeck never signs in), install the agent, or install Node 20 or
-newer where the adapter needs it and restart Flockdeck, since a new Node on the
-path is only seen by a restarted Flockdeck. Start the pane again after the other
-two.</li>
+<li><strong>A card shows what you are approving.</strong> A request to leave plan mode shows the
+plan, and a request to edit a file shows the diff. Both are text the agent wrote,
+drawn as plain text and cut when long. When the agent asks you questions (Claude
+Code does), the card lists them with their options. Choose one or more, or type
+your own answer, and press <em>Send answers</em>; <em>Skip</em> tells the agent you did not
+answer.</li>
+<li><strong>opencode is started to ask, which a repository can override.</strong> opencode, as
+shipped, runs commands and edits files without a question, so Flockdeck starts it
+with <code>bash</code> and <code>edit</code> set to ask, and each arrives as a permission card. This
+builds the setting from your own and the project's <code>bash</code> and <code>edit</code> rules: each
+allow becomes a question, and a <code>deny</code> stays a deny. That is about your and the
+project's rules, not the built-in agents' own: opencode's <code>plan</code> agent, which denies
+edits, asks for them instead, with a card. Choosing <em>Always</em> on a card
+allows that kind of command for the rest of the session, one you had denied
+included. Other settings, such
+as <code>webfetch</code>, <code>read</code> and <code>external_directory</code>, are left as you set them, and
+opencode still runs those without asking unless you say otherwise; Flockdeck
+never sets anything to allow. A terminal opencode pane keeps its own
+configuration. A repository whose own opencode settings give an agent
+(<code>agent.build.permission</code>, or a file under <code>.opencode/agent</code>) permission to run
+commands wins over this, and the command runs without a card. A project's
+<code>opencode.json</code> or <code>.opencode</code> folder can also load plugins and MCP servers that
+run code, so no permission setting makes an opencode pane safe in a repository you
+do not trust. When a pane starts, Flockdeck reads what opencode resolves in that
+directory and, only if a command could still run without a card, the drawer header of the pane says &quot;This agent may run commands and edit files without asking you first: in this repository Flockdeck could not make it ask, or could not check. A project's opencode.json or .opencode folder can also load plugins and MCP servers that run code, so no permission setting makes an opencode pane safe in a repository you do not trust.&quot; Open
+a repository you do not trust in a terminal pane, not a structured one.</li>
+<li><strong>Mail arrives as prompts.</strong> A structured agent has no <code>flockdeck</code> command, so
+it cannot run <code>flockdeck inbox</code> or <code>flockdeck msg</code>; those are for terminal
+panes. It sends with the <code>send_message</code> tool and looks at the team with
+<code>list_peers</code>. A message sent to it arrives as a prompt, with the first line
+<code>Flockdeck message from agent &quot;&lt;role&gt;&quot;:</code> (<code>the user</code> for a message you wrote)
+and the text on one line after a fixed marker. This puts text written by
+another agent in front of an agent that may run commands, as if it were a turn
+from you. What limits it: the fixed first line in a block of its own, one line
+with escapes and control characters removed, the sender label cut at 32
+characters, and a briefing that tells the agent to treat the text as a message
+from another agent and not as your instruction. There is no switch for it.</li>
+<li><strong>Signing in.</strong> A Claude Code pane that is not signed in shows as a blocked pane
+marked &quot;needs setup&quot;, and as &quot;Needs setting up&quot; in the Team view. Agent info
+opens by itself. Press <strong>Sign in</strong> there: Flockdeck starts Claude's own login,
+shows you the address it prints, and restarts the pane when the login ends.
+Flockdeck never sees your password or key. If the button is not offered, sign in
+with the agent's own tool and start the pane again, or use <strong>Restart as
+terminal</strong>.</li>
+<li><strong>Project permissions need a trusted folder.</strong> Claude Code ignores the <code>allow</code>
+rules in a project's <code>.claude/settings.json</code> in a folder you have not trusted,
+and a structured pane cannot show its trust question. The pane says so when
+that happens, and every command asks until you open Claude Code once in that
+folder in a terminal pane and accept the prompt. <code>deny</code> rules and hooks in the
+project's settings still apply.</li>
+<li><strong>An agent that cannot be found or started</strong> shows as &quot;the agent is
+unavailable&quot; and nothing more: not the command, not the reason, not anything
+the agent printed. The same words come back from a refused spawn.</li>
 <li><strong>A restart starts a new session.</strong> The earlier entries stay above a line saying
 the agent was restarted. If the new agent cannot be started, they stay too, with
 a line giving the reason.</li>
-<li><strong>Nothing is recorded or exported.</strong> Recording and export are not available for a
-structured pane yet.</li>
+<li><strong>Rewind and Always do less than in a terminal.</strong> Going back removes the
+conversation after a prompt and does not put back files the agent changed.
+There is no Esc Esc and no <code>/undo</code>. <strong>Always</strong> on a permission card covers
+shell commands only, the exact command only, and is forgotten when the pane
+restarts, which Flockdeck does on an update; the agent then asks again.
+Choosing the accept-edits mode in the mode selector asks less for edits.</li>
+<li><strong>Recording is not available.</strong> A structured pane is not recorded. Export saves
+the conversation as Markdown, as above.</li>
 </ul>
-<h2>An endpoint's address</h2>
-<p>The OpenAI-compatible endpoint ships with no address, because none would be
-right for everybody, so it waits under <strong>not installed</strong> until it has one.
-Pick it and the picker asks for the address there and then: type where the
-model server answers, starting <code>http://</code> or <code>https://</code> (<code>http://127.0.0.1:11434/v1</code>
-for Ollama, <code>http://127.0.0.1:1234/v1</code> for LM Studio), and press <code>Enter</code>.
-<code>Escape</code> puts the field away without saving anything.</p>
-<p>How much of the address to give depends on the path. For an OpenAI-compatible
-endpoint, <code>/v1</code> is added only to a bare address such as
-<code>http://127.0.0.1:11434</code>. An address with a path of its own (<code>.../v1</code>, or a
-gateway's <code>https://gateway.example/openai</code>) is taken as the whole of the API's
-root, and nothing is added to it. So give the path your server or gateway
-documents, <code>/v1</code> included where it has one. For the Anthropic and Gemini
-agents, the API's version is added unless the address already ends in it. A
-request's full address pasted in, ending <code>/chat/completions</code>, <code>/messages</code> or
-<code>/models</code>, has that part taken off first.</p>
-<p>An address on this machine needs no key, so a local model server is offered
-the moment its address is saved. One anywhere else, such as a gateway, needs a
-key as well, set under <strong>API keys…</strong>.</p>
-<p>Any other API agent that has been given an address (one of your own, or a
-built-in pointed at a proxy) shows it beside its name. Open the agent with the
-right arrow and choose its <strong>Address</strong> row to change it. Saved empty, the
-address is taken away, and a built-in goes back to its vendor's own.</p>
-<p>An address that is not one is refused under the field, with what to type
-instead: <code>localhost:11434</code> is answered with <code>http://localhost:11434</code>. An
-address with a name or password in it is refused too, because it is shown in
-the picker; the key goes under <strong>API keys…</strong>. A pane already running
-keeps the address it started with, until the old one cannot be reached: then
-it asks the new address instead, and says so. From a terminal, <code>flockdeck keys endpoint &lt;agent&gt; &lt;address&gt;</code> does the same, and <code>default</code> in place of the
-address goes back to the vendor's own.</p>
 <h2>Not every agent can do everything</h2>
 <p>Most of what Flockdeck does beyond drawing a terminal depends on the agent
 cooperating, and they do not all cooperate in the same ways.</p>
@@ -265,8 +375,8 @@ a program in it. Where a
 capability is missing Flockdeck falls back rather than failing: status comes from
 the terminal bell and a quiet timer; resume is not
 attempted, and the pane starts fresh.</p>
-<p>Of the built-in agents, Claude Code and the four API agents report their own
-lifecycle and answer the start-up hook. Codex, Gemini CLI, Aider, opencode and
+<p>Of the built-in agents, Claude Code reports its own
+lifecycle and answers the start-up hook. Codex, Gemini CLI, Aider, opencode and
 Cursor Agent are read from their terminals, but are still briefed: the briefing
 is put in front of their opening task, once, and is not refreshed. Codex,
 Gemini CLI, opencode and Cursor Agent get it even in a pane opened by hand with
@@ -280,14 +390,17 @@ case does not matter. None of the built-ins has any yet.</p>
 <p>Aider is handed its opening task with <code>--message</code>, which Aider treats as a
 single message, so a pane started with a task (by <code>flockdeck spawn</code>, say) may end when
 the task does.</p>
-<h2>Keys, for the API agents</h2>
-<p>A CLI agent uses the login it already has, and Flockdeck never sees it. An API
-agent needs a key, which is looked for in that agent's own environment
-variables first (<code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code> and the rest), then in
-Flockdeck's own store, and last in <code>FLOCKDECK_API_KEY</code>, which any API agent
-reads. A vendor's own variable is read only by an agent talking to that
-vendor's own address: a built-in given a gateway's or a proxy's address is
-never sent the key you exported for the vendor, and uses the one stored for it.</p>
+<h2>API keys</h2>
+<p>An agent uses the login it already has, and Flockdeck never sees it. A key is
+optional: an agent starts without one. Where you set one, in <strong>API keys…</strong>
+or with <code>flockdeck keys set</code>, Flockdeck puts it in the environment of that
+agent's process under the variable the agent reads (<code>GEMINI_API_KEY</code> for Gemini
+CLI, <code>OPENAI_API_KEY</code> for Codex) and in no other process, recording or message.
+It is read when a pane starts, so a pane already running keeps what it had.
+opencode keeps its own provider logins and has no key here.</p>
+<p>A key you exported in the environment Flockdeck runs in reaches an agent only if
+the agent's entry lists that variable in <code>passEnv</code>. Without that, an
+<code>OPENAI_API_KEY</code> you set for another tool does not move Codex off its login.</p>
 <table>
 <thead>
 <tr>
@@ -297,7 +410,7 @@ never sent the key you exported for the vendor, and uses the one stored for it.<
 </thead>
 <tbody>
 <tr>
-<td><code>flockdeck keys set openai</code></td>
+<td><code>flockdeck keys set &lt;agent&gt;</code></td>
 <td>Reads the key from stdin, so it misses shell history</td>
 </tr>
 <tr>
@@ -305,25 +418,18 @@ never sent the key you exported for the vendor, and uses the one stored for it.<
 <td>Which agents have one, not what it is</td>
 </tr>
 <tr>
-<td><code>flockdeck keys clear openai</code></td>
+<td><code>flockdeck keys clear &lt;agent&gt;</code></td>
 <td>Forgets the one Flockdeck stored</td>
 </tr>
 <tr>
-<td><code>flockdeck keys check openai</code></td>
-<td>Asks the agent's endpoint whether it takes the key a pane would use</td>
+<td><code>flockdeck keys check &lt;agent&gt;</code></td>
+<td>Asks the agent's endpoint whether it takes the key</td>
 </tr>
 </tbody>
 </table>
-<p>Or set them from the window: <strong>API keys…</strong>, in the command palette, or
-<strong>API keys</strong> in the settings, lists every API agent with <strong>set</strong> or <strong>not
-set</strong> beside it (and, for one that is not, the environment variables it would
-look in), and offers <strong>Set…</strong> (<strong>Replace…</strong> once one is set) and, for a key
-Flockdeck stored, <strong>Clear</strong>.</p>
 <p>Keys are kept in <code>keys.json</code> in the state directory, readable only by you. A
-key reaches exactly one place: the environment of the chat process for the pane
-that needs it. It is never logged, never written into a saved layout and never
-shown, and the interface will not read one back to you. An endpoint that needs no key at all, such
-as a local server on loopback, counts as available without one.</p>
+key is never logged, never written into a saved layout and never shown, and the
+interface will not read one back to you.</p>
 <h2>Adding your own: agents.json</h2>
 <p>The picker is the built-in agents overlaid with your own file, <code>agents.json</code> in
 the state directory: <code>%AppData%\flockdeck</code> on Windows, <code>~/Library/Application Support/flockdeck</code> on macOS, <code>~/.config/flockdeck</code> on Linux.</p>
@@ -336,14 +442,10 @@ the state directory: <code>%AppData%\flockdeck</code> on Windows, <code>~/Librar
   &quot;agents&quot;: [
     { &quot;id&quot;: &quot;claude&quot;, &quot;defaultModel&quot;: &quot;sonnet&quot; },
     {
-      &quot;id&quot;: &quot;local&quot;,
-      &quot;name&quot;: &quot;Local llama&quot;,
-      &quot;runner&quot;: &quot;api&quot;,
-      &quot;api&quot;: {
-        &quot;wire&quot;: &quot;openai&quot;,
-        &quot;baseURL&quot;: &quot;http://127.0.0.1:11434/v1&quot;
-      },
-      &quot;models&quot;: [{ &quot;id&quot;: &quot;qwen3-coder&quot; }]
+      &quot;id&quot;: &quot;mine&quot;,
+      &quot;name&quot;: &quot;My agent&quot;,
+      &quot;exe&quot;: &quot;my-agent&quot;,
+      &quot;models&quot;: [{ &quot;id&quot;: &quot;fast&quot; }, { &quot;id&quot;: &quot;careful&quot; }]
     }
   ]
 }
@@ -356,8 +458,6 @@ takes one out of the picker without removing it. A model's <code>&quot;tier&quot
 is named in the notice and ignored.</p>
 <p>The file is read fresh every time the picker opens, so editing it by hand takes
 effect without a restart.</p>
-<p><a href="/app/ornith.html">Running Ornith models</a> has a worked example of an agent of your own
-pointed at a self-hosted model.</p>
 <h2>Roles</h2>
 <p>A role is a job an agent is started for. Flockdeck ships six: <code>manager</code>,
 <code>planner</code>, <code>worker</code>, <code>reviewer</code>, <code>tester</code> and <code>docs</code>. Each has a short briefing
@@ -445,10 +545,22 @@ merged over it field by field, and any other <code>id</code> is a role of your o
 </tr>
 </tbody>
 </table>
-<p>The <code>worktree</code> setting is part of the briefing and the role list. Flockdeck does not
-yet cut a worktree or make a checkout read-only because of it, so pass
-<code>-worktree &lt;branch&gt;</code> when a role should have its own. The manager briefing says to
-do this for workers and to pass the branch name to the reviewer and tester. A <code>worktree</code> that is none of
+<p>The <code>worktree</code> setting is part of the briefing and the role list, and it decides what
+<code>flockdeck spawn</code> does when an agent starts a helper. A helper in a role set to <code>own</code>, or in
+a role with no setting, or with no role, is given a git worktree and a branch of its own,
+cut from the starting agent's current commit and named from its task, with no flag needed;
+<code>spawn</code> prints the branch and directory. The helper starts in the same subfolder of the
+worktree that you were in, when it exists there. Uncommitted changes in your checkout are not
+in the worktree, and <code>spawn</code> says how many, so the manager can commit first. It says so only for the default worktree, not for one you name with <code>-worktree</code>. A tester that
+needs a worker's change is started with <code>-worktree &lt;worker branch&gt;</code>. Nothing removes a helper's
+worktree when it closes; <a href="/app/worktrees.html">Worktrees</a> is where they are cleared, and files git ignores,
+such as <code>node_modules</code>, are not copied into it. <code>-worktree &lt;branch&gt;</code> chooses the branch name and
+<code>-no-worktree</code> starts the helper in the starting agent's checkout instead. A role set to
+<code>readonly</code> or <code>main</code> (the planner and reviewer, and the manager) is started in the starting
+agent's checkout. Flockdeck does not make a <code>readonly</code> checkout read-only. Outside a git
+repository, or when the worktree cannot be cut, the start is refused and the note names
+<code>-no-worktree</code>; it is never started in the shared checkout on its own. In the window, <strong>Start in
+a worktree</strong> is ticked when you choose a role that works on its own branch. A <code>worktree</code> that is none of
 the three, a bad <code>tier</code>, and a <code>spawns</code> entry that names no role are listed in the
 notice and ignored.</p>
 <h3>Starting a role from the window</h3>
@@ -478,9 +590,9 @@ then starts the rest. With no <code>manager</code> role in the catalog the dialo
 <ol>
 <li>It breaks the goal into tasks and puts them on the task board, starting a <code>planner</code>
 first when the goal is more than one obvious change.</li>
-<li>It starts a <code>worker</code> for each task with <code>spawn -role worker -worktree &lt;branch&gt;</code>, so
-each has a branch of its own, and assigns the task to it. Planners and reviewers read
-and need no worktree of their own. Every agent it starts for one task gets the same
+<li>It starts a <code>worker</code> for each task with <code>spawn -role worker</code>, so each is given a branch
+of its own, and assigns the task to it. Planners and reviewers read and share the
+manager's checkout. Every agent it starts for one task gets the same
 <code>-tab &quot;&lt;task title&gt;&quot;</code>, so the planner, worker, reviewer and tester for a task share one
 tab named after it, and another task gets another tab. The tab is forgotten when Flockdeck
 restarts, so a task whose helpers are still running gets a second tab of the same title the
@@ -527,6 +639,14 @@ nothing. Settings › Agents &amp; models lists the roles to read; they are chan
 as they were when the agent started, and a &quot;Messages&quot; section. Targets, limits, the
 one-line notice, the fixed line that can wake an idle agent and what Flockdeck writes to an
 inbox itself are in <a href="/app/cli.html">The command line</a>.</p>
+<p>An idle Claude Code pane is woken from Claude's own record of its state, the <code>sessions/&lt;pid&gt;.json</code> file
+it keeps in its config folder: only when that file is the one for the pane's own process and
+conversation and says the agent has been idle for five seconds, nobody has pressed a key in the
+pane since, the pane's own status is idle, the pane's hooks have reported, and its output has
+not changed for five seconds. The line is still the fixed sentence. Anyone who can write
+to that folder can forge an idle record, which gets the pane at most one line a minute, and three
+in a row until the agent reads its mail, while it has unread mail and every other condition and
+limit holds.</p>
 <p>The built-in roles say when to use messages: the manager writes to the agents it started to
 answer a question or change a task, and planners, workers, reviewers, testers and docs agents
 write to the manager when they are blocked. Planners, workers, reviewers, testers and docs
@@ -550,18 +670,17 @@ commands and a snapshot of the counts for that pane, such as &quot;2 tasks assig
 1 in review&quot;, or &quot;2 tasks for your role, none claimed yet&quot; for tasks assigned to a role that
 no pane has started.</p>
 <h3>The Team panel</h3>
-<p><kbd>Ctrl+Shift+M</kbd> opens a sheet for the project on screen, with three tabs. It shows what the
-command line shows, and lets you steer from the window. It updates as the team works: a task
-that moves, a message that arrives and a pane that starts, stops or changes status appear
-without reopening it, and an open task, the text you are typing and your place in the list
-stay as they were.</p>
-<p><strong>Roster</strong> lists every agent pane of the project with its role, name, agent and model, status,
-branch and its current task: the one in progress, else in review, else the first assigned. Click
-a row to go to the pane, or click its task to open it on the board. <strong>Start an agent…</strong> opens the
-agent picker with its Role control. <strong>Close</strong> and <strong>Close finished</strong> close panes that are idle or have
-exited; Close finished names them and asks first, and each pane is checked again as it closes, so one
-that has started working since the list was drawn is left open.
-With no agent running, the tab says what a team is and offers <strong>Start a team</strong>.</p>
+<p><kbd data-key="team">Ctrl+Shift+M</kbd> opens a sheet for the project on screen, with three tabs: Tasks, Messages and
+Agents. It shows what the command line shows, and lets you steer from the window. It updates as
+the team works: a task that moves, a message that arrives and a pane that starts, stops or
+changes status appear without reopening it, and an open task, the text you are typing and your
+place in the list stay as they were.</p>
+<p><strong>Agents</strong> lists every agent pane of the project with its name, role, what it is doing and how
+many messages it has not read. The Team view shows the rest of a pane's detail. <strong>Close</strong> and
+<strong>Close finished</strong> close panes that are idle or have exited; Close finished names them and asks
+first, and each pane is checked again as it closes, so one that has started working since the
+list was drawn is left open. A pane locked against closing keeps its button disabled. To start
+an agent, use the agent picker; the sheet has no button for it.</p>
 <p><strong>Tasks</strong> is the board, one column for each of planned, assigned, in progress, in review and
 done. In a window narrower than 900 pixels the columns are one list, grouped by state. Blocked and
 cancelled tasks are behind a button. Each card shows the id, title, who the task is for, the
@@ -600,10 +719,9 @@ rule runs the cheaper model without the arrow.</p>
 between models whose tier it knows. It sends work to another agent only when
 you turn on <strong>Let a rule send work to another agent</strong>, in the same place, and
 a rule names that agent's <code>model</code> and <code>agent</code>. A rule like that could send test
-runs to a local model through an OpenAI-compatible endpoint, say. Even then,
+runs to a cheaper agent, say. Even then,
 only a new helper moves, never a conversation already under
-way. The other agent has to be installed or keyed and trusted for the project,
-and, if it has an address of its own, something has to be answering there. The
+way. The other agent has to be installed and trusted for the project. The
 pane header's tooltip names the agent and model it would otherwise have used.
 Claude Code's <strong>Default</strong> is whatever the CLI is set to, which might be its
 smallest model or its largest, so routing leaves work on it alone: make a
@@ -662,11 +780,7 @@ is ignored and left in the file as written.</p>
 <p>Saving a default from a Flockdeck that has no routing (0.2.10 or older)
 writes a project's entry back without its <code>routing</code>, so a project's policy is
 lost that way.</p>
-<p><strong>Routing makes no request</strong> unless you turn on <strong>Let a rule send work to
-another agent</strong>: then, before moving work to an agent with an address of its
-own, it opens a connection to that address, and closes it at once without
-sending anything, to check something is listening. Otherwise it decides from
-these rules alone. The routed mark on a pane travels only as the
+<p><strong>Routing makes no request.</strong> It decides from these rules alone. The routed mark on a pane travels only as the
 rest of the pane's state does, to your own paired devices when Flockdeck Remote
 is on. Helpers and first prompts are not logged. An older version
 that routed fan-out rows kept its choices in <code>routing.jsonl</code> in the state

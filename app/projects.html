@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -94,9 +94,9 @@
 <p class="doc-lede">Each open project has a tile in the rail down the left of the window: two
 letters, with the full name and folder in its tooltip, and a click switches to
 it. <strong>Open a project</strong>, under the tiles, opens the projects dialog at the
-folder browser; <kbd>Ctrl+Shift+O</kbd> does the same from the keyboard. The dialog
+folder browser; <kbd data-key="projects">Ctrl+Shift+O</kbd> does the same from the keyboard. The dialog
 also switches between the projects already open, and closes them.</p>
-<p>The rail starts as icons alone. <kbd>Ctrl+B</kbd> widens it into a panel of
+<p>The rail starts as icons alone. <kbd data-key="toggleRail">Ctrl+B</kbd> widens it into a panel of
 icons and names, or folds it back; widened, drag its right edge (or use the
 left and right arrow keys once it has the keyboard) to whatever width suits
 you. Both are kept, and are what a new window opens onto.</p>
@@ -146,7 +146,7 @@ left; its <strong>Agent</strong> and <strong>Shell</strong> buttons open a tab t
 first, and <strong>×</strong> splits it back out into a project of its own. That does
 not close it, and touches nothing on disk.</p>
 <p>A member does not need a git repository. One that has none simply has
-nothing to show in <kbd>Ctrl+Shift+S</kbd> or <kbd>Ctrl+Shift+G</kbd>. Every other part
+nothing to show in <kbd data-key="changes">Ctrl+Shift+S</kbd> or <kbd data-key="worktrees">Ctrl+Shift+G</kbd>. Every other part
 of the project works the same either way.</p>
 <h2>Managing the list</h2>
 <p>Every project, open or not, carries a small row of its own controls:</p>

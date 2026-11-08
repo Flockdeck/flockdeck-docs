@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html" aria-current="page">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -111,13 +111,13 @@ you.</p>
 <p><strong>Panes are moved, not recreated.</strong> Drag a pane by its header to another edge,
 another tab, or a tab of its own; nothing restarts, and the conversation,
 working directory and scrollback come with it.</p>
-<p><strong><kbd>Ctrl+Shift+K</kbd> opens the command palette</strong>, and so does <strong>Commands</strong> at the
+<p><strong><kbd data-key="palette">Ctrl+Shift+K</kbd> opens the command palette</strong>, and so does <strong>Commands</strong> at the
 right of the top bar. It holds every action in the application, searchable,
 and goes to any tab or project by name. If you remember one shortcut,
 remember that one.</p>
 <h2>A first session</h2>
 <ol>
-<li>Press <kbd>Ctrl+Shift+T</kbd> for an agent tab, or <kbd>Ctrl+Shift+D</kbd> to put a
+<li>Press <kbd data-key="newAgentTab">Ctrl+Shift+T</kbd> for an agent tab, or <kbd data-key="splitRight">Ctrl+Shift+D</kbd> to put a
 second agent beside the one you have. Both take the default agent;
 <strong>New agent tab (choose agent)…</strong> is the same thing with the picker in front of
 it, for when you want a different agent or a different model.</li>
@@ -125,20 +125,20 @@ it, for when you want a different agent or a different model.</li>
 keyboard.</li>
 <li>When an agent blocks on a permission prompt its dot turns amber and its tab
 is marked. Answer it, and it goes back to work.</li>
-<li>When one has produced something, press <kbd>Ctrl+Shift+S</kbd> to see the diff,
+<li>When one has produced something, press <kbd data-key="changes">Ctrl+Shift+S</kbd> to see the diff,
 commit and push it without leaving the window.</li>
 </ol>
 <h2>When one agent is not enough</h2>
 <p>Two agents editing the same files will fight. Give each its own checkout
-instead: <kbd>Ctrl+Shift+G</kbd> opens the worktrees, where you can create them, and
-<strong>Start a team</strong> starts a manager agent that starts the rest, each in a
-worktree of its own. <a href="/app/worktrees.html">Git worktrees</a> and <a href="/app/agents.html">Agents and models</a>
+instead: <kbd data-key="worktrees">Ctrl+Shift+G</kbd> opens the worktrees, where you can create them, and
+<strong>Start a team</strong> starts a manager agent that starts the rest; each helper that edits
+code is given a worktree of its own, and the manager and the readers share the project's checkout. <a href="/app/worktrees.html">Git worktrees</a> and <a href="/app/agents.html">Agents and models</a>
 cover both.</p>
 <h2>Which agent, which model</h2>
 <p>A pane's header names what is in it, such as <code>claude · sonnet</code> or <code>codex · gpt-5.6-sol</code>,
 beside its branch. <a href="/app/agents.html">Agents and models</a> explains the picker, what changes when
-an agent cannot report its own status, and how to add one of your own. For the
-API agents, and for Claude Code where its status line is read, the header also
+an agent cannot report its own status, and how to add one of your own. For
+Claude Code, where its status line is read, the header also
 estimates what the conversation has spent and shows how near a usage limit it
 is; <a href="/app/spend.html">Spend and limits</a> says how, and when Claude Code's are read.</p>
 <h2>Finding the rest of it</h2>
@@ -155,7 +155,7 @@ menu at the left of the top bar.</p>
 rail, with your panes still in view. While one is open the keyboard stays in
 it, and a click on the panes puts it away; so does <kbd>Esc</kbd>, or the
 shortcut that opened it.</p>
-<p>The first run opens this page once, unasked, and never again. <kbd>F1</kbd> brings
+<p>The first run opens this page once, unasked, and never again. <kbd data-key="help">F1</kbd> brings
 it back from anywhere.</p>
 
   </article>

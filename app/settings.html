@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -91,7 +91,7 @@
   <article class="prose">
     <p class="eyebrow">Using Flockdeck</p>
 <h1>Settings</h1>
-<p class="doc-lede"><kbd>Ctrl+,</kbd>, or <strong>Settings</strong> at the foot of the rail, opens the settings:
+<p class="doc-lede"><kbd data-key="settings">Ctrl+,</kbd>, or <strong>Settings</strong> at the foot of the rail, opens the settings:
 twelve sections in five groups on the left, and the one you are in on the
 right. Every control changes its setting at once, and it is the same setting
 the command palette and the keys change, so whichever you use, the others show
@@ -117,7 +117,7 @@ of swatches, kept legible against either palette, not a free colour picker.</li>
 <li><strong>Terminal</strong>: a preview at the top, then the font size (13 px unless changed, from 8 to
 28), the font, how many lines each pane keeps to scroll back through (10,000
 by default), and the cursor's shape and whether it blinks. The size is also
-<kbd>Ctrl+=</kbd>, <kbd>Ctrl+-</kbd> and <kbd>Ctrl+0</kbd>. <strong>Screen reader
+<kbd data-key="fontUp">Ctrl+=</kbd>, <kbd data-key="fontDown">Ctrl+-</kbd> and <kbd data-key="fontReset">Ctrl+0</kbd>. <strong>Screen reader
 support</strong> lets a screen reader read what the agents write; it is off unless
 you turn it on, because it slows every terminal a little. The palette has
 <strong>Turn screen reader support on</strong> too.</li>
@@ -154,8 +154,10 @@ version's log shows it overridden where it has decided at least once, with
 where <code>agents.json</code> is, since that is where they are edited, and <strong>Clear
 routing history</strong> empties that log, which nothing adds to now.
 <a href="/app/agents.html">Agents and models</a> has the rest.</li>
-<li><strong>API keys</strong>: set, replace or clear the key each API agent uses. A key is
-never shown once it is set. Keys are set and cleared only at the desk: a
+<li><strong>API keys</strong>: set, replace or clear the key an agent uses. A key is
+optional, and an agent with a login of its own uses that without one. The
+list shows the agents that can take a key, and a key set here goes to that
+agent's process only. A key is never shown once it is set. Keys are set and cleared only at the desk: a
 window reached through the relay shows which are set, and no more. Below the
 agents, <strong>TypeSafe API key</strong> is where you paste, replace or clear the key
 that <strong>Let TypeSafe's Jev help read pane status</strong> needs. The field is masked
@@ -220,15 +222,12 @@ in the settings for the mode, the floor and the strategy; the rules
 themselves are edited by hand. Kept in <code>agents.json</code>.</li>
 <li>Whether Claude panes read their usage limits: <strong>Agents &amp; models ›
 Claude Code's usage limits</strong> in the settings. Kept in <code>prefs.json</code>.</li>
-<li>An API agent's key: <strong>API keys</strong> in the settings, <strong>API keys…</strong>, or
+<li>An agent's API key: <strong>API keys</strong> in the settings, <strong>API keys…</strong>, or
 <code>flockdeck keys set &lt;agent&gt;</code>. Kept in <code>keys.json</code>. At the desk only.</li>
-<li>Where an API agent sends its prompts: its address, in the agent picker,
-or <code>flockdeck keys endpoint &lt;agent&gt; &lt;url&gt;</code>. Kept in <code>agents.json</code>. At the
-desk only.</li>
 <li>A tab's name: double-click the tab, press F2 while the keyboard is on
 it, or <strong>Rename this tab…</strong> in the command palette. An empty name, or <strong>Use the automatic title</strong> there, goes
 back to the title the tab gives itself. Kept with the layout.</li>
-<li>Which panes the prompt bar reaches: <kbd>Ctrl+Shift+B</kbd>, and the <code>⇉</code>
+<li>Which panes the prompt bar reaches: <kbd data-key="toggleBroadcast">Ctrl+Shift+B</kbd>, and the <code>⇉</code>
 button in each pane header; <a href="/app/broadcast.html">Broadcast and the prompt bar</a> has the
 rest. Kept until Flockdeck stops.</li>
 <li>The terminal's font, size, scrollback and cursor: <strong>Terminal</strong> in the
@@ -253,9 +252,12 @@ run only: each run has an address of its own.</li>
 Kept in <code>prefs.json</code>.</li>
 <li>Auto-approve read-only's own default: <strong>General ›
 New panes</strong> in the settings. Kept in <code>prefs.json</code>.</li>
-<li>Structured agents (beta): no setting in the window. Put
-<code>&quot;structuredPanes&quot;: true</code> in <code>prefs.json</code> to have them offered;
-<a href="/app/agents.html">Agents and models</a> says what to know first.</li>
+<li>New panes start as: <strong>General</strong> in the settings. Follow the default,
+Structured or Terminal, for a new Claude Code or opencode pane. The default is
+structured, except on a machine that paired devices or Remote can
+reach. It changes new panes only, and only from the machine itself. Kept in
+<code>prefs.json</code>; <a href="/app/agents.html">Agents and models</a> says what to know about
+structured panes.</li>
 <li>Status detection with Jev: <strong>Status detection</strong> in the settings. Kept
 in <code>prefs.json</code>; off unless you turn it on, and only from the machine
 itself.</li>
@@ -307,7 +309,6 @@ launch joins it.</li>
 <li><code>sessions</code>: the settings file written for each pane whose agent reports its
 status, which also carries the pane's status line where that goes through
 Flockdeck.</li>
-<li><code>chats</code>: the built-in chat client's conversations.</li>
 <li><code>groups.json</code>: the multi-repo projects' grouping.</li>
 <li><code>todos.json</code>: the saved todo checklists of an older version. Nothing reads it now; it is left alone.</li>
 <li><code>worktree-procs.json</code>: processes recorded for worktrees, so they can be
@@ -348,18 +349,10 @@ turned on; see <a href="/app/status.html">Knowing who needs you</a>. A key set i
 TypeSafe API key</strong> is used first; this is the fallback when none
 is set there. No other variable is ever tried. Without a key nothing is ever
 sent.</li>
-<li><code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code> and <code>GEMINI_API_KEY</code> (or
-<code>GOOGLE_API_KEY</code>): keys for the API agents talking to those vendors' own
-addresses, used before anything in <code>keys.json</code>. An agent given another
-address, such as a gateway's, is never sent them.</li>
-<li><code>FLOCKDECK_API_KEY</code>: a key for any API agent, used when neither its own
-variables nor <code>keys.json</code> hold one.</li>
+<li><code>FLOCKDECK_API_KEY</code>: a key for any agent that takes one, used when neither its
+own variables nor <code>keys.json</code> hold one.</li>
 <li><code>CLAUDE_CONFIG_DIR</code>: where Claude Code keeps its own files; Flockdeck follows
 it to find conversations and folder trust.</li>
-<li><code>NO_COLOR</code>: the built-in chat client draws without colour.</li>
-<li><code>FLOCKDECK_COLUMNS</code>: the width the built-in chat client wraps its answers
-at. Without it the client follows the pane's width, falling back to
-<code>COLUMNS</code> and then 80.</li>
 <li><code>SHELL</code>: the shell a shell pane runs, as a login shell; <code>/bin/sh</code> if it is
 unset or names a program that is not there. On Windows a shell pane runs
 <code>pwsh</code> if it is installed, then the shell <code>COMSPEC</code> names, then Windows

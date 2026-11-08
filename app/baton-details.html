@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -193,13 +193,13 @@ often. Under <code>pass</code>, <code>pwd</code> and <code>pw</code> names the l
 <li>Some lines of source code that mention <code>key</code>, <code>pass</code>, <code>pw</code> or <code>pwd</code> are marked though
 they are code. Counted against every line, per line, the scrubber changes 0.3% (405 of
 163,613) of the non-test Go source of net and crypto in the Go 1.27 standard library and
-0.9% (134 of 15,243) of this repository's <code>internal/webui/assets/app.js</code>; some of those are
+0.9% (134 of 15,243) of this repository's old front end, <code>internal/webui/assets/app.js</code> (deleted since, still in git history); some of those are
 other things it takes, such as long random-looking identifiers. The larger figures that
 follow are a different measure: the share of lines that contain the letters <code>key</code>, <code>pass</code>, <code>pw</code>
 or <code>pwd</code> anywhere in the line, in any case (a substring match, so <code>monkey</code>, <code>passport</code> and
 <code>power</code> count) that Flockdeck changes: 2.6% (157 of 5958) of the lines of the non-test Go
 source of net and crypto in the Go 1.27 standard library, and 14.2% (119 of 839) of this
-repository's <code>internal/webui/assets/app.js</code>. Counting only lines where one of the four is a
+repository's old front end. Counting only lines where one of the four is a
 word of its own (not next to another letter) it is 5.6% (110 of 1954) and 34.9% (117 of
 335). That is deliberate: a password with brackets
 or dots in it looks like code, and under the names <code>key</code>, <code>pass</code>, <code>pw</code> and <code>pwd</code> nothing is

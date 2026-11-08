@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html" aria-current="page">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -99,11 +99,10 @@
 <li><strong>The tightest limit.</strong> <code>5h 72%</code> means 72% of the five-hour window is used; <code>7d</code> is the weekly one. A bar under it fills as the window does. It turns amber at 80% and red at 95%.</li>
 </ul>
 <p>Hover over either one for the rest: every window and when it resets, the tokens in, cached and out, and where the money figure came from.</p>
-<p>Nothing is shown for an agent that reports nothing. Today that is every agent except Claude Code and the built-in API agents.</p>
+<p>Nothing is shown for an agent that reports nothing. Today that is every agent except Claude Code.</p>
 <h2>Every money figure is an estimate</h2>
 <p>No figure here is your bill, and each one is written with <code>~</code> to say so.</p>
 <ul>
-<li><strong>The built-in API agents</strong> count the tokens of every call exactly, and Flockdeck prices them from a table of published prices compiled into the app, for Anthropic's, OpenAI's and Google's models. It is the same table the picker shows prices from. The tooltip says the date the prices were checked. A model is priced only when its id is one the table names, or a dated snapshot of one; any other is shown in tokens only, because a made-up price is worse than none.</li>
 <li><strong>Claude Code</strong> works out its own session cost at list prices, and the header shows that figure, marked as Claude Code's own. It can differ from what you are charged: for example, a data-residency premium or a negotiated rate is not in it.</li>
 </ul>
 <p>Tokens are exact and carry no <code>~</code>.</p>

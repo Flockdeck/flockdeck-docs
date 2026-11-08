@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html" aria-current="page">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -93,7 +93,7 @@
 <h1>Git worktrees</h1>
 <p class="doc-lede">Worktrees are how you run several agents without them fighting over one
 checkout: each gets its own directory and its own branch, backed by the same
-repository. <kbd>Ctrl+Shift+G</kbd>, or <strong>Worktrees</strong> in the rail, opens the panel.</p>
+repository. <kbd data-key="worktrees">Ctrl+Shift+G</kbd>, or <strong>Worktrees</strong> in the rail, opens the panel.</p>
 <h2>What the panel shows</h2>
 <p>For every worktree:</p>
 <ul>
@@ -164,6 +164,13 @@ as <strong>folder gone</strong>, with a <strong>Prune</strong> button of its own
 since there is no folder left to open an agent, a shell or a review in. Either
 button clears every such record at once, including one for a worktree on a
 drive that is not plugged in.</p>
+<h2>Worktrees helpers leave behind</h2>
+<p>A helper that is started with a worktree of its own (see <a href="/app/agents.html">Agents</a>) keeps it
+after its pane closes: nothing removes a worktree when its agent stops, since the
+branch may hold work nobody has merged. This panel is where they are cleared, with
+<strong>Remove worktree…</strong>. A new worktree is a clean checkout of the commit it was cut from,
+so files git ignores, such as <code>node_modules</code> or a build folder, are not copied into it;
+install or build there as you would in a fresh clone.</p>
 <h2>In the pane headers</h2>
 <p>Every pane header carries the same information for the checkout it is working
 in (branch, <code>●n</code> uncommitted files, <code>↑n</code> and <code>↓n</code> against upstream),

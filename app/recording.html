@@ -45,7 +45,6 @@
       <li><a href="/app/getting-started.html">Getting started</a></li>
       <li><a href="/app/panes.html">Panes and tabs</a></li>
       <li><a href="/app/agents.html">Agents and models</a></li>
-      <li><a href="/app/ornith.html">Running Ornith models</a></li>
       <li><a href="/app/status.html">Knowing who needs you</a></li>
       <li><a href="/app/auto-approve.html">Auto-approve read-only</a></li>
       <li><a href="/app/spend.html">Spend and limits</a></li>
@@ -53,6 +52,7 @@
       <li><a href="/app/broadcast.html">Broadcast and the prompt bar</a></li>
       <li><a href="/app/worktrees.html">Git worktrees</a></li>
       <li><a href="/app/changes.html">Review, commit and push</a></li>
+      <li><a href="/app/views.html">The team views</a></li>
       <li><a href="/app/github.html">GitHub</a></li>
       <li><a href="/app/history.html">Resume</a></li>
       <li><a href="/app/baton.html">Handing work to another agent</a></li>
@@ -98,8 +98,9 @@ every pane until you turn it on, and the palette names the action <strong>Stop
 recording</strong> while the pane is recording. A recording pane shows a red dot and
 the word &quot;Recording&quot; in its header, and its record button is pressed.</p>
 <p>Only agent panes can record: a shell has no conversation, so it has no record
-button. A structured agent's pane cannot record or export yet either, because its
-conversation is not stored where Flockdeck can read it. The first time you turn recording on, Flockdeck asks you to confirm,
+button. A structured agent's pane cannot record yet, because its
+conversation is not stored where Flockdeck can read it; its Export button in the
+conversation bar saves it as a Markdown file instead. The first time you turn recording on, Flockdeck asks you to confirm,
 and tells you what is kept.</p>
 <h2>Exporting without having recorded</h2>
 <p><strong>Export transcript</strong>, from the command palette or the export button in a
@@ -117,7 +118,7 @@ it on. Export is only from the machine Flockdeck runs on, not from a window
 reached through the relay.</p>
 <p><strong>Only agents that store their conversation in a form Flockdeck can read have
 anything to record or export.</strong> That is Claude Code today. For Codex, Gemini
-CLI, Aider, opencode, Cursor Agent and the built-in chat clients, Flockdeck says
+CLI, Aider, opencode and Cursor Agent, Flockdeck says
 so, and nothing is exported; turning recording on for one is refused, saying so.
 A conversation is one file, so only one pane at a time can record it: turning
 recording on in a second pane showing the same conversation is refused.</p>
@@ -219,7 +220,7 @@ so, and <code>flockdeck recordings export</code> exits with an error. Delete the
 a fresh one. The files are readable by you only, and the setting moves with the
 pane when you drag it to another tab.</p>
 <p><strong>Reveal transcript</strong>, from the command palette, or <strong>Show in folder</strong> in
-<kbd>Ctrl+Shift+Y</kbd>, opens your file manager with that pane's transcript file
+<kbd data-key="paneInfo">Ctrl+Shift+Y</kbd>, opens your file manager with that pane's transcript file
 selected: the file it is recording to if it is recording, otherwise its latest
 export, and a notice if it has neither. Like opening the folder it only works
 from the machine Flockdeck runs on, and only for a file in the recordings
