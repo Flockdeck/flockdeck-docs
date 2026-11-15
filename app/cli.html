@@ -1164,16 +1164,6 @@ command line and asks before it downloads anything.</p>
 </table>
 <p><code>FLOCKDECK_PANE</code>, <code>FLOCKDECK_PANE_NAME</code> and <code>FLOCKDECK_PROJECT</code> are what a shell pane,
 which has no lifecycle hooks of its own, has to go on.</p>
-<p><code>FLOCKDECK_API</code>, <code>FLOCKDECK_TOKEN</code>, <code>FLOCKDECK_PANE</code>, <code>FLOCKDECK_PANE_NAME</code> and
-<code>FLOCKDECK_PROJECT</code> were called <code>PERCH_*</code> before the program was renamed. Panes
-still carry both spellings of those five and <code>spawn</code>, <code>peer-name</code>, <code>close</code>, <code>team</code>, <code>msg</code>, <code>inbox</code> and <code>task</code>
-still read both, so a prompt or a script written against the old names keeps
-working. They will be removed after 17 April 2027. Until then a command you run that
-has to fall back to a <code>PERCH_*</code> name prints one line per name on stderr saying
-which <code>FLOCKDECK_*</code> name to set instead; the hook and the status line, which run
-on every event, fall back without saying anything. <code>FLOCKDECK_AGENT</code>,
-<code>FLOCKDECK_MODEL</code>, <code>FLOCKDECK_ROLE</code> and <code>FLOCKDECK_LAUNCH</code> are newer and have
-only the one name in a pane.</p>
 
   </article>
 </main>
